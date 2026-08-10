@@ -6,23 +6,50 @@ Dikembangkan khusus untuk kompetisi **Trunodjoyo Creative Competition (TCC Vibe 
 
 ---
 
-## 🌟 Fitur Utama & Keunggulan
+## 🤖 Peran & Penggunaan AI dalam REFOUND
 
-1. **AI Match Score Fusion Engine**:
-   - Menghitung kecocokan barang menggunakan formula:
+AI dalam REFOUND berfungsi secara terukur pada **3 titik utama**:
+
+1. **AI Vector Similarity & Score Fusion Engine**:
+   - Menghitung kecocokan barang temuan vs barang hilang menggunakan formula terikat blueprint:
      $$\text{MatchScore} = 0.45 \times \text{Teks} + 0.30 \times \text{Visual} + 0.15 \times \text{Lokasi} + 0.10 \times \text{Waktu}$$
-   - Memberikan transparansi skor & breakdown alasan kecocokan (seperti kemiripan deskripsi, zona lokasi, dan rentang waktu).
+   - Menyediakan breakdown transparan skor Teks, Visual, Lokasi, dan Waktu beserta chip alasan kecocokan.
 
-2. **Privasi & Keamanan Terjaga (*Privacy by Interface*)**:
+2. **LLM Semantic Verification Engine**:
+   - Membandingkan makna semantik antara jawaban klaim mahasiswa dengan catatan rahasia (*secret notes*) yang disimpan oleh Admin Lab.
+   - Menghasilkan skor verifikasi semantik (%) tanpa pernah membocorkan ciri fisik rahasia barang ke antarmuka publik.
+
+3. **LLM Admin Verification Question Suggester**:
+   - Merekomendasikan 2-3 pilihan pertanyaan verifikasi kepemilikan yang relevan dengan kategori barang saat Admin mendaftarkan barang temuan fisik (*physical custody*).
+
+---
+
+## 🛡️ Mekanisme Backup / Callback Fail-Safe & Manual Override
+
+REFOUND menerapkan **AI Adapter Pattern** dengan ketahanan tingkat tinggi (*graceful degradation*) agar sistem **100% selalu berfungsi dan aman didemokan** dalam kondisi apa pun:
+
+### 1. Automatic Callback Fallback Engine
+- Jika API Key (OpenAI / Gemini) tidak diisi, mengalami timeout jaringan, atau kehabisan kuota:
+  - Sistem secara otomatis (*automatic callback*) beralih ke **Local Fallback Engine** berbasis *Deterministic Keyword Overlap & Local String Matching*.
+  - Aplikasi **tidak akan pernah crash** atau menampilkan *error 500* kepada pengguna/juri.
+
+### 2. Admin Manual Override (*Admin as Trust*)
+- Rekomendasi skor AI **bukan keputusan final**.
+- Admin Lab memiliki wewenang penuh (*manual override*) untuk menyetujui atau menolak pengajuan klaim mahasiswa berdasarkan bukti fisik di lapangan, terlepas dari berapa pun skor rekomendasi AI.
+
+---
+
+## 🌟 Fitur Utama & Keunggulan Produk
+
+1. **Privasi & Keamanan Terjaga (*Privacy by Interface*)**:
    - Tidak ada pengungkapan nomor kontak, NIM, atau foto sensitif secara publik.
    - Ciri rahasia barang temuan tersimpan aman (*Admin Custody*) dan dilindungi oleh Supabase Row Level Security (RLS).
 
-3. **Verifikasi Kepemilikan Dua Langkah (*Two-Step Claim Verification*)**:
+2. **Verifikasi Kepemilikan Dua Langkah (*Two-Step Claim Verification*)**:
    - Pemohon menjawab pertanyaan rahasia yang disusun oleh Admin Lab.
-   - Evaluasi semantik LLM membantu Admin menilai keakuratan jawaban tanpa membocorkan ciri fisik barang ke publik.
-   - Klaim disetujui menghasilkan **Kode Pengambilan Single-Use** untuk verifikasi penyerahan fisik di Ruang Admin Lab.
+   - Klaim yang disetujui menghasilkan **Kode Pengambilan Single-Use** untuk verifikasi penyerahan fisik di Ruang Admin Lab.
 
-4. **Desain Visual & Aksesibilitas Modern**:
+3. **Desain Visual & Aksesibilitas Modern**:
    - Palet warna sistem: Deep Navy (`#0B1633`), Teal (`#12A99A`), Coral (`#FF765F`), dan Off-white (`#F5F7FA`).
    - Responsif penuh untuk perangkat seluler dan desktop.
 
@@ -59,7 +86,7 @@ Buka [http://localhost:3000](http://localhost:3000) di browser Anda.
 
 1. Buka [Supabase Dashboard](https://database.new) dan buat project baru.
 2. Buka tab **SQL Editor**.
-3. Jalankan seluruh isi skrip [supabase/schema.sql](file:///e:/Hackhaton/TCC2026/refound-app/supabase/schema.sql) untuk membuat ekstensi `vector`, tipe enum, tabel master zona, laporan, ciri rahasia, match, klaim, serta aturan Row Level Security (RLS).
+3. Jalankan skrip [supabase/schema.sql](file:///e:/Hackhaton/TCC2026/refound-app/supabase/schema.sql) untuk membuat ekstensi `vector`, tipe enum, tabel master zona, laporan, ciri rahasia, match, klaim, serta aturan Row Level Security (RLS).
 
 ---
 
@@ -99,7 +126,7 @@ refound-app/
 │   │   ├── globals.css     # Styling Design System & Tailwind CSS v4
 │   │   └── page.tsx        # Beranda / Landing Page Utama
 │   ├── komponen/           # Komponen UI Modular Bahasa Indonesia
-│   └── pustaka/            # Modul AI Match, Workflow Tipe, Katalog, & Supabase
+│   └── pustaka/            # Modul AI Adapter, Fallback Engine, Katalog, & Supabase
 ├── supabase/
 │   └── schema.sql          # Migrasi Schema Supabase PostgreSQL + pgvector
 ├── .env.example            # Blueprint Variabel Lingkungan
