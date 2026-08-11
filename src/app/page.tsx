@@ -7,13 +7,13 @@ export default function Home() {
       {/* Header */}
       <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-zinc-100 py-4 px-6 sm:px-12 flex items-center justify-between transition-all">
         <div className="flex items-center">
-          <Link href="/" className="font-black text-2xl tracking-tight text-[#0B1633] hover:text-[#12A99A] transition-colors">
-            REFOUND
+          <Link href="/" className="flex items-center">
+            <Image src="/logo.png" alt="REFOUND Logo" width={130} height={40} className="object-contain h-10 w-auto" />
           </Link>
         </div>
         <div>
           <Link
-            href="/dashboard"
+            href="/login"
             className="px-6 py-2 bg-[#0B1633] hover:bg-[#12A99A] text-white font-bold text-sm rounded-lg shadow-sm transition-all duration-300 transform hover:-translate-y-0.5"
           >
             Masuk
@@ -245,7 +245,7 @@ export default function Home() {
       <footer className="bg-[#0B1633] text-white border-t border-white/10 py-12 px-6 sm:px-12">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col items-center md:items-start space-y-2">
-            <span className="font-black text-xl tracking-wider">REFOUND</span>
+            <Image src="/logo.png" alt="REFOUND Logo" width={110} height={32} className="object-contain h-8 w-auto brightness-0 invert" />
             <span className="text-xs text-zinc-400 font-medium">
               © 2026 REFOUND University Laboratory System. All rights reserved.
             </span>

@@ -30,7 +30,7 @@ export default function DetailBarangTemuanPage({ params }: { params: Promise<{ i
             <svg className="w-5 h-5 mr-2 text-[#0B1633] hover:text-[#12A99A]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
-            REFOUND
+            <Image src="/logo.png" alt="REFOUND Logo" width={110} height={32} className="object-contain h-8 w-auto" />
           </Link>
         </div>
         <div>
@@ -209,7 +209,7 @@ export default function DetailBarangTemuanPage({ params }: { params: Promise<{ i
       <footer className="bg-[#0B1633] text-white py-12 px-6 sm:px-12 border-t border-white/10 shrink-0">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col items-center md:items-start space-y-2">
-            <span className="font-black text-xl tracking-wider">REFOUND</span>
+            <Image src="/logo.png" alt="REFOUND Logo" width={110} height={32} className="object-contain h-8 w-auto brightness-0 invert" />
             <span className="text-xs text-zinc-400 font-semibold">
               © 2024 REFOUND University Laboratory System. All rights reserved.
             </span>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import PesanUmpanBalik from '@/komponen/PesanUmpanBalik';
 
 export default function HalamanAdminPenyerahan() {
@@ -58,13 +59,13 @@ export default function HalamanAdminPenyerahan() {
       {/* Header bar */}
       <header className="sticky top-0 bg-white border-b border-zinc-100 py-4 px-6 md:px-12 flex items-center justify-between z-20 shadow-sm shrink-0">
         <div>
-          <Link href="/admin" className="font-black text-2xl tracking-tight text-[#0B1633] hover:text-[#12A99A] transition-colors">
-            REFOUND
+          <Link href="/admin" className="flex items-center">
+            <Image src="/logo.png" alt="REFOUND Logo" width={130} height={40} className="object-contain h-10 w-auto" />
           </Link>
         </div>
         <div>
           <Link
-            href="/dashboard"
+            href="/login"
             className="text-zinc-500 hover:text-[#0B1633] font-extrabold text-sm transition-all"
           >
             Masuk
@@ -244,7 +245,7 @@ export default function HalamanAdminPenyerahan() {
       <footer className="bg-[#0B1633] text-white py-12 px-6 sm:px-12 border-t border-white/10 shrink-0">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col items-center md:items-start space-y-2">
-            <span className="font-black text-xl tracking-wider">REFOUND</span>
+            <Image src="/logo.png" alt="REFOUND Logo" width={110} height={32} className="object-contain h-8 w-auto brightness-0 invert" />
             <span className="text-xs text-zinc-400 font-semibold">
               © 2024 REFOUND University Laboratory System. All rights reserved.
             </span>

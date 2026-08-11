@@ -60,8 +60,8 @@ export default function HalamanBarangTemuan() {
         <div className="p-6 space-y-8">
           {/* Logo Brand */}
           <div className="pt-2">
-            <Link href="/" className="font-black text-2xl tracking-tight text-[#0B1633] hover:text-[#006F69] transition-colors">
-              REFOUND
+            <Link href="/" className="flex items-center">
+              <Image src="/logo.png" alt="REFOUND Logo" width={130} height={40} className="object-contain h-10 w-auto" />
             </Link>
           </div>
 
@@ -118,7 +118,7 @@ export default function HalamanBarangTemuan() {
               <span>Laporan Saya</span>
             </Link>
             <Link
-              href="#"
+              href="/profil"
               className="flex items-center space-x-3 px-4 py-3 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 font-semibold text-sm rounded-xl transition-all"
             >
               <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -132,7 +132,7 @@ export default function HalamanBarangTemuan() {
         {/* Logout Link */}
         <div className="bg-zinc-50 border-t border-zinc-100 p-4">
           <Link
-            href="/"
+            href="/login"
             className="flex items-center space-x-3 px-4 py-3 text-red-500 hover:text-red-600 font-bold text-sm rounded-xl transition-all"
           >
             <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -144,7 +144,7 @@ export default function HalamanBarangTemuan() {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-h-screen overflow-x-hidden bg-white">
+      <div className="flex-1 flex flex-col min-h-screen overflow-x-hidden bg-white pb-20 md:pb-0">
         
         {/* Content Wrapper */}
         <div className="flex-1 py-8 px-6 sm:px-12 max-w-5xl w-full mx-auto space-y-8">
@@ -314,7 +314,55 @@ export default function HalamanBarangTemuan() {
         </footer>
       </div>
 
+      {/* Sticky Bottom Navigation Bar for Mobile */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-zinc-200 flex items-center justify-around py-2.5 z-50 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
+        <Link
+          href="/dashboard"
+          className="flex flex-col items-center space-y-0.5 text-zinc-400 hover:text-[#006F69] transition-colors"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
+          </svg>
+          <span className="text-[10px] font-bold">Dashboard</span>
+        </Link>
+        <Link
+          href="/barang-temuan"
+          className="flex flex-col items-center space-y-0.5 text-[#006F69]"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+          </svg>
+          <span className="text-[10px] font-black">Temuan</span>
+        </Link>
+        <Link
+          href="/kecocokan"
+          className="flex flex-col items-center space-y-0.5 text-zinc-400 hover:text-[#006F69] transition-colors"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <circle cx="9" cy="12" r="5" />
+            <circle cx="15" cy="12" r="5" />
+          </svg>
+          <span className="text-[10px] font-bold">Kecocokan</span>
+        </Link>
+        <Link
+          href="/dashboard"
+          className="flex flex-col items-center space-y-0.5 text-zinc-400 hover:text-[#006F69] transition-colors"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+          </svg>
+          <span className="text-[10px] font-bold">Laporan Saya</span>
+        </Link>
+        <Link
+          href="/profil"
+          className="flex flex-col items-center space-y-0.5 text-zinc-400 hover:text-[#006F69] transition-colors"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          <span className="text-[10px] font-bold">Profil</span>
+        </Link>
+      </div>
     </div>
   );
 }
-

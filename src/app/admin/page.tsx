@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function AdminOverviewDashboardPage() {
   return (
@@ -11,8 +12,8 @@ export default function AdminOverviewDashboardPage() {
         <div className="p-6 space-y-8">
           {/* Logo Brand with Admin badge */}
           <div className="pt-2 flex items-center space-x-2.5">
-            <Link href="/" className="font-black text-2xl tracking-tight text-[#0B1633] hover:text-[#006F69] transition-colors">
-              REFOUND
+            <Link href="/" className="flex items-center">
+              <Image src="/logo.png" alt="REFOUND Logo" width={130} height={40} className="object-contain h-10 w-auto" />
             </Link>
             <span className="bg-[#0B1633] text-white px-2 py-0.5 rounded text-[8px] font-black tracking-wider uppercase">
               Admin
@@ -92,7 +93,7 @@ export default function AdminOverviewDashboardPage() {
         {/* Bottom logout row */}
         <div className="p-4 bg-zinc-50 border-t border-zinc-100">
           <Link
-            href="/"
+            href="/admin-login"
             className="flex items-center justify-center w-full px-4 py-2.5 bg-black hover:bg-zinc-800 text-white font-bold text-xs rounded-xl shadow-sm transition-all"
           >
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -361,7 +362,7 @@ export default function AdminOverviewDashboardPage() {
         <footer className="bg-[#0B1633] text-white py-12 px-6 sm:px-12 border-t border-white/10 shrink-0">
           <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex flex-col items-center md:items-start space-y-2">
-              <span className="font-black text-xl tracking-wider">REFOUND</span>
+              <Image src="/logo.png" alt="REFOUND Logo" width={110} height={32} className="object-contain h-8 w-auto brightness-0 invert" />
               <span className="text-xs text-zinc-400 font-semibold">
                 © 2024 REFOUND University Laboratory System. All rights reserved.
               </span>

@@ -68,8 +68,8 @@ export default function HalamanAdminTinjauKlaim() {
       {/* Header bar */}
       <header className="sticky top-0 bg-white border-b border-zinc-100 py-4 px-6 md:px-12 flex items-center justify-between z-20 shadow-sm shrink-0">
         <div className="flex items-center space-x-3">
-          <Link href="/admin" className="font-black text-2xl tracking-tight text-[#0B1633] hover:text-[#12A99A] transition-colors">
-            REFOUND
+          <Link href="/admin" className="flex items-center">
+            <Image src="/logo.png" alt="REFOUND Logo" width={110} height={32} className="object-contain h-8 w-auto" />
           </Link>
           <span className="bg-zinc-100 text-zinc-500 px-3 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase">
             Admin View
@@ -81,7 +81,7 @@ export default function HalamanAdminTinjauKlaim() {
           <Link href="/admin/klaim" className="text-[#006F69] border-b-2 border-[#006F69] pb-0.5 font-bold transition-colors">Review Klaim</Link>
           <Link href="/barang-temuan" className="hover:text-[#0B1633] transition-colors">Inventory</Link>
           <Link
-            href="/"
+            href="/admin-login"
             className="px-6 py-2 bg-black hover:bg-zinc-800 text-white font-extrabold text-xs rounded-full shadow-sm transition-all"
           >
             Keluar
@@ -353,7 +353,7 @@ export default function HalamanAdminTinjauKlaim() {
       <footer className="bg-[#0B1633] text-white py-12 px-6 sm:px-12 border-t border-white/10 shrink-0">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col items-center md:items-start space-y-2">
-            <span className="font-black text-xl tracking-wider">REFOUND</span>
+            <Image src="/logo.png" alt="REFOUND Logo" width={110} height={32} className="object-contain h-8 w-auto brightness-0 invert" />
             <span className="text-xs text-zinc-400 font-semibold">
               © 2024 REFOUND University Laboratory System. All rights reserved.
             </span>
