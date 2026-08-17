@@ -75,7 +75,7 @@ export default function HalamanPengajuanKlaim({ params }: { params: Promise<{ id
         </div>
         <div>
           <Link
-            href="/dashboard"
+            href="/login"
             className="px-6 py-2 bg-black hover:bg-zinc-800 text-white font-extrabold text-xs rounded-full shadow-sm transition-all"
           >
             Masuk

@@ -164,7 +164,7 @@ Detail Lokasi: ${detailLokasi || '-'}`;
                 )}
               </div>
               <span
-                className={`text-xs font-semibold ${
+                className={`text-xs font-semibold hidden sm:block ${
                   langkah === s.nr ? 'text-[#0B1633] font-bold' : 'text-zinc-400'
                 }`}
               >
