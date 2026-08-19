@@ -64,62 +64,70 @@ export default function HalamanPengajuanKlaim({ params }: { params: Promise<{ id
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F9FAFC] text-[#0B1633] font-sans antialiased selection:bg-[#12A99A]/20">
+    <div className="min-h-screen flex flex-col bg-[#F5F7FA] text-[#0B1633] font-sans antialiased">
       
       {/* Header bar */}
-      <header className="sticky top-0 bg-white border-b border-zinc-100 py-4 px-6 md:px-12 flex items-center justify-between z-20 shadow-sm shrink-0">
+      <header className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-slate-200/80 py-3.5 px-6 md:px-12 flex items-center justify-between z-20 shrink-0">
         <div>
-          <Link href="/kecocokan" className="flex items-center">
-            <Image src="/logo.png" alt="REFOUND Logo" width={130} height={40} className="object-contain h-10 w-auto" />
+          <Link href="/" className="flex items-center space-x-3">
+            <Image src="/logo.png" alt="REFOUND Logo" width={120} height={36} className="object-contain h-8 w-auto" priority />
           </Link>
         </div>
-        <div>
+        <div className="flex items-center gap-3">
           <Link
-            href="/login"
-            className="px-6 py-2 bg-black hover:bg-zinc-800 text-white font-extrabold text-xs rounded-full shadow-sm transition-all"
+            href="/dashboard"
+            className="text-xs font-semibold text-slate-600 hover:text-[#0B1633] transition-colors"
           >
-            Masuk
+            &larr; Kembali ke Dashboard
+          </Link>
+          <Link
+            href="/profil"
+            title="Buka Profil Saya"
+            className="w-8 h-8 rounded-full bg-[#0B1633] text-white flex items-center justify-center font-semibold text-xs shadow-xs hover:ring-2 hover:ring-[#12A99A]/50 transition-all"
+          >
+            BS
           </Link>
         </div>
       </header>
 
       {/* Main Container */}
-      <main className="flex-1 flex items-start justify-center p-6 md:p-8">
-        <div className="max-w-3xl w-full bg-white p-8 sm:p-10 rounded-3xl border border-zinc-150 shadow-[0_10px_40px_rgba(11,22,51,0.02)] space-y-6 mb-24">
+      <main className="flex-1 flex items-start justify-center p-6 md:p-10">
+        <div className="max-w-2xl w-full bg-white p-8 sm:p-10 rounded-2xl border border-slate-200/80 shadow-xs space-y-6 mb-20">
           
           {/* Header text */}
-          <div className="space-y-2 border-b border-zinc-100 pb-6">
-            <h1 className="text-2xl sm:text-3xl font-black text-[#0B1633]">
+          <div className="space-y-1.5 border-b border-slate-100 pb-5">
+            <span className="text-[10px] font-semibold text-[#12A99A] uppercase tracking-widest bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-100">
+              Verifikasi Kepemilikan 2-Langkah
+            </span>
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#0B1633] tracking-tight">
               Pengajuan Klaim Barang
             </h1>
-            <p className="text-zinc-500 text-xs sm:text-sm font-medium leading-relaxed">
-              Sistem verifikasi keamanan ketat. Buktikan kepemilikan Anda untuk memproses pengambilan barang.
+            <p className="text-slate-500 text-xs sm:text-sm font-normal leading-relaxed">
+              Jawab pertanyaan rahasia yang disusun oleh Admin Lab untuk membuktikan kepemilikan sah barang Anda.
             </p>
           </div>
 
           {/* Item Info Box */}
-          <div className="p-5 bg-[#F4F6F9] border border-zinc-200 rounded-2xl flex items-center gap-4">
-            {/* Left square badge */}
-            <div className="w-12 h-12 bg-zinc-200/50 rounded-xl flex items-center justify-center text-zinc-500 shrink-0">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          <div className="p-4 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center gap-4">
+            <div className="w-11 h-11 bg-white rounded-xl border border-slate-200 flex items-center justify-center text-[#12A99A] shrink-0 font-semibold text-sm shadow-xs">
+              <svg className="w-6 h-6 text-[#12A99A]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
               </svg>
             </div>
-            {/* Right text info */}
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="px-2.5 py-0.5 text-[9px] font-black uppercase bg-[#6366F1] text-white rounded-full tracking-wider">
-                  Disimpan Admin
+                <span className="px-2 py-0.5 text-[9px] font-semibold uppercase bg-emerald-50 text-[#10B981] border border-emerald-200 rounded-full">
+                  Disimpan Admin Lab
                 </span>
-                <span className="text-zinc-400 font-bold text-[10px]">
+                <span className="text-slate-400 font-medium text-[10px]">
                   ID: {kandidat.id_barang}
                 </span>
               </div>
-              <h3 className="font-extrabold text-[#0B1633] text-sm sm:text-base leading-tight">
+              <h3 className="font-bold text-[#0B1633] text-sm sm:text-base leading-tight">
                 {kandidat.title}
               </h3>
-              <p className="text-zinc-400 text-[10px] font-bold">
-                Ditemukan di {kandidat.zona_penemuan} pada {kandidat.waktu_penemuan}.
+              <p className="text-slate-500 text-[11px] font-normal">
+                Ditemukan di {kandidat.zona_penemuan} &bull; {kandidat.waktu_penemuan}
               </p>
             </div>
           </div>
@@ -134,18 +142,18 @@ export default function HalamanPengajuanKlaim({ params }: { params: Promise<{ id
               />
 
               {hasil.skor_semantik_ai !== undefined && (
-                <div className="p-5 bg-teal-50/50 border border-teal-100 rounded-2xl space-y-3 shadow-sm text-xs">
-                  <span className="font-black uppercase tracking-wider text-[#12A99A] block">
-                    Hasil Evaluasi Semantik LLM AI Engine:
+                <div className="p-5 bg-teal-50/70 border border-teal-200 rounded-xl space-y-3 text-xs">
+                  <span className="font-semibold uppercase tracking-wider text-[#12A99A] block">
+                    Hasil Evaluasi Semantik AI Engine:
                   </span>
                   <div className="space-y-1 font-mono text-[#0B1633]">
-                    <p><strong>Skor Verifikasi Jawaban:</strong> {Math.round(hasil.skor_semantik_ai * 100)}%</p>
-                    <p className="leading-relaxed"><strong>Analisis AI:</strong> {hasil.alasan_analisis_ai}</p>
+                    <p><strong>Tingkat Kemiripan Jawaban:</strong> {Math.round(hasil.skor_semantik_ai * 100)}%</p>
+                    <p className="leading-relaxed"><strong>Analisis Ciri AI:</strong> {hasil.alasan_analisis_ai}</p>
                   </div>
                   <div className="pt-2 border-t border-teal-100 flex justify-end">
                     <Link
                       href="/dashboard"
-                      className="px-4 py-2 bg-[#12A99A] hover:bg-[#12A99A]/90 text-white font-bold rounded-xl transition-all shadow-sm"
+                      className="px-4 py-2 bg-[#12A99A] hover:bg-[#12A99A]/90 text-white font-semibold rounded-xl transition-all shadow-xs"
                     >
                       Buka Dashboard Saya &rarr;
                     </Link>
@@ -158,23 +166,23 @@ export default function HalamanPengajuanKlaim({ params }: { params: Promise<{ id
           {!hasil && (
             <form onSubmit={handleSubmitKlaim} className="space-y-6">
               {/* Question Section */}
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div className="space-y-1">
-                  <label className="block text-sm font-bold text-[#0B1633]">
-                    Pertanyaan Verifikasi Keamanan *
+                  <label className="block text-xs font-semibold text-[#0B1633] uppercase tracking-wider">
+                    Pertanyaan Keamanan Rahasia *
                   </label>
-                  <p className="text-zinc-400 text-xs font-semibold leading-relaxed">
-                    Untuk memastikan ini milik Anda, jawab pertanyaan spesifik dari penemu/admin:
+                  <p className="text-slate-500 text-xs font-normal">
+                    Pertanyaan ini dirancang khusus dari ciri fisik unik yang ditemukan petugas:
                   </p>
                 </div>
 
-                {/* Dark highlighted box */}
-                <div className="p-4 bg-[#0B1633] rounded-xl text-white flex items-start space-x-3 shadow-md shadow-[#0B1633]/5">
-                  <svg className="w-5 h-5 text-[#12A99A] shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                  <span className="text-xs sm:text-sm font-bold leading-relaxed">
-                    &quot;{kandidat.pertanyaan_verifikasi}&quot;
+                {/* Question Box */}
+                <div className="p-4 bg-[#0B1633] rounded-xl text-white flex items-start space-x-3 shadow-xs">
+                  <div className="w-5 h-5 rounded-full bg-teal-500/20 text-[#12A99A] flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                    ?
+                  </div>
+                  <span className="text-xs sm:text-sm font-medium leading-relaxed text-slate-100">
+                    "{kandidat.pertanyaan_verifikasi}"
                   </span>
                 </div>
 
@@ -185,69 +193,40 @@ export default function HalamanPengajuanKlaim({ params }: { params: Promise<{ id
                     rows={4}
                     value={jawaban}
                     onChange={(e) => setJawaban(e.target.value)}
-                    placeholder="Masukkan jawaban spesifik Anda di sini..."
-                    className="w-full rounded-2xl border border-zinc-200 bg-white p-4 text-sm font-semibold text-[#0B1633] placeholder-zinc-300 focus:border-[#12A99A] focus:ring-1 focus:ring-[#12A99A] outline-none transition-colors resize-none"
+                    placeholder="Tuliskan jawaban detail dan spesifik Anda di sini..."
+                    className="w-full rounded-xl border border-slate-200 bg-white p-3.5 text-xs sm:text-sm font-medium text-slate-900 placeholder-slate-400 focus:border-[#12A99A] focus:ring-1 focus:ring-[#12A99A] outline-none transition-colors resize-none"
                   />
                 </div>
               </div>
 
-              {/* Additional Proof Section */}
-              <div className="space-y-4">
-                <div className="space-y-1">
-                  <label className="block text-sm font-bold text-[#0B1633]">
-                    Bukti Kepemilikan Tambahan (Opsional)
-                  </label>
-                  <p className="text-zinc-400 text-xs font-semibold leading-relaxed">
-                    Unggah foto nota pembelian, kotak kemasan, atau tangkapan layar jika relevan.
-                  </p>
-                </div>
-
-                {/* Dashed upload box */}
-                <div className="border-2 border-dashed border-zinc-200 hover:border-[#12A99A] rounded-2xl p-8 flex flex-col items-center justify-center space-y-3 bg-zinc-50/50 hover:bg-teal-50/5 cursor-pointer transition-all">
-                  <svg className="w-10 h-10 text-zinc-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                  </svg>
-                  <div className="text-center">
-                    <p className="text-xs sm:text-sm font-bold text-[#0B1633]">
-                      <span className="text-[#12A99A]">Upload file</span> atau drag and drop
-                    </p>
-                    <p className="text-zinc-400 text-[10px] font-bold mt-1">PNG, JPG, PDF up to 5MB</p>
-                  </div>
-                </div>
-              </div>
-
               {/* Checkbox confirmation */}
-              <div className="flex items-start space-x-3 pt-2">
+              <div className="flex items-start space-x-3 pt-1">
                 <input
                   type="checkbox"
                   id="confirm-kebenaran"
                   checked={sudahKonfirmasi}
                   onChange={(e) => setSudahKonfirmasi(e.target.checked)}
-                  className="w-4 h-4 rounded border-zinc-300 text-[#0B1633] focus:ring-[#12A99A] mt-1 shrink-0 cursor-pointer"
+                  className="w-4 h-4 rounded border-slate-300 text-[#12A99A] focus:ring-[#12A99A] mt-0.5 shrink-0 cursor-pointer"
                 />
-                <label htmlFor="confirm-kebenaran" className="text-zinc-500 text-xs font-semibold leading-relaxed cursor-pointer select-none">
-                  Saya mengonfirmasi bahwa informasi yang diberikan adalah benar. Saya memahami bahwa klaim palsu dapat berakibat pada sanksi administratif kampus dan proses klaim ini akan ditinjau langsung oleh Admin Lab.
+                <label htmlFor="confirm-kebenaran" className="text-slate-500 text-xs font-normal leading-relaxed cursor-pointer select-none">
+                  Saya mengonfirmasi bahwa informasi yang saya berikan adalah benar. Saya memahami bahwa klaim palsu dapat dikenakan sanksi disipliner laboratorium.
                 </label>
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-4 border-t border-zinc-100 flex items-center justify-end space-x-4">
+              <div className="pt-4 border-t border-slate-100 flex items-center justify-end space-x-3">
                 <Link
                   href="/kecocokan"
-                  className="px-6 py-2.5 border border-zinc-200 text-zinc-500 hover:border-zinc-300 font-bold text-sm rounded-xl transition-all bg-white"
+                  className="px-5 py-2.5 border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold text-xs rounded-xl transition-all"
                 >
                   Batal
                 </Link>
                 <button
                   type="submit"
                   disabled={loading || !sudahKonfirmasi}
-                  className="px-6 py-2.5 bg-black hover:bg-zinc-800 disabled:opacity-50 text-white font-bold text-sm rounded-xl transition-all shadow-md flex items-center"
+                  className="px-6 py-2.5 bg-[#0B1633] hover:bg-[#0B1633]/90 disabled:opacity-50 text-white font-semibold text-xs rounded-xl shadow-xs transition-all flex items-center cursor-pointer"
                 >
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  {loading ? 'Mengirim...' : 'Kirim Pengajuan Klaim'}
+                  {loading ? 'Mengevaluasi Jawaban...' : 'Kirim Jawaban Klaim'}
                 </button>
               </div>
             </form>
@@ -257,24 +236,10 @@ export default function HalamanPengajuanKlaim({ params }: { params: Promise<{ id
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#0B1633] text-white py-12 px-6 sm:px-12 border-t border-white/10 shrink-0">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex flex-col items-center md:items-start space-y-2">
-            <Image src="/logo.png" alt="REFOUND Logo" width={110} height={32} className="object-contain h-8 w-auto brightness-0 invert" />
-            <span className="text-xs text-zinc-400 font-semibold">
-              © 2024 REFOUND University Laboratory System. All rights reserved.
-            </span>
-          </div>
-          <div className="flex flex-wrap justify-center gap-6 text-xs sm:text-sm font-semibold text-zinc-300">
-            <Link href="#" className="hover:text-white transition-colors">Tentang Kami</Link>
-            <Link href="#" className="hover:text-white transition-colors">Panduan Komunitas</Link>
-            <Link href="#" className="hover:text-white transition-colors">Kebijakan Privasi</Link>
-            <Link href="#" className="hover:text-white transition-colors">Kontak Admin Lab</Link>
-          </div>
-        </div>
+      <footer className="bg-[#0B1633] text-white py-8 px-6 border-t border-white/10 shrink-0 text-center text-xs font-normal text-slate-400">
+        © 2026 REFOUND - Laboratorium Teknik Informatika & Sistem Informasi
       </footer>
 
     </div>
   );
 }
-

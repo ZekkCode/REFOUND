@@ -26,8 +26,20 @@ export interface ProfilPengguna {
   nama: string;
   nim: string;
   program_studi: 'Teknik Informatika' | 'Sistem Informasi';
-  peran: PeranPengguna;
-  created_at?: string;
+  nomor_telepon?: string;
+  avatar_url?: string;
+  dibuat_pada?: string;
+}
+
+export interface AdminLab {
+  id: string;
+  nama: string;
+  nip_atau_kode_petugas: string;
+  ruang_lab: string;
+  nomor_telepon?: string;
+  avatar_url?: string;
+  level_akses: string;
+  dibuat_pada?: string;
 }
 
 export interface ZonaGedung {
@@ -52,11 +64,32 @@ export interface ItemLaporan {
 }
 
 export interface SecretPenitipan {
-  report_id: string;
+  id_laporan: string;
   catatan_rahasia: string;
   kode_penitipan: string;
   pertanyaan_verifikasi?: string;
-  created_at?: string;
+  id_admin_penerima?: string;
+  dibuat_pada?: string;
+}
+
+export interface FotoLaporan {
+  id: string;
+  id_laporan: string;
+  url_foto: string;
+  keterangan?: string;
+  urutan: number;
+  dibuat_pada?: string;
+}
+
+export interface NotifikasiPengguna {
+  id: string;
+  id_pengguna: string;
+  judul: string;
+  pesan: string;
+  tipe: 'kecocokan_ditemukan' | 'klaim_disetujui' | 'klaim_ditolak' | 'barang_disimpan' | 'barang_diserahkan' | 'sistem';
+  sudah_dibaca: boolean;
+  tautan?: string;
+  dibuat_pada?: string;
 }
 
 export interface MatchKandidat {
@@ -77,17 +110,19 @@ export interface MatchKandidat {
 
 export interface KlaimMahasiswa {
   id: string;
-  match_id: string;
-  claimant_id: string;
+  id_kecocokan: string;
+  id_pemohon: string;
   jawaban?: string;
-  ai_semantic_score?: number;
-  ai_alasan_analisis?: string;
+  skor_semantik_ai?: number;
   status: StatusKlaim;
-  admin_decision_reason?: string;
-  pickup_code?: string;
-  created_at?: string;
-  match?: MatchKandidat;
-  claimant_profile?: ProfilPengguna;
+  id_admin?: string;
+  alasan_keputusan_admin?: string;
+  kode_pengambilan?: string;
+  kadaluwarsa_kode_pengambilan?: string;
+  sudah_diambil_pada?: string;
+  dibuat_pada?: string;
+  kecocokan?: MatchKandidat;
+  profil_pemohon?: ProfilPengguna;
 }
 
 export interface AuditingStatus {

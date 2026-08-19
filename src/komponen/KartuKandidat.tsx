@@ -21,14 +21,14 @@ export default function KartuKandidat({ match }: PropsKartuKandidat) {
     <div className="kartu-refound p-6 space-y-5">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-[#12A99A]">
+          <span className="text-xs font-semibold uppercase tracking-wider text-[#12A99A]">
             {foundItem?.kategori || 'Barang Temuan'}
           </span>
-          <h3 className="text-lg font-bold text-[#0B1633] dark:text-white mt-0.5">
+          <h3 className="text-lg font-semibold text-[#0B1633] dark:text-white mt-0.5">
             {foundItem?.deskripsi_publik || 'Deskripsi barang temuan'}
           </h3>
         </div>
-        <span className="text-xs font-mono bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 px-3 py-1 rounded-full font-bold">
+        <span className="text-xs font-mono bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 px-3 py-1 rounded-full font-medium">
           Disimpan Admin Lab
         </span>
       </div>
@@ -65,7 +65,7 @@ export default function KartuKandidat({ match }: PropsKartuKandidat) {
 
         <Link
           href={`/klaim/${match.id}`}
-          className="w-full sm:w-auto text-center px-5 py-2.5 bg-[#0B1633] hover:bg-[#152754] text-white dark:bg-[#12A99A] dark:hover:bg-[#0f9184] rounded-xl font-bold transition-all shadow-sm"
+          className="w-full sm:w-auto text-center px-5 py-2.5 bg-[#0B1633] hover:bg-[#152754] text-white dark:bg-[#12A99A] dark:hover:bg-[#0f9184] rounded-xl font-semibold transition-all shadow-sm"
         >
           Ajukan Klaim Sekarang &rarr;
         </Link>

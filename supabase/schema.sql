@@ -1,125 +1,329 @@
--- Enable pgvector extension
+-- ==============================================================================
+-- SKEMA DATABASE REFOUND (LENGKAP - 100% BAHASA INDONESIA)
+-- Sistem Lost & Found Tertutup Komunitas Laboratorium TIF & SI
+-- PostgreSQL + pgvector + Row Level Security (RLS) + Storage + Notifikasi
+-- ==============================================================================
+
+-- ------------------------------------------------------------------------------
+-- 1. Bersihkan Tabel & Enum Lama (DROP CASCADE)
+-- ------------------------------------------------------------------------------
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+DROP FUNCTION IF EXISTS public.tangani_pengguna_baru() CASCADE;
+DROP FUNCTION IF EXISTS public.handle_new_user() CASCADE;
+
+DROP TABLE IF EXISTS public.notifikasi CASCADE;
+DROP TABLE IF EXISTS public.foto_laporan CASCADE;
+DROP TABLE IF EXISTS public.riwayat_status CASCADE;
+DROP TABLE IF EXISTS public.klaim CASCADE;
+DROP TABLE IF EXISTS public.kecocokan CASCADE;
+DROP TABLE IF EXISTS public.vektor_embedding CASCADE;
+DROP TABLE IF EXISTS public.rahasia_temuan CASCADE;
+DROP TABLE IF EXISTS public.laporan CASCADE;
+DROP TABLE IF EXISTS public.zona CASCADE;
+DROP TABLE IF EXISTS public.admin_lab CASCADE;
+DROP TABLE IF EXISTS public.profil CASCADE;
+
+-- Bersihkan sisa tabel bahasa Inggris jika masih ada
+DROP TABLE IF EXISTS public.status_history CASCADE;
+DROP TABLE IF EXISTS public.claims CASCADE;
+DROP TABLE IF EXISTS public.matches CASCADE;
+DROP TABLE IF EXISTS public.embeddings CASCADE;
+DROP TABLE IF EXISTS public.found_secrets CASCADE;
+DROP TABLE IF EXISTS public.reports CASCADE;
+DROP TABLE IF EXISTS public.zones CASCADE;
+DROP TABLE IF EXISTS public.profiles CASCADE;
+
+DROP TYPE IF EXISTS peran_pengguna CASCADE;
+DROP TYPE IF EXISTS tipe_laporan CASCADE;
+DROP TYPE IF EXISTS status_laporan CASCADE;
+DROP TYPE IF EXISTS status_klaim CASCADE;
+DROP TYPE IF EXISTS tipe_notifikasi CASCADE;
+DROP TYPE IF EXISTS user_role CASCADE;
+DROP TYPE IF EXISTS report_type CASCADE;
+DROP TYPE IF EXISTS report_status CASCADE;
+DROP TYPE IF EXISTS claim_status CASCADE;
+
+-- ------------------------------------------------------------------------------
+-- 2. Aktifkan Ekstensi pgvector
+-- ------------------------------------------------------------------------------
 CREATE EXTENSION IF NOT EXISTS vector;
 
--- Enums
-CREATE TYPE user_role AS ENUM ('user', 'admin_lab');
-CREATE TYPE report_type AS ENUM ('lost', 'found');
-CREATE TYPE report_status AS ENUM ('diajukan', 'menunggu_validasi', 'aktif', 'potensi_cocok', 'diklaim', 'dikembalikan', 'ditolak', 'kedaluwarsa');
-CREATE TYPE claim_status AS ENUM ('diajukan', 'menunggu_jawaban', 'ditinjau_admin', 'disetujui', 'diambil', 'ditolak', 'dibatalkan');
+-- ------------------------------------------------------------------------------
+-- 3. Tipe Data Enum (Bahasa Indonesia)
+-- ------------------------------------------------------------------------------
+CREATE TYPE tipe_laporan AS ENUM ('kehilangan', 'penemuan');
+CREATE TYPE status_laporan AS ENUM (
+  'diajukan',
+  'menunggu_validasi',
+  'aktif',
+  'potensi_cocok',
+  'diklaim',
+  'dikembalikan',
+  'ditolak',
+  'kedaluwarsa'
+);
+CREATE TYPE status_klaim AS ENUM (
+  'diajukan',
+  'menunggu_jawaban',
+  'ditinjau_admin',
+  'disetujui',
+  'diambil',
+  'ditolak',
+  'dibatalkan'
+);
+CREATE TYPE tipe_notifikasi AS ENUM (
+  'kecocokan_ditemukan',
+  'klaim_disetujui',
+  'klaim_ditolak',
+  'barang_disimpan',
+  'barang_diserahkan',
+  'sistem'
+);
 
--- 1. Profiles Table
-CREATE TABLE IF NOT EXISTS public.profiles (
+-- ------------------------------------------------------------------------------
+-- 4. Tabel Master & Entitas Utama
+-- ------------------------------------------------------------------------------
+
+-- A. Tabel Profil Mahasiswa / Pengguna Umum
+CREATE TABLE public.profil (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  name TEXT NOT NULL,
+  nama TEXT NOT NULL,
   nim TEXT UNIQUE NOT NULL,
-  study_program TEXT NOT NULL CHECK (study_program IN ('Teknik Informatika', 'Sistem Informasi')),
-  role user_role DEFAULT 'user' NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+  program_studi TEXT NOT NULL CHECK (program_studi IN ('Teknik Informatika', 'Sistem Informasi')),
+  nomor_telepon TEXT,
+  avatar_url TEXT,
+  dibuat_pada TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
 
--- 2. Master Zones Table
-CREATE TABLE IF NOT EXISTS public.zones (
+-- B. Tabel Khusus Admin Lab (Terpisah dari Mahasiswa)
+CREATE TABLE public.admin_lab (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  nama TEXT NOT NULL,
+  nip_atau_kode_petugas TEXT UNIQUE NOT NULL,
+  ruang_lab TEXT DEFAULT 'Tata Usaha / Lab Center TIF-SI' NOT NULL,
+  nomor_telepon TEXT,
+  avatar_url TEXT,
+  level_akses TEXT DEFAULT 'operator_lab' NOT NULL,
+  dibuat_pada TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+
+-- C. Tabel Master Zona Laboratorium
+CREATE TABLE public.zona (
   id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  description TEXT
+  nama TEXT NOT NULL,
+  deskripsi TEXT
 );
 
-INSERT INTO public.zones (id, name, description) VALUES
+-- Data Awal Master Zona Laboratorium
+INSERT INTO public.zona (id, nama, deskripsi) VALUES
   ('lab_tif', 'Lab TIF', 'Laboratorium Teknik Informatika'),
   ('lab_si', 'Lab SI', 'Laboratorium Sistem Informasi'),
-  ('koridor', 'Koridor Gedung Lab', 'Koridor utama lantai gedung'),
-  ('tangga', 'Area Tangga', 'Tangga antar lantai'),
-  ('lobi', 'Lobi Utama Lab', 'Lobi pintu masuk gedung lab'),
-  ('ruang_admin', 'Ruang Admin Lab', 'Ruang pengelolaan & penitipan barang')
+  ('koridor', 'Koridor Gedung Lab', 'Koridor utama lantai gedung laboratorium'),
+  ('tangga', 'Area Tangga', 'Tangga penghubung antar lantai gedung'),
+  ('lobi', 'Lobi Utama Lab', 'Lobi pintu masuk gedung laboratorium'),
+  ('ruang_admin', 'Ruang Admin Lab', 'Ruang pengelolaan & penitipan fisik barang')
 ON CONFLICT (id) DO NOTHING;
 
--- 3. Reports Table
-CREATE TABLE IF NOT EXISTS public.reports (
+-- D. Tabel Laporan (Kehilangan & Penemuan)
+CREATE TABLE public.laporan (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
-  type report_type NOT NULL,
-  category TEXT NOT NULL,
-  public_description TEXT NOT NULL,
-  zone_id TEXT NOT NULL REFERENCES public.zones(id),
-  occurred_at TIMESTAMPTZ NOT NULL,
-  status report_status DEFAULT 'diajukan' NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+  id_pengguna UUID NOT NULL REFERENCES public.profil(id) ON DELETE CASCADE,
+  tipe tipe_laporan NOT NULL,
+  kategori TEXT NOT NULL,
+  deskripsi_publik TEXT NOT NULL,
+  id_zona TEXT NOT NULL REFERENCES public.zona(id),
+  waktu_kejadian TIMESTAMPTZ NOT NULL,
+  status status_laporan DEFAULT 'diajukan' NOT NULL,
+  url_foto_utama TEXT,
+  dibuat_pada TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
 
--- 4. Found Secrets Table (Admin Custody & Verification Question)
-CREATE TABLE IF NOT EXISTS public.found_secrets (
-  report_id UUID PRIMARY KEY REFERENCES public.reports(id) ON DELETE CASCADE,
-  secret_notes TEXT NOT NULL,
-  custody_code TEXT UNIQUE NOT NULL,
-  verification_question TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
-);
-
--- 5. Embeddings Table (pgvector)
-CREATE TABLE IF NOT EXISTS public.embeddings (
-  report_id UUID PRIMARY KEY REFERENCES public.reports(id) ON DELETE CASCADE,
-  text_vector vector(1536),
-  model_version TEXT DEFAULT 'text-embedding-3-small' NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
-);
-
--- 6. Matches Table
-CREATE TABLE IF NOT EXISTS public.matches (
+-- E. Tabel Foto Laporan (Menyimpan Galeri/Multi-Foto per Laporan)
+CREATE TABLE public.foto_laporan (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  lost_report_id UUID NOT NULL REFERENCES public.reports(id) ON DELETE CASCADE,
-  found_report_id UUID NOT NULL REFERENCES public.reports(id) ON DELETE CASCADE,
-  text_score NUMERIC(5, 4) DEFAULT 0 NOT NULL,
-  visual_score NUMERIC(5, 4) DEFAULT 0 NOT NULL,
-  location_score NUMERIC(5, 4) DEFAULT 0 NOT NULL,
-  time_score NUMERIC(5, 4) DEFAULT 0 NOT NULL,
-  final_score NUMERIC(5, 4) DEFAULT 0 NOT NULL,
+  id_laporan UUID NOT NULL REFERENCES public.laporan(id) ON DELETE CASCADE,
+  url_foto TEXT NOT NULL,
+  keterangan TEXT,
+  urutan INT DEFAULT 1 NOT NULL,
+  dibuat_pada TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+
+-- F. Tabel Rahasia Temuan (Ciri Fisik Khusus & Penitipan Admin Lab)
+CREATE TABLE public.rahasia_temuan (
+  id_laporan UUID PRIMARY KEY REFERENCES public.laporan(id) ON DELETE CASCADE,
+  catatan_rahasia TEXT NOT NULL,
+  kode_penitipan TEXT UNIQUE NOT NULL,
+  pertanyaan_verifikasi TEXT,
+  id_admin_penerima UUID REFERENCES public.admin_lab(id),
+  dibuat_pada TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+
+-- G. Tabel Vektor Embedding AI (pgvector untuk Vector Similarity Search)
+CREATE TABLE public.vektor_embedding (
+  id_laporan UUID PRIMARY KEY REFERENCES public.laporan(id) ON DELETE CASCADE,
+  vektor_teks vector(1536),
+  versi_model TEXT DEFAULT 'text-embedding-3-small' NOT NULL,
+  dibuat_pada TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+
+-- H. Tabel Kecocokan AI (Kandidat Match Antara Kehilangan & Penemuan)
+CREATE TABLE public.kecocokan (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id_laporan_kehilangan UUID NOT NULL REFERENCES public.laporan(id) ON DELETE CASCADE,
+  id_laporan_penemuan UUID NOT NULL REFERENCES public.laporan(id) ON DELETE CASCADE,
+  skor_teks NUMERIC(5, 4) DEFAULT 0 NOT NULL,
+  skor_visual NUMERIC(5, 4) DEFAULT 0 NOT NULL,
+  skor_lokasi NUMERIC(5, 4) DEFAULT 0 NOT NULL,
+  skor_waktu NUMERIC(5, 4) DEFAULT 0 NOT NULL,
+  skor_akhir NUMERIC(5, 4) DEFAULT 0 NOT NULL,
   status TEXT DEFAULT 'pending' NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
-  UNIQUE(lost_report_id, found_report_id)
+  dibuat_pada TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+  UNIQUE(id_laporan_kehilangan, id_laporan_penemuan)
 );
 
--- 7. Claims Table
-CREATE TABLE IF NOT EXISTS public.claims (
+-- I. Tabel Klaim Mahasiswa (Lengkap dengan Expiry Code & ID Admin Peninjau)
+CREATE TABLE public.klaim (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  match_id UUID NOT NULL REFERENCES public.matches(id) ON DELETE CASCADE,
-  claimant_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
-  answer TEXT,
-  ai_semantic_score NUMERIC(5, 4),
-  status claim_status DEFAULT 'diajukan' NOT NULL,
-  admin_decision_reason TEXT,
-  pickup_code TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+  id_kecocokan UUID NOT NULL REFERENCES public.kecocokan(id) ON DELETE CASCADE,
+  id_pemohon UUID NOT NULL REFERENCES public.profil(id) ON DELETE CASCADE,
+  jawaban TEXT,
+  skor_semantik_ai NUMERIC(5, 4),
+  status status_klaim DEFAULT 'diajukan' NOT NULL,
+  
+  -- Relasi Admin dari tabel public.admin_lab
+  id_admin UUID REFERENCES public.admin_lab(id),
+  alasan_keputusan_admin TEXT,
+  
+  -- Kode Pengambilan Single-Use + Batas Waktu (Expiry)
+  kode_pengambilan TEXT,
+  kadaluwarsa_kode_pengambilan TIMESTAMPTZ,
+  sudah_diambil_pada TIMESTAMPTZ,
+  
+  dibuat_pada TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
 
--- 8. Status History Audit Log
-CREATE TABLE IF NOT EXISTS public.status_history (
+-- J. Tabel Notifikasi Pengguna (Riwayat Notifikasi User)
+CREATE TABLE public.notifikasi (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  entity_type TEXT NOT NULL,
-  entity_id UUID NOT NULL,
-  from_status TEXT NOT NULL,
-  to_status TEXT NOT NULL,
-  actor_id UUID NOT NULL REFERENCES public.profiles(id),
-  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+  id_pengguna UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  judul TEXT NOT NULL,
+  pesan TEXT NOT NULL,
+  tipe tipe_notifikasi DEFAULT 'sistem' NOT NULL,
+  sudah_dibaca BOOLEAN DEFAULT FALSE NOT NULL,
+  tautan TEXT,
+  dibuat_pada TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
 
--- Row Level Security (RLS) Policies
-ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.reports ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.found_secrets ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.matches ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.claims ENABLE ROW LEVEL SECURITY;
+-- K. Tabel Riwayat Status (Audit Trail Log Penyerahan & Perubahan Status)
+CREATE TABLE public.riwayat_status (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  tipe_entitas TEXT NOT NULL,
+  id_entitas UUID NOT NULL,
+  status_awal TEXT NOT NULL,
+  status_tujuan TEXT NOT NULL,
+  id_pelaku UUID NOT NULL REFERENCES auth.users(id),
+  keterangan TEXT,
+  dibuat_pada TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
 
--- Profiles Policy
-CREATE POLICY "Users read own profile, Admins read all" ON public.profiles
-  FOR SELECT USING (auth.uid() = id OR EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin_lab'));
+-- ------------------------------------------------------------------------------
+-- 5. Row Level Security (RLS) Policies
+-- ------------------------------------------------------------------------------
 
--- Reports Policy
-CREATE POLICY "Public read active reports" ON public.reports
-  FOR SELECT USING (status IN ('aktif', 'potensi_cocok') OR user_id = auth.uid() OR EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin_lab'));
+ALTER TABLE public.profil ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.admin_lab ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.laporan ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.foto_laporan ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.rahasia_temuan ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.vektor_embedding ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.kecocokan ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.klaim ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.notifikasi ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.riwayat_status ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Users insert own report" ON public.reports
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
+-- Helper Function Cek Apakah Pengguna Adalah Admin Lab
+CREATE OR REPLACE FUNCTION public.adalah_admin_lab(user_id UUID)
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN EXISTS (SELECT 1 FROM public.admin_lab WHERE id = user_id);
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Found Secrets Policy (Strict Admin Only)
-CREATE POLICY "Admin only secret access" ON public.found_secrets
-  FOR ALL USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin_lab'));
+-- Profil Mahasiswa: Mahasiswa baca/update miliknya, Admin baca semua
+CREATE POLICY "Pengguna baca profil sendiri, Admin baca semua" ON public.profil
+  FOR SELECT USING (auth.uid() = id OR public.adalah_admin_lab(auth.uid()));
+
+CREATE POLICY "Pengguna perbarui profil sendiri" ON public.profil
+  FOR UPDATE USING (auth.uid() = id);
+
+-- Admin Lab: Admin baca semua data admin, user publik hanya baca nama/ruang lab
+CREATE POLICY "Akses tabel admin lab" ON public.admin_lab
+  FOR SELECT USING (TRUE);
+
+CREATE POLICY "Admin perbarui profil admin sendiri" ON public.admin_lab
+  FOR UPDATE USING (auth.uid() = id);
+
+-- Laporan: Publik baca laporan aktif, Pelapor baca miliknya, Admin kelola semua
+CREATE POLICY "Publik membaca laporan aktif" ON public.laporan
+  FOR SELECT USING (status IN ('aktif', 'potensi_cocok') OR id_pengguna = auth.uid() OR public.adalah_admin_lab(auth.uid()));
+
+CREATE POLICY "Pengguna buat laporan sendiri" ON public.laporan
+  FOR INSERT WITH CHECK (auth.uid() = id_pengguna);
+
+-- Foto Laporan: Publik baca foto laporan aktif
+CREATE POLICY "Publik membaca foto laporan" ON public.foto_laporan
+  FOR SELECT USING (EXISTS (SELECT 1 FROM public.laporan WHERE id = foto_laporan.id_laporan AND (status IN ('aktif', 'potensi_cocok') OR id_pengguna = auth.uid() OR public.adalah_admin_lab(auth.uid()))));
+
+CREATE POLICY "Pengguna upload foto laporan sendiri" ON public.foto_laporan
+  FOR INSERT WITH CHECK (EXISTS (SELECT 1 FROM public.laporan WHERE id = foto_laporan.id_laporan AND id_pengguna = auth.uid()));
+
+-- Rahasia Temuan: Ketat Hanya Admin Lab yang Dapat Akses
+CREATE POLICY "Akses rahasia khusus Admin Lab" ON public.rahasia_temuan
+  FOR ALL USING (public.adalah_admin_lab(auth.uid()));
+
+-- Klaim: Pemohon baca klaim miliknya, Admin kelola semua
+CREATE POLICY "Pemohon baca klaim sendiri, Admin kelola semua" ON public.klaim
+  FOR ALL USING (id_pemohon = auth.uid() OR public.adalah_admin_lab(auth.uid()));
+
+-- Notifikasi: Pengguna membaca & update notifikasi miliknya sendiri
+CREATE POLICY "Pengguna baca notifikasi sendiri" ON public.notifikasi
+  FOR SELECT USING (id_pengguna = auth.uid());
+
+CREATE POLICY "Pengguna tandai baca notifikasi sendiri" ON public.notifikasi
+  FOR UPDATE USING (id_pengguna = auth.uid());
+
+-- ------------------------------------------------------------------------------
+-- 6. Trigger Otomatis Pembuatan Profil saat Registrasi / Google OAuth Masuk
+-- ------------------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION public.tangani_pengguna_baru()
+RETURNS TRIGGER AS $$
+BEGIN
+  -- Cek apakah email terdaftar sebagai admin lab (misal berakhiran @admin.refound atau memiliki metadata admin)
+  IF (NEW.raw_user_meta_data->>'role' = 'admin_lab' OR NEW.email LIKE '%admin%') THEN
+    INSERT INTO public.admin_lab (id, nama, nip_atau_kode_petugas, ruang_lab)
+    VALUES (
+      NEW.id,
+      COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'name', split_part(NEW.email, '@', 1)),
+      COALESCE(NEW.raw_user_meta_data->>'nip', 'ADM-' || SUBSTRING(NEW.id::text, 1, 6)),
+      'Tata Usaha / Lab Center TIF-SI'
+    )
+    ON CONFLICT (id) DO NOTHING;
+  ELSE
+    INSERT INTO public.profil (id, nama, nim, program_studi)
+    VALUES (
+      NEW.id,
+      COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'name', split_part(NEW.email, '@', 1)),
+      COALESCE(NEW.raw_user_meta_data->>'nim', 'NIM-' || SUBSTRING(NEW.id::text, 1, 8)),
+      'Teknik Informatika'
+    )
+    ON CONFLICT (id) DO NOTHING;
+  END IF;
+  
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.tangani_pengguna_baru();

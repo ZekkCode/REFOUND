@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface BarangTemuanPending {
   id: string;
@@ -76,11 +77,16 @@ export default function HalamanPenitipanAdmin() {
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-6 md:p-12 text-zinc-900 dark:text-zinc-100">
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-4">
-          <div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-rose-600 dark:text-rose-400">
-              Portal Admin Lab
-            </span>
-            <h1 className="text-2xl font-bold tracking-tight">Penitipan & Penyerahan Barang Lab</h1>
+          <div className="flex items-center space-x-4">
+            <Link href="/" className="flex items-center">
+              <Image src="/logo.png" alt="REFOUND Logo" width={130} height={40} className="object-contain h-10 w-auto" />
+            </Link>
+            <div>
+              <span className="text-xs font-semibold uppercase tracking-wider text-[#12A99A]">
+                Portal Admin Lab
+              </span>
+              <h1 className="text-xl font-bold tracking-tight">Penitipan & Penyerahan Barang Lab</h1>
+            </div>
           </div>
           <Link
             href="/"

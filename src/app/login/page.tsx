@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { masukDenganGoogle } from '@/pustaka/supabase/auth';
 
 export default function UserLoginPage() {
   const router = useRouter();
@@ -18,8 +19,21 @@ export default function UserLoginPage() {
   const [konfirmasiPassword, setKonfirmasiPassword] = useState('');
 
   const [loading, setLoading] = useState(false);
+  const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+
+  const handleLoginGoogle = async () => {
+    setErrorMsg(null);
+    setLoadingGoogle(true);
+    try {
+      await masukDenganGoogle('/dashboard');
+    } catch (err: unknown) {
+      const pesan = err instanceof Error ? err.message : 'Gagal menghubungi server Google';
+      setErrorMsg(`Masuk dengan Google gagal: ${pesan}`);
+      setLoadingGoogle(false);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +41,6 @@ export default function UserLoginPage() {
     setSuccessMsg(null);
 
     if (isRegisterMode) {
-      // Registration validation
       if (!nama || !nim || !email || !password || !konfirmasiPassword) {
         setErrorMsg('Mohon lengkapi seluruh kolom pendaftaran.');
         return;
@@ -41,12 +54,10 @@ export default function UserLoginPage() {
         setLoading(false);
         setSuccessMsg('Pendaftaran akun berhasil! Silakan masuk menggunakan NIM Anda.');
         setIsRegisterMode(false);
-        // Clear registration fields
         setNama('');
         setKonfirmasiPassword('');
-      }, 1500);
+      }, 1200);
     } else {
-      // Login validation
       if (!nim || !password) {
         setErrorMsg('Mohon isi NIM dan Kata Sandi Anda.');
         return;
@@ -55,48 +66,52 @@ export default function UserLoginPage() {
       setTimeout(() => {
         setLoading(false);
         router.push('/dashboard');
-      }, 1500);
+      }, 1200);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F9FAFC] text-[#0B1633] font-sans antialiased selection:bg-[#12A99A]/20">
+    <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-[#0F172A] selection:bg-[#0D9488]/20 font-sans relative overflow-x-hidden">
       
+      {/* Background Decorators */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[500px] bg-radial-gradient pointer-events-none -z-10" />
+      <div className="absolute inset-0 bg-grid-pattern opacity-30 pointer-events-none -z-10" />
+
       {/* Header bar */}
-      <header className="bg-white border-b border-zinc-100 py-4 px-6 md:px-12 flex items-center justify-between shadow-sm shrink-0">
+      <header className="bg-white/80 backdrop-blur-xl border-b border-slate-200/80 py-3.5 px-6 md:px-12 flex items-center justify-between z-20 shrink-0">
         <div>
-          <Link href="/" className="flex items-center">
-            <Image src="/logo.png" alt="REFOUND Logo" width={130} height={40} className="object-contain h-10 w-auto" />
+          <Link href="/" className="flex items-center space-x-3">
+            <Image src="/logo.png" alt="REFOUND Logo" width={120} height={36} className="object-contain h-8 w-auto" priority />
           </Link>
         </div>
         <div>
-          <Link href="/" className="text-zinc-500 hover:text-[#0B1633] text-sm font-extrabold transition-colors">
-            Beranda
+          <Link href="/" className="text-slate-600 hover:text-slate-900 text-xs font-bold transition-colors">
+            &larr; Beranda
           </Link>
         </div>
       </header>
 
       {/* Main Gate Area */}
       <main className="flex-1 flex items-center justify-center p-6 md:p-8 my-6">
-        <div className="max-w-md w-full bg-white p-8 sm:p-10 rounded-3xl border border-zinc-150 shadow-[0_10px_45px_rgba(11,22,51,0.02)] space-y-6">
+        <div data-aos="zoom-in" className="max-w-md w-full bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-[0_15px_45px_rgba(15,23,42,0.06)] space-y-6">
           
           {/* Logo & Welcome */}
           <div className="text-center space-y-2">
             <div className="flex justify-center">
-              <Image src="/logo.png" alt="REFOUND Logo" width={140} height={44} className="object-contain" />
+              <Image src="/logo.png" alt="REFOUND Logo" width={130} height={40} className="object-contain" />
             </div>
-            <h1 className="text-2xl font-black text-[#0B1633] tracking-tight">
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
               {isRegisterMode ? 'Daftar Akun Mahasiswa' : 'Portal Masuk Mahasiswa'}
             </h1>
-            <p className="text-zinc-400 text-xs font-semibold leading-relaxed">
+            <p className="text-slate-500 text-xs font-normal leading-relaxed">
               {isRegisterMode 
-                ? 'Lengkapi form di bawah ini untuk membuat akun baru.' 
-                : 'Gunakan akun universitas (NIM) Anda untuk masuk ke sistem.'}
+                ? 'Lengkapi form untuk mendaftarkan akun komunitas laboratorium.' 
+                : 'Masuk dengan akun universitas atau Google OAuth untuk melapor dan klaim.'}
             </p>
           </div>
 
           {successMsg && (
-            <div className="p-3.5 bg-teal-50 border border-teal-150 text-[#12A99A] text-xs font-bold rounded-2xl flex items-center space-x-2">
+            <div className="p-3.5 bg-teal-50 border border-teal-200 text-[#0D9488] text-xs font-semibold rounded-2xl flex items-center space-x-2">
               <svg className="w-4.5 h-4.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4" />
               </svg>
@@ -105,7 +120,7 @@ export default function UserLoginPage() {
           )}
 
           {errorMsg && (
-            <div className="p-3.5 bg-red-50 border border-red-150 text-red-500 text-xs font-bold rounded-2xl flex items-center space-x-2">
+            <div className="p-3.5 bg-rose-50 border border-rose-200 text-rose-600 text-xs font-semibold rounded-2xl flex items-center space-x-2">
               <svg className="w-4.5 h-4.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
@@ -113,30 +128,54 @@ export default function UserLoginPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Tombol Google OAuth */}
+          <div>
+            <button
+              type="button"
+              onClick={handleLoginGoogle}
+              disabled={loading || loadingGoogle}
+              className="w-full py-3 bg-white hover:bg-slate-50 border border-slate-200 text-slate-900 font-semibold text-xs rounded-xl shadow-xs hover:shadow-sm transition-all flex items-center justify-center space-x-2.5 disabled:opacity-50 cursor-pointer"
+            >
+              <svg className="w-4 h-4" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z" />
+                <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z" />
+                <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z" />
+                <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
+              </svg>
+              <span>{loadingGoogle ? 'Mengarahkan ke Google...' : 'Masuk dengan Akun Google'}</span>
+            </button>
+          </div>
+
+          {/* Divider */}
+          <div className="relative my-3">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-slate-200" />
+            </div>
+            <div className="relative flex justify-center text-[10px] uppercase font-semibold">
+              <span className="bg-white px-2 text-slate-400">Atau masuk dengan NIM</span>
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-3.5">
             {isRegisterMode && (
               <>
                 <div>
-                  <label className="block text-[10px] font-black uppercase text-zinc-400 mb-1.5">
-                    Nama Lengkap
-                  </label>
+                  <label className="block text-[10px] font-semibold uppercase text-slate-400 mb-1">Nama Lengkap</label>
                   <input
                     type="text"
                     placeholder="Contoh: Budi Santoso"
                     value={nama}
                     onChange={(e) => setNama(e.target.value)}
-                    className="w-full bg-white border border-zinc-200 focus:ring-1 focus:ring-[#006F69] focus:border-[#006F69] outline-none rounded-xl p-3 text-xs font-bold text-[#0B1633]"
+                    className="w-full bg-white border border-slate-200 focus:ring-1 focus:ring-[#0D9488] focus:border-[#0D9488] outline-none rounded-xl p-3 text-xs font-semibold text-slate-900"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-black uppercase text-zinc-400 mb-1.5">
-                    Program Studi
-                  </label>
+                  <label className="block text-[10px] font-semibold uppercase text-slate-400 mb-1">Program Studi</label>
                   <select
                     value={prodi}
                     onChange={(e) => setProdi(e.target.value)}
-                    className="w-full bg-white border border-zinc-200 focus:ring-1 focus:ring-[#006F69] focus:border-[#006F69] outline-none rounded-xl p-3 text-xs font-bold text-[#0B1633]"
+                    className="w-full bg-white border border-slate-200 focus:ring-1 focus:ring-[#0D9488] focus:border-[#0D9488] outline-none rounded-xl p-3 text-xs font-semibold text-slate-900"
                   >
                     <option value="Teknik Informatika">Teknik Informatika</option>
                     <option value="Sistem Informasi">Sistem Informasi</option>
@@ -144,85 +183,65 @@ export default function UserLoginPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-black uppercase text-zinc-400 mb-1.5">
-                    Email Kampus
-                  </label>
+                  <label className="block text-[10px] font-semibold uppercase text-slate-400 mb-1">Email Mahasiswa</label>
                   <input
                     type="email"
-                    placeholder="Contoh: budi@student.unpad.ac.id"
+                    placeholder="budi@student.trunojoyo.ac.id"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-white border border-zinc-200 focus:ring-1 focus:ring-[#006F69] focus:border-[#006F69] outline-none rounded-xl p-3 text-xs font-bold text-[#0B1633]"
+                    className="w-full bg-white border border-slate-200 focus:ring-1 focus:ring-[#0D9488] focus:border-[#0D9488] outline-none rounded-xl p-3 text-xs font-semibold text-slate-900"
                   />
                 </div>
               </>
             )}
 
             <div>
-              <label className="block text-[10px] font-black uppercase text-zinc-400 mb-1.5">
-                Nomor Induk Mahasiswa (NIM)
-              </label>
+              <label className="block text-[10px] font-semibold uppercase text-slate-400 mb-1">NIM (Nomor Induk Mahasiswa)</label>
               <input
                 type="text"
                 placeholder="Contoh: 13519099"
                 value={nim}
                 onChange={(e) => setNim(e.target.value)}
-                className="w-full bg-white border border-zinc-200 focus:ring-1 focus:ring-[#006F69] focus:border-[#006F69] outline-none rounded-xl p-3 text-xs font-bold text-[#0B1633]"
+                className="w-full bg-white border border-slate-200 focus:ring-1 focus:ring-[#0D9488] focus:border-[#0D9488] outline-none rounded-xl p-3 text-xs font-semibold text-slate-900"
               />
             </div>
 
             <div>
-              <label className="block text-[10px] font-black uppercase text-zinc-400 mb-1.5">
-                Kata Sandi
-              </label>
+              <label className="block text-[10px] font-semibold uppercase text-slate-400 mb-1">Kata Sandi</label>
               <input
                 type="password"
                 placeholder="Masukkan kata sandi..."
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-white border border-zinc-200 focus:ring-1 focus:ring-[#006F69] focus:border-[#006F69] outline-none rounded-xl p-3 text-xs font-bold text-[#0B1633]"
+                className="w-full bg-white border border-slate-200 focus:ring-1 focus:ring-[#0D9488] focus:border-[#0D9488] outline-none rounded-xl p-3 text-xs font-semibold text-slate-900"
               />
             </div>
 
             {isRegisterMode && (
               <div>
-                <label className="block text-[10px] font-black uppercase text-zinc-400 mb-1.5">
-                  Konfirmasi Kata Sandi
-                </label>
+                <label className="block text-[10px] font-semibold uppercase text-slate-400 mb-1">Konfirmasi Kata Sandi</label>
                 <input
                   type="password"
-                  placeholder="Masukkan ulang kata sandi..."
+                  placeholder="Ulangi kata sandi..."
                   value={konfirmasiPassword}
                   onChange={(e) => setKonfirmasiPassword(e.target.value)}
-                  className="w-full bg-white border border-zinc-200 focus:ring-1 focus:ring-[#006F69] focus:border-[#006F69] outline-none rounded-xl p-3 text-xs font-bold text-[#0B1633]"
+                  className="w-full bg-white border border-slate-200 focus:ring-1 focus:ring-[#0D9488] focus:border-[#0D9488] outline-none rounded-xl p-3 text-xs font-semibold text-slate-900"
                 />
-              </div>
-            )}
-
-            {!isRegisterMode && (
-              <div className="flex items-center justify-between text-xs font-bold text-zinc-400 pt-1">
-                <label className="flex items-center space-x-2 cursor-pointer select-none">
-                  <input type="checkbox" className="rounded border-zinc-300 text-[#006F69] focus:ring-[#006F69]" />
-                  <span>Ingat Saya</span>
-                </label>
-                <Link href="#" className="text-[#006F69] hover:underline">
-                  Lupa Sandi?
-                </Link>
               </div>
             )}
 
             <button
               type="submit"
-              disabled={loading}
-              className="w-full py-3 bg-black hover:bg-zinc-800 disabled:opacity-50 text-white font-bold text-sm rounded-xl shadow-md transition-all mt-4"
+              disabled={loading || loadingGoogle}
+              className="w-full py-3 bg-[#0F172A] hover:bg-slate-800 disabled:opacity-50 text-white font-semibold text-xs rounded-xl shadow-md transition-all mt-2 cursor-pointer"
             >
               {loading 
                 ? (isRegisterMode ? 'Memproses Pendaftaran...' : 'Memproses Masuk...') 
-                : (isRegisterMode ? 'Daftar Akun' : 'Masuk')}
+                : (isRegisterMode ? 'Daftar Akun Mahasiswa' : 'Masuk dengan NIM')}
             </button>
           </form>
 
-          {/* Toggle Button for Login / Registration */}
+          {/* Toggle */}
           <div className="text-center pt-2">
             <button
               type="button"
@@ -231,18 +250,18 @@ export default function UserLoginPage() {
                 setErrorMsg(null);
                 setSuccessMsg(null);
               }}
-              className="text-xs font-extrabold text-[#006F69] hover:underline focus:outline-none"
+              className="text-xs font-semibold text-[#0D9488] hover:underline focus:outline-none cursor-pointer"
             >
-              {isRegisterMode ? 'Sudah memiliki akun? Masuk Sekarang' : 'Belum punya akun? Daftar Sekarang'}
+              {isRegisterMode ? 'Sudah punya akun? Masuk Sekarang' : 'Belum punya akun? Daftar Sekarang'}
             </button>
           </div>
 
-          {/* Secure gate redirect for lab admins */}
-          <div className="text-center pt-4 border-t border-zinc-100">
-            <span className="text-[10px] font-bold text-zinc-400">
-              Petugas Lab?{' '}
-              <Link href="/admin-login" className="text-[#006F69] hover:underline font-extrabold">
-                Masuk di Gerbang Admin
+          {/* Admin link */}
+          <div className="text-center pt-3 border-t border-slate-100">
+            <span className="text-[11px] font-medium text-slate-400">
+              Petugas Laboratorium?{' '}
+              <Link href="/admin-login" className="text-[#0D9488] hover:underline font-semibold">
+                Masuk Gerbang Admin
               </Link>
             </span>
           </div>
@@ -251,7 +270,7 @@ export default function UserLoginPage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#0B1633] text-white py-8 px-6 sm:px-12 border-t border-white/10 shrink-0 text-center text-xs font-semibold text-zinc-400">
+      <footer className="bg-slate-900 text-white py-8 px-6 border-t border-slate-800 shrink-0 text-center text-xs font-medium text-slate-400">
         © 2026 REFOUND University Laboratory System. All rights reserved.
       </footer>
 

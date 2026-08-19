@@ -1,8 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { AdminHandoverDTO } from '@/lib/workflow/types';
+import { verifikasiAdminLab } from '@/pustaka/supabase/auth';
 
 export async function POST(req: NextRequest) {
   try {
+    // Verifikasi Otorisasi Admin Lab
+    const cekAdmin = await verifikasiAdminLab(req);
+    if (!cekAdmin.terverifikasi) {
+      return NextResponse.json(
+        { error: cekAdmin.pesanError || 'Akses ditolak: Hanya Admin Lab yang diizinkan.' },
+        { status: 403 }
+      );
+    }
+
     const body: AdminHandoverDTO = await req.json();
 
     if (!body.claim_id || !body.pickup_code) {

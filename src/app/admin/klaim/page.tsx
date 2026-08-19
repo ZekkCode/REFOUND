@@ -82,7 +82,7 @@ export default function HalamanAdminTinjauKlaim() {
           <Link href="/barang-temuan" className="hover:text-[#0B1633] transition-colors">Inventory</Link>
           <Link
             href="/admin-login"
-            className="px-6 py-2 bg-black hover:bg-zinc-800 text-white font-extrabold text-xs rounded-full shadow-sm transition-all"
+            className="px-6 py-2 bg-black hover:bg-zinc-800 text-white font-semibold text-xs rounded-full shadow-sm transition-all"
           >
             Keluar
           </Link>
@@ -97,23 +97,23 @@ export default function HalamanAdminTinjauKlaim() {
           <div className="space-y-2">
             <Link
               href="/admin"
-              className="inline-flex items-center text-xs font-bold text-zinc-400 hover:text-[#0B1633] transition-colors"
+              className="inline-flex items-center text-xs font-semibold text-zinc-400 hover:text-[#0B1633] transition-colors"
             >
               <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
               </svg>
               Kembali ke Daftar Klaim
             </Link>
-            <h1 className="text-3xl font-black tracking-tight text-[#0B1633]">
+            <h1 className="text-3xl font-bold tracking-tight text-[#0B1633]">
               Tinjauan Klaim: {mockKlaim.id_klaim}
             </h1>
-            <p className="text-zinc-500 text-xs sm:text-sm font-medium">
+            <p className="text-zinc-500 text-xs sm:text-sm font-normal">
               Review kecocokan data laporan kehilangan user dengan data inventaris laboratorium.
             </p>
           </div>
 
           <div>
-            <span className="inline-flex items-center px-4 py-2 text-xs font-extrabold text-amber-700 bg-amber-50 border border-amber-200 rounded-xl shadow-sm">
+            <span className="inline-flex items-center px-4 py-2 text-xs font-semibold text-amber-700 bg-amber-50 border border-amber-200 rounded-xl shadow-sm">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mr-2 animate-pulse" />
               Menunggu Tinjauan
             </span>
@@ -134,13 +134,13 @@ export default function HalamanAdminTinjauKlaim() {
           {/* Left Column: User Data */}
           <section className="lg:col-span-6 bg-white rounded-3xl border border-zinc-150 shadow-[0_10px_35px_rgba(11,22,51,0.02)] overflow-hidden flex flex-col justify-between">
             <div className="p-6 border-b border-zinc-100 flex items-center justify-between">
-              <h3 className="text-lg font-black text-[#0B1633] flex items-center">
+              <h3 className="text-lg font-bold text-[#0B1633] flex items-center">
                 <svg className="w-5 h-5 mr-2 text-zinc-400" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
                 Data Pelapor (User)
               </h3>
-              <span className="px-2.5 py-0.5 text-[9px] font-black uppercase bg-[#0B1633] text-white rounded-full">
+              <span className="px-2.5 py-0.5 text-[9px] font-semibold uppercase bg-[#0B1633] text-white rounded-full">
                 Laporan Kehilangan
               </span>
             </div>
@@ -148,17 +148,17 @@ export default function HalamanAdminTinjauKlaim() {
             <div className="p-6 sm:p-8 space-y-6">
               {/* User row */}
               <div className="p-5 bg-zinc-50/50 border border-zinc-100 rounded-2xl flex items-center space-x-4">
-                <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 text-indigo-700 font-extrabold text-sm rounded-full flex items-center justify-center shrink-0">
+                <div className="w-12 h-12 bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold text-sm rounded-full flex items-center justify-center shrink-0">
                   AB
                 </div>
                 <div className="space-y-0.5">
-                  <h4 className="font-extrabold text-sm text-[#0B1633]">
+                  <h4 className="font-semibold text-sm text-[#0B1633]">
                     {mockKlaim.mahasiswa}
                   </h4>
-                  <p className="text-zinc-500 text-[11px] font-semibold">
+                  <p className="text-zinc-500 text-[11px] font-medium">
                     NIM: {mockKlaim.nim} • {mockKlaim.prodi}
                   </p>
-                  <p className="text-zinc-400 text-[10px] font-semibold pt-0.5">
+                  <p className="text-zinc-400 text-[10px] font-medium pt-0.5">
                     Dilaporkan pada: {mockKlaim.waktuLapor}
                   </p>
                 </div>
@@ -166,28 +166,28 @@ export default function HalamanAdminTinjauKlaim() {
 
               {/* Items specifications */}
               <div className="space-y-4 pt-2">
-                <h4 className="text-xs font-black uppercase tracking-wider text-zinc-400">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
                   Deskripsi Barang Hilang
                 </h4>
                 <div className="grid grid-cols-2 gap-6 text-xs">
                   <div>
-                    <span className="block text-zinc-400 font-semibold mb-0.5">Kategori</span>
-                    <span className="text-[#0B1633] font-bold">{mockKlaim.kategoriHilang}</span>
+                    <span className="block text-zinc-400 font-medium mb-0.5">Kategori</span>
+                    <span className="text-[#0B1633] font-semibold">{mockKlaim.kategoriHilang}</span>
                   </div>
                   <div>
-                    <span className="block text-zinc-400 font-semibold mb-0.5">Merk/Warna</span>
-                    <span className="text-[#0B1633] font-bold">{mockKlaim.merkhilang}</span>
+                    <span className="block text-zinc-400 font-medium mb-0.5">Merk/Warna</span>
+                    <span className="text-[#0B1633] font-semibold">{mockKlaim.merkhilang}</span>
                   </div>
                   <div className="col-span-2">
-                    <span className="block text-zinc-400 font-semibold mb-0.5">Lokasi Kehilangan Terakhir</span>
-                    <span className="text-[#0B1633] font-bold">{mockKlaim.lokasiHilang}</span>
+                    <span className="block text-zinc-400 font-medium mb-0.5">Lokasi Kehilangan Terakhir</span>
+                    <span className="text-[#0B1633] font-semibold">{mockKlaim.lokasiHilang}</span>
                   </div>
                 </div>
               </div>
 
               {/* Security Questions & Answers */}
               <div className="space-y-4 pt-4 border-t border-zinc-100">
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#12A99A] block flex items-center">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-[#12A99A] block flex items-center">
                   <svg className="w-4 h-4 mr-1 text-[#12A99A]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
@@ -218,13 +218,13 @@ export default function HalamanAdminTinjauKlaim() {
           {/* Right Column: Found Item */}
           <section className="lg:col-span-6 bg-white rounded-3xl border border-zinc-150 shadow-[0_10px_35px_rgba(11,22,51,0.02)] overflow-hidden flex flex-col justify-between">
             <div className="p-6 bg-[#006F69] text-white flex items-center justify-between">
-              <h3 className="text-lg font-black flex items-center">
+              <h3 className="text-lg font-bold flex items-center">
                 <svg className="w-5 h-5 mr-2 text-white/80" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                 </svg>
                 Data Barang Temuan
               </h3>
-              <span className="inline-flex items-center px-2.5 py-1 text-[9px] font-black text-white bg-black/40 rounded-full">
+              <span className="inline-flex items-center px-2.5 py-1 text-[9px] font-semibold text-white bg-black/40 rounded-full">
                 <svg className="w-3 h-3 mr-1 fill-current text-[#12A99A]" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
@@ -235,7 +235,7 @@ export default function HalamanAdminTinjauKlaim() {
             <div className="p-6 sm:p-8 space-y-6">
               {/* Product Photo */}
               <div className="space-y-3">
-                <span className="text-xs font-black uppercase tracking-wider text-zinc-400">
+                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
                   Foto Barang dari Finder
                 </span>
                 <div className="w-full h-44 relative bg-zinc-100 rounded-2xl overflow-hidden border border-zinc-100">
@@ -272,7 +272,7 @@ export default function HalamanAdminTinjauKlaim() {
 
               {/* Status and Info */}
               <div className="space-y-4 pt-4 border-t border-zinc-100">
-                <h4 className="text-xs font-black uppercase tracking-wider text-zinc-400">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
                   Info Penemu & Status
                 </h4>
                 
@@ -310,7 +310,7 @@ export default function HalamanAdminTinjauKlaim() {
         {/* Bottom Decision Bar Card */}
         <section className="bg-white p-6 sm:p-8 rounded-3xl border border-zinc-150 shadow-[0_10px_35px_rgba(11,22,51,0.02)] space-y-4">
           <div>
-            <label className="block text-xs font-black uppercase tracking-wider text-zinc-400 mb-2">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">
               Catatan Admin / Alasan Keputusan (Wajib)
             </label>
             <input

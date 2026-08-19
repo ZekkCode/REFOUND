@@ -1,394 +1,293 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import SidebarMahasiswa from '@/komponen/SidebarMahasiswa';
+import TopbarMahasiswa from '@/komponen/TopbarMahasiswa';
+import { ItemLaporan } from '@/pustaka/alur-kerja/tipe';
 
 export default function DashboardMahasiswaPage() {
+  const [laporanSaya, setLaporanSaya] = useState<ItemLaporan[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Ambil data laporan langsung dari Supabase API
+  useEffect(() => {
+    async function loadLaporan() {
+      try {
+        const res = await fetch('/api/laporan');
+        const json = await res.json();
+        if (json.sukses && Array.isArray(json.data)) {
+          setLaporanSaya(json.data);
+        }
+      } catch (e) {
+        console.warn('Load live reports:', e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadLaporan();
+  }, []);
+
+  const totalLaporan = laporanSaya.length;
+  const matchKandidat = laporanSaya.find(l => l.status === 'potensi_cocok') || laporanSaya[0];
+
   return (
-    <div className="min-h-screen flex bg-[#F9FAFC] text-[#0B1633] font-sans antialiased selection:bg-[#12A99A]/20">
-      {/* Left Sidebar */}
-      <aside className="w-64 bg-[#0B1633] text-white flex flex-col justify-between p-6 shrink-0 min-h-screen hidden md:flex">
-        <div className="space-y-8">
-          {/* Logo Brand */}
-          <div className="pt-2">
-            <Link href="/" className="flex items-center">
-              <Image src="/logo.png" alt="REFOUND Logo" width={130} height={40} className="object-contain h-10 w-auto brightness-0 invert" />
-            </Link>
-          </div>
+    <div className="min-h-screen flex bg-[#F8FAFC] text-[#0B1633] font-sans antialiased">
+      <SidebarMahasiswa />
 
-          {/* Quick Actions */}
-          <div className="space-y-3">
-            <Link
-              href="/lapor/penemuan"
-              className="flex items-center justify-center w-full px-4 py-3 bg-[#12A99A] hover:bg-[#12A99A]/90 text-white font-bold text-sm rounded-xl shadow-lg transition-all duration-300 transform hover:-translate-y-0.5"
-            >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-              </svg>
-              Lapor Penemuan
-            </Link>
-            <Link
-              href="/lapor/kehilangan"
-              className="flex items-center justify-center w-full px-4 py-3 bg-transparent hover:bg-white/5 text-white font-bold text-sm rounded-xl border border-white/20 transition-all duration-300 transform hover:-translate-y-0.5"
-            >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              Lapor Kehilangan
-            </Link>
-          </div>
+      <div className="flex-1 flex flex-col min-h-screen overflow-x-hidden pb-28 md:pb-12">
+        <TopbarMahasiswa judulHalaman="Dashboard" />
 
-          {/* Navigation Menu */}
-          <nav className="space-y-1">
-            <Link
-              href="/dashboard"
-              className="flex items-center space-x-3 px-4 py-3 bg-[#1E293B] text-white font-bold text-sm rounded-xl transition-all"
-            >
-              <svg className="w-5 h-5 text-[#12A99A]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
-              </svg>
-              <span>Dashboard</span>
-            </Link>
-            <Link
-              href="/barang-temuan"
-              className="flex items-center space-x-3 px-4 py-3 text-zinc-400 hover:text-white hover:bg-white/5 font-semibold text-sm rounded-xl transition-all"
-            >
-              <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-              </svg>
-              <span>Barang Temuan</span>
-            </Link>
-            <Link
-              href="/kecocokan"
-              className="flex items-center space-x-3 px-4 py-3 text-zinc-400 hover:text-white hover:bg-white/5 font-semibold text-sm rounded-xl transition-all"
-            >
-              <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <circle cx="9" cy="12" r="5" />
-                <circle cx="15" cy="12" r="5" />
-              </svg>
-              <span>Kecocokan</span>
-            </Link>
-            <Link
-              href="/dashboard"
-              className="flex items-center space-x-3 px-4 py-3 text-zinc-400 hover:text-white hover:bg-white/5 font-semibold text-sm rounded-xl transition-all"
-            >
-              <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-              </svg>
-              <span>Laporan Saya</span>
-            </Link>
-            <Link
-              href="/profil"
-              className="flex items-center space-x-3 px-4 py-3 text-zinc-400 hover:text-white hover:bg-white/5 font-semibold text-sm rounded-xl transition-all"
-            >
-              <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-              <span>Profil</span>
-            </Link>
-          </nav>
-        </div>
-
-        {/* Logout Link */}
-        <div>
-          <Link
-            href="/login"
-            className="flex items-center space-x-3 px-4 py-3 text-red-400 hover:text-red-300 hover:bg-red-500/5 font-bold text-sm rounded-xl transition-all"
-          >
-            <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            <span>Keluar</span>
-          </Link>
-        </div>
-      </aside>
-
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-h-screen overflow-x-hidden pb-20 md:pb-0">
-        {/* Top Navbar */}
-        <header className="w-full bg-white py-4 px-6 sm:px-12 flex items-center justify-between md:justify-end border-b border-zinc-100 shrink-0">
-          {/* Logo Brand on Mobile */}
-          <div className="md:hidden">
-            <Link href="/" className="flex items-center">
-              <Image src="/logo.png" alt="REFOUND Logo" width={100} height={32} className="object-contain h-8 w-auto" />
-            </Link>
-          </div>
-          <div className="flex items-center gap-6">
-            {/* Notification Bell */}
-            <button className="relative text-zinc-500 hover:text-[#0B1633] transition-colors p-1.5 rounded-lg hover:bg-zinc-50">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-              </svg>
-              {/* Notification Badge */}
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-white" />
-            </button>
-
-            {/* Profile Avatar */}
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-full bg-[#0B1633] text-white flex items-center justify-center font-bold text-xs shadow-md">
-                BS
+        <main className="flex-1 py-6 sm:py-8 px-4 sm:px-8 max-w-5xl w-full mx-auto space-y-6 sm:space-y-8">
+          
+          {/* Header Banner - Spacious & Clean */}
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/70 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-5">
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-teal-50 text-[#12A99A] text-[11px] font-semibold tracking-wide">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#12A99A]" />
+                Portal Mahasiswa
               </div>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0B1633]">
+                Selamat Datang, Budi Santoso
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-500 font-normal max-w-xl leading-relaxed">
+                Pantau laporan barang hilang Anda, laporkan temuan baru, dan periksa notifikasi kecocokan cerdas AI laboratorium.
+              </p>
+            </div>
+            
+            <div className="flex flex-wrap items-center gap-2.5 shrink-0 pt-2 md:pt-0">
+              <Link
+                href="/lapor/kehilangan"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#0B1633] hover:bg-[#12A99A] text-white font-medium text-xs sm:text-sm rounded-xl shadow-xs transition-all duration-150"
+              >
+                <svg className="w-4 h-4 text-[#12A99A] group-hover:text-white" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <span>Lapor Kehilangan</span>
+              </Link>
+              <Link
+                href="/lapor/penemuan"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200/80 text-[#0B1633] font-medium text-xs sm:text-sm rounded-xl transition-all duration-150"
+              >
+                <svg className="w-4 h-4 text-[#12A99A]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                <span>Lapor Temuan</span>
+              </Link>
             </div>
           </div>
-        </header>
 
-        {/* Dashboard Grid */}
-        <main className="flex-1 py-8 px-6 sm:px-12 max-w-6xl w-full mx-auto space-y-8">
-          {/* Welcome Banner */}
-          <div className="space-y-1">
-            <h1 className="text-3xl font-black tracking-tight text-[#0B1633]">
-              Halo, Budi Santoso!
-            </h1>
-            <p className="text-zinc-500 text-sm font-medium">
-              Selamat datang di dashboard REFOUND.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {/* Left Column: Match Candidates */}
-            <section className="lg:col-span-5 space-y-6">
-              <div className="flex items-center space-x-2.5">
-                <h2 className="text-lg sm:text-xl font-extrabold text-[#0B1633]">
-                  Kandidat Kecocokan Baru
-                </h2>
-                <span className="px-2 py-0.5 text-[10px] font-black uppercase bg-red-600 text-white rounded-full tracking-wider flex items-center">
-                  1 Baru
+          {/* Quick Metrics Bar - Responsive & Spacious (Stacked on Mobile, 3-Cols on Tablet/Desktop) */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            
+            {/* Metric 1 */}
+            <div className="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-xs flex items-center justify-between">
+              <div className="space-y-0.5">
+                <span className="text-xs font-normal text-slate-500 block">Laporan Aktif</span>
+                <span className="text-2xl font-bold text-[#0B1633] block">
+                  {loading ? '...' : totalLaporan}
                 </span>
               </div>
-
-              {/* Match Candidate Card */}
-              <div className="bg-white p-6 rounded-2xl border border-zinc-100 shadow-[0_10px_35px_rgba(11,22,51,0.03)] hover:shadow-[0_15px_40px_rgba(11,22,51,0.06)] hover:border-indigo-100/50 transition-all duration-300 space-y-5">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-0.5">
-                    <span className="text-[10px] font-black text-zinc-400 tracking-wider">
-                      FLASHDISK 32GB
-                    </span>
-                    <h3 className="text-xl font-black text-[#0B1633] leading-tight">
-                      SanDisk Cruzer
-                    </h3>
-                  </div>
-                  {/* Score badge */}
-                  <span className="inline-flex items-center px-2.5 py-1 text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 rounded-full">
-                    <svg className="w-3.5 h-3.5 mr-1 text-indigo-500 fill-current" viewBox="0 0 20 20">
-                      <path d="M11.3 1.046A1 1 0 0112 2v6.5h3a1 1 0 01.76 1.649l-6 7.5A1 1 0 018 17v-6.5H5a1 1 0 01-.76-1.649l6-7.5a1 1 0 011.06-.305z" />
-                    </svg>
-                    86/100 – Potensi Tinggi
-                  </span>
-                </div>
-
-                {/* Attributes Tags */}
-                <div className="flex flex-wrap gap-2">
-                  <span className="inline-flex items-center px-2.5 py-1 text-xs font-semibold text-zinc-500 bg-zinc-50 border border-zinc-200 rounded-lg">
-                    <svg className="w-3.5 h-3.5 mr-1 text-[#12A99A]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                    Warna mirip
-                  </span>
-                  <span className="inline-flex items-center px-2.5 py-1 text-xs font-semibold text-zinc-500 bg-zinc-50 border border-zinc-200 rounded-lg">
-                    <svg className="w-3.5 h-3.5 mr-1 text-[#12A99A]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    Zona dekat
-                  </span>
-                </div>
-
-                {/* Status alert box */}
-                <div className="flex items-center px-4 py-2.5 bg-teal-50/50 border border-teal-100 rounded-xl">
-                  <svg className="w-4 h-4 mr-2 text-[#12A99A]" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span className="text-xs font-bold text-[#12A99A]">
-                    Disimpan Admin
-                  </span>
-                </div>
-
-                {/* Button detail */}
-                <Link
-                  href="/kecocokan"
-                  className="flex items-center justify-center w-full px-4 py-2.5 bg-white border border-[#12A99A] hover:bg-teal-50/20 text-[#12A99A] font-bold text-sm rounded-xl transition-all duration-300"
-                >
-                  Lihat Detail
-                </Link>
-              </div>
-
-              {/* Privacy protection notice box */}
-              <div className="p-4 bg-zinc-100/50 border border-zinc-200 rounded-2xl flex items-start space-x-3">
-                <svg className="w-5 h-5 text-zinc-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              <div className="w-11 h-11 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#0B1633] shrink-0">
+                <svg className="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                 </svg>
-                <p className="text-zinc-500 text-xs font-semibold leading-relaxed">
-                  Sistem melindungi privasi Anda. NIM dan detail pribadi disamarkan. Lokasi ditampilkan sebagai "Zona" untuk keamanan.
-                </p>
               </div>
-            </section>
+            </div>
 
-            {/* Right Column: Active Reports */}
-            <section className="lg:col-span-7 space-y-6">
+            {/* Metric 2 */}
+            <div className="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-xs flex items-center justify-between">
+              <div className="space-y-0.5">
+                <span className="text-xs font-normal text-slate-500 block">Kecocokan AI</span>
+                <span className="text-2xl font-bold text-[#12A99A] block">1 Match</span>
+              </div>
+              <div className="w-11 h-11 rounded-xl bg-teal-50 border border-teal-100 flex items-center justify-center text-[#12A99A] shrink-0">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Metric 3 */}
+            <div className="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-xs flex items-center justify-between">
+              <div className="space-y-0.5">
+                <span className="text-xs font-normal text-slate-500 block">Status Fisik</span>
+                <span className="text-2xl font-bold text-[#10B981] block">Disimpan</span>
+              </div>
+              <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-[#10B981] shrink-0">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Main 2-Column Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
+            
+            {/* Left: AI Match Highlight Card */}
+            <section className="lg:col-span-5 space-y-3.5">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg sm:text-xl font-extrabold text-[#0B1633]">
-                  Laporan Aktif Saya
-                </h2>
-                <Link href="/dashboard" className="text-xs font-bold text-[#12A99A] hover:underline transition-all">
+                <div className="flex items-center gap-2">
+                  <h2 className="text-sm font-bold uppercase tracking-wider text-slate-400">
+                    Kandidat Kecocokan AI
+                  </h2>
+                  <span className="px-2 py-0.5 text-[10px] font-semibold bg-[#12A99A] text-white rounded-full">
+                    1 Baru
+                  </span>
+                </div>
+                <Link href="/kecocokan" className="text-xs font-medium text-[#12A99A] hover:underline">
                   Lihat Semua
                 </Link>
               </div>
 
-              {/* Card 1: Flashdisk SanDisk 32GB */}
-              <div className="bg-white p-6 rounded-2xl border border-zinc-100 shadow-[0_10px_35px_rgba(11,22,51,0.03)] hover:shadow-[0_15px_40px_rgba(11,22,51,0.06)] transition-all duration-300 space-y-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex items-center space-x-4">
-                    {/* Icon frame */}
-                    <div className="w-12 h-12 bg-zinc-100 rounded-xl flex items-center justify-center text-zinc-500 shrink-0 shadow-sm">
-                      {/* USB Icon */}
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="font-extrabold text-[#0B1633]">
-                        Flashdisk SanDisk 32GB
-                      </h3>
-                      <p className="text-zinc-400 text-xs font-semibold">
-                        Hilang pada 12 Okt 2024 &bull; Lab Komputer A
-                      </p>
-                    </div>
+              {/* Match Card - Spacious & Clean */}
+              <div className="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/70 shadow-xs space-y-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-semibold text-[#12A99A] uppercase tracking-wider block">
+                      {matchKandidat?.kategori || 'Laptop & Komputer'}
+                    </span>
+                    <h3 className="text-base font-bold text-[#0B1633] leading-snug">
+                      {matchKandidat?.deskripsi_publik ? matchKandidat.deskripsi_publik.split('\n')[0].replace('Nama Barang: ', '') : 'MacBook Pro 14" (Space Grey)'}
+                    </h3>
                   </div>
-                  {/* Status label */}
-                  <span className="px-3.5 py-1.5 text-xs font-bold bg-[#FF765F]/10 text-[#FF765F] rounded-full border border-[#FF765F]/20 whitespace-nowrap">
-                    Menunggu Validasi Admin
+                  <span className="inline-flex items-center px-2.5 py-1 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200/80 rounded-full shrink-0">
+                    86% Cocok
                   </span>
                 </div>
 
-                {/* Horizontal Progress Timeline */}
-                <div className="relative pt-4 pb-2">
-                  {/* Connecting Line */}
-                  <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-zinc-100 -translate-y-1/2 z-0" />
-                  
-                  {/* Active Line Segment */}
-                  <div className="absolute top-1/2 left-0 w-1/3 h-0.5 bg-[#FF765F] -translate-y-1/2 z-0" />
-
-                  <div className="relative grid grid-cols-4 z-10 text-center">
-                    {/* Step 1: Dilaporkan */}
-                    <div className="flex flex-col items-center space-y-2">
-                      <div className="w-6 h-6 rounded-full bg-[#12A99A] text-white flex items-center justify-center shadow-sm">
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
-                      </div>
-                      <span className="text-[10px] font-bold text-[#0B1633]">Dilaporkan</span>
-                    </div>
-
-                    {/* Step 2: Validasi Admin */}
-                    <div className="flex flex-col items-center space-y-2">
-                      <div className="w-6 h-6 rounded-full bg-white border-4 border-[#FF765F] flex items-center justify-center shadow-sm" />
-                      <span className="text-[10px] font-black text-[#FF765F]">Validasi Admin</span>
-                    </div>
-
-                    {/* Step 3: Pencarian AI */}
-                    <div className="flex flex-col items-center space-y-2">
-                      <div className="w-6 h-6 rounded-full bg-zinc-200 border-4 border-white flex items-center justify-center shadow-sm" />
-                      <span className="text-[10px] font-bold text-zinc-400">Pencarian AI</span>
-                    </div>
-
-                    {/* Step 4: Ditemukan */}
-                    <div className="flex flex-col items-center space-y-2">
-                      <div className="w-6 h-6 rounded-full bg-zinc-200 border-4 border-white flex items-center justify-center shadow-sm" />
-                      <span className="text-[10px] font-bold text-zinc-400">Ditemukan</span>
-                    </div>
-                  </div>
+                {/* Attributes Tags */}
+                <div className="flex flex-wrap gap-1.5 pt-0.5">
+                  <span className="inline-flex items-center px-2.5 py-1 text-[11px] font-medium text-slate-600 bg-slate-50 border border-slate-200/80 rounded-lg">
+                    <svg className="w-3.5 h-3.5 mr-1 text-[#12A99A]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                    Atribut Sesuai
+                  </span>
+                  <span className="inline-flex items-center px-2.5 py-1 text-[11px] font-medium text-slate-600 bg-slate-50 border border-slate-200/80 rounded-lg">
+                    <svg className="w-3.5 h-3.5 mr-1 text-[#12A99A]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                    </svg>
+                    Zona: {matchKandidat?.nama_zona || 'Lab TIF'}
+                  </span>
                 </div>
+
+                {/* Storage Status */}
+                <div className="flex items-center gap-2 px-3.5 py-2.5 bg-emerald-50/70 border border-emerald-200/60 rounded-xl text-xs font-medium text-emerald-800">
+                  <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse shrink-0" />
+                  <span>Disimpan Aman di Ruang Admin Lab</span>
+                </div>
+
+                <Link
+                  href="/kecocokan"
+                  className="flex items-center justify-center w-full px-4 py-2.5 bg-[#0B1633] hover:bg-[#12A99A] text-white font-medium text-xs sm:text-sm rounded-xl shadow-xs transition-all duration-150"
+                >
+                  Tinjau & Klaim Barang &rarr;
+                </Link>
               </div>
 
-              {/* Card 2: Buku Catatan Praktikum */}
-              <div className="bg-white rounded-2xl border border-zinc-100 shadow-[0_10px_35px_rgba(11,22,51,0.03)] hover:shadow-[0_15px_40px_rgba(11,22,51,0.06)] transition-all duration-300 overflow-hidden">
-                <div className="p-6 flex items-start justify-between gap-4">
-                  <div className="flex items-center space-x-4">
-                    {/* Icon frame */}
-                    <div className="w-12 h-12 bg-zinc-100 rounded-xl flex items-center justify-center text-zinc-500 shrink-0 shadow-sm">
-                      {/* Book Icon */}
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="font-extrabold text-[#0B1633]">
-                        Buku Catatan Praktikum
-                      </h3>
-                      <p className="text-zinc-400 text-xs font-semibold">
-                        Ditemukan pada 10 Okt 2024 &bull; Lobi Utama
-                      </p>
-                    </div>
-                  </div>
-                  {/* Status label */}
-                  <span className="px-3.5 py-1.5 text-xs font-bold bg-teal-50 text-[#12A99A] rounded-full border border-teal-100 whitespace-nowrap">
-                    Selesai / Dikembalikan
-                  </span>
-                </div>
-
-                {/* Footer details row */}
-                <div className="bg-zinc-50 px-6 py-3 flex items-center justify-between border-t border-zinc-100">
-                  <span className="text-xs font-semibold text-zinc-400">
-                    Status akhir: Dikembalikan ke pemilik.
-                  </span>
-                  <Link href="/dashboard" className="text-xs font-bold text-[#12A99A] hover:underline">
-                    Lihat Riwayat
-                  </Link>
-                </div>
+              {/* Privacy Notice Card */}
+              <div className="p-3.5 bg-slate-50/80 border border-slate-200/60 rounded-xl flex items-start gap-2.5 text-slate-500 text-xs font-normal leading-relaxed">
+                <svg className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.75" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                </svg>
+                <span>Ciri rahasia barang temuan dilindungi sistem. Hanya Admin Lab yang memverifikasi keaslian bukti kepemilikan Anda.</span>
               </div>
             </section>
+
+            {/* Right: Active Reports Section */}
+            <section className="lg:col-span-7 space-y-3.5">
+              <div className="flex items-center justify-between">
+                <h2 className="text-sm font-bold uppercase tracking-wider text-slate-400">
+                  Laporan Aktif Saya
+                </h2>
+                <span className="text-xs font-normal text-slate-400">{totalLaporan} Laporan Terdaftar</span>
+              </div>
+
+              {loading ? (
+                <div className="space-y-3">
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-xs animate-pulse space-y-3">
+                    <div className="h-4 bg-slate-100 rounded w-1/3" />
+                    <div className="h-3 bg-slate-100 rounded w-1/2" />
+                    <div className="h-1.5 bg-slate-100 rounded w-full pt-2" />
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3.5">
+                  {laporanSaya.map((lap) => {
+                    const isKehilangan = lap.tipe === 'kehilangan';
+                    const isPotensiCocok = lap.status === 'potensi_cocok';
+
+                    return (
+                      <div key={lap.id} className="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/70 shadow-xs space-y-4">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-center gap-3.5">
+                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                              isKehilangan ? 'bg-teal-50 border border-teal-100 text-[#12A99A]' : 'bg-slate-50 border border-slate-100 text-slate-500'
+                            }`}>
+                              {isKehilangan ? (
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.75" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
+                                </svg>
+                              ) : (
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="1.75" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                                </svg>
+                              )}
+                            </div>
+                            <div>
+                              <h3 className="font-semibold text-sm sm:text-base text-[#0B1633]">
+                                {lap.deskripsi_publik ? lap.deskripsi_publik.split('\n')[0].replace('Nama Barang: ', '') : lap.kategori}
+                              </h3>
+                              <p className="text-slate-400 text-xs font-normal mt-0.5">
+                                {isKehilangan ? 'Hilang' : 'Ditemukan'} pada {lap.waktu_kejadian?.slice(0, 16).replace('T', ' ')} &bull; {lap.nama_zona || lap.id_zona}
+                              </p>
+                            </div>
+                          </div>
+                          <span className={`px-2.5 py-1 text-[11px] font-semibold uppercase rounded-full shrink-0 ${
+                            isPotensiCocok 
+                              ? 'bg-indigo-50 text-indigo-700 border border-indigo-200/70' 
+                              : 'bg-emerald-50 text-[#10B981] border border-emerald-200/70'
+                          }`}>
+                            {isPotensiCocok ? 'Potensi Cocok AI' : 'Disimpan Admin'}
+                          </span>
+                        </div>
+
+                        {/* Minimalist Linear Progress Bar */}
+                        <div className="pt-2 border-t border-slate-100">
+                          <div className="grid grid-cols-4 gap-2 text-center">
+                            <div className="space-y-1.5">
+                              <div className="h-1.5 w-full bg-[#12A99A] rounded-full" />
+                              <span className="text-[11px] font-medium text-[#12A99A] block">Dilaporkan</span>
+                            </div>
+                            <div className="space-y-1.5">
+                              <div className="h-1.5 w-full bg-[#12A99A] rounded-full" />
+                              <span className="text-[11px] font-medium text-[#12A99A] block">Diproses AI</span>
+                            </div>
+                            <div className="space-y-1.5">
+                              <div className={`h-1.5 w-full rounded-full ${isPotensiCocok ? 'bg-[#6366F1]' : 'bg-slate-200'}`} />
+                              <span className={`text-[11px] block ${isPotensiCocok ? 'font-medium text-[#6366F1]' : 'font-normal text-slate-400'}`}>Verifikasi</span>
+                            </div>
+                            <div className="space-y-1.5">
+                              <div className="h-1.5 w-full bg-slate-200 rounded-full" />
+                              <span className="text-[11px] font-normal text-slate-400 block">Pengambilan</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </section>
+
           </div>
         </main>
       </div>
 
-      {/* Sticky Bottom Navigation Bar for Mobile */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-zinc-200 flex items-center justify-around py-2.5 z-50 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
-        <Link
-          href="/dashboard"
-          className="flex flex-col items-center space-y-0.5 text-[#006F69]"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
-          </svg>
-          <span className="text-[10px] font-black">Dashboard</span>
-        </Link>
-        <Link
-          href="/barang-temuan"
-          className="flex flex-col items-center space-y-0.5 text-zinc-400 hover:text-[#006F69] transition-colors"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-          </svg>
-          <span className="text-[10px] font-bold">Temuan</span>
-        </Link>
-        <Link
-          href="/kecocokan"
-          className="flex flex-col items-center space-y-0.5 text-zinc-400 hover:text-[#006F69] transition-colors"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <circle cx="9" cy="12" r="5" />
-            <circle cx="15" cy="12" r="5" />
-          </svg>
-          <span className="text-[10px] font-bold">Kecocokan</span>
-        </Link>
-        <Link
-          href="/dashboard"
-          className="flex flex-col items-center space-y-0.5 text-zinc-400 hover:text-[#006F69] transition-colors"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-          </svg>
-          <span className="text-[10px] font-bold">Laporan Saya</span>
-        </Link>
-        <Link
-          href="/profil"
-          className="flex flex-col items-center space-y-0.5 text-zinc-400 hover:text-[#006F69] transition-colors"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-          </svg>
-          <span className="text-[10px] font-bold">Profil</span>
-        </Link>
-      </div>
     </div>
   );
 }
-

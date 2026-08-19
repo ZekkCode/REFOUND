@@ -3,262 +3,251 @@ import Image from 'next/image';
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#F9FAFC] text-[#0B1633] font-sans antialiased selection:bg-[#12A99A]/20">
-      {/* Header */}
-      <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-zinc-100 py-4 px-6 sm:px-12 flex items-center justify-between transition-all">
-        <div className="flex items-center">
-          <Link href="/" className="flex items-center">
-            <Image src="/logo.png" alt="REFOUND Logo" width={130} height={40} className="object-contain h-10 w-auto" />
+    <div className="min-h-screen flex flex-col bg-[#F5F7FA] text-[#0B1633] selection:bg-[#12A99A]/20 font-sans antialiased">
+      
+      {/* 1. Top Navbar */}
+      <header className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-slate-200/80 transition-all">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="flex items-center space-x-3 transition-opacity hover:opacity-90">
+            <Image src="/logo.png" alt="REFOUND Logo" width={125} height={36} className="object-contain h-8 w-auto" priority />
           </Link>
-        </div>
-        <div>
-          <Link
-            href="/login"
-            className="px-6 py-2 bg-[#0B1633] hover:bg-[#12A99A] text-white font-bold text-sm rounded-lg shadow-sm transition-all duration-300 transform hover:-translate-y-0.5"
-          >
-            Masuk
-          </Link>
+
+          {/* Nav Links */}
+          <nav className="hidden md:flex items-center space-x-6 text-sm font-medium text-slate-600">
+            <Link href="/barang-temuan" className="hover:text-[#12A99A] transition-colors">
+              Katalog Temuan
+            </Link>
+            <Link href="/lapor/kehilangan" className="hover:text-[#12A99A] transition-colors">
+              Lapor Kehilangan
+            </Link>
+            <Link href="/lapor/penemuan" className="hover:text-[#12A99A] transition-colors">
+              Lapor Penemuan
+            </Link>
+          </nav>
+
+          {/* Auth Button */}
+          <div className="flex items-center space-x-3">
+            <Link
+              href="/login"
+              className="px-4 py-2 bg-[#0B1633] hover:bg-[#0B1633]/90 text-white font-medium text-xs sm:text-sm rounded-xl transition-all duration-200"
+            >
+              Masuk Mahasiswa
+            </Link>
+          </div>
         </div>
       </header>
 
       <main className="flex-1 flex flex-col">
-        {/* Hero Section */}
-        <section className="relative overflow-hidden pt-12 pb-20 px-6 sm:px-12 max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8">
-          {/* Subtle background glow */}
-          <div className="absolute top-10 left-10 w-72 h-72 bg-blue-100/40 rounded-full blur-3xl -z-10" />
-          <div className="absolute bottom-10 right-10 w-96 h-96 bg-teal-50/50 rounded-full blur-3xl -z-10" />
-
-          {/* Left Column (Text & CTAs) */}
-          <div className="flex-1 space-y-6 max-w-xl text-left z-10">
-            <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-[#0B1633] leading-tight">
-              Temukan Barangmu,<br className="hidden sm:inline" /> Hubungkan Kembali ke Komunitas.
-            </h1>
-            <p className="text-zinc-500 text-sm sm:text-base leading-relaxed font-medium">
-              Sistem Lost & Found terintegrasi untuk Informatika & Sistem Informasi.<br className="hidden sm:inline" /> Cepat, aman, dan transparan.
-            </p>
-            <div className="flex flex-wrap items-center gap-4 pt-4">
-              <Link
-                href="/lapor/kehilangan"
-                className="px-6 py-3.5 bg-[#0B1633] hover:bg-[#0B1633]/90 text-white font-bold text-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center transform hover:-translate-y-0.5"
-              >
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                Lapor Kehilangan
-              </Link>
-              <Link
-                href="/lapor/penemuan"
-                className="px-6 py-3.5 bg-[#12A99A] hover:bg-[#12A99A]/90 text-white font-bold text-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center transform hover:-translate-y-0.5"
-              >
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                </svg>
-                Lapor Penemuan
-              </Link>
-            </div>
-          </div>
-
-          {/* Right Column (Illustration) */}
-          <div className="flex-1 w-full flex justify-center items-center relative py-8">
-            {/* Background Faint Text */}
-            <div className="absolute text-[120px] font-black text-zinc-100/70 select-none tracking-widest pointer-events-none -z-10 font-sans transform -translate-x-12">
-              REFOUND
-            </div>
+        {/* 2. Hero Section */}
+        <section className="pt-12 pb-16 sm:pt-16 sm:pb-20 px-6 max-w-6xl mx-auto w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
             
-            {/* Image Container with shadow and styling */}
-            <div className="relative bg-white p-3 rounded-2xl shadow-[0_20px_50px_rgba(11,22,51,0.08)] border border-zinc-100 max-w-lg w-full transform hover:scale-[1.02] transition-transform duration-500 z-10 overflow-hidden">
-              <Image
-                src="/hero_illustration.png"
-                alt="Lost & Found Desk Illustration"
-                width={600}
-                height={400}
-                className="rounded-xl w-full h-auto object-cover"
-                priority
-              />
+            {/* Left Hero Content */}
+            <div className="lg:col-span-6 space-y-5 text-left">
+              {/* Badge Pill */}
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-slate-200 rounded-full text-xs font-medium text-slate-600 shadow-2xs">
+                <span className="w-2 h-2 rounded-full bg-[#12A99A]" />
+                <span>Lost & Found Digital Komunitas Kampus</span>
+              </div>
+
+              {/* Heading */}
+              <h1 className="text-3xl sm:text-4xl lg:text-[44px] font-semibold text-[#0B1633] leading-tight tracking-tight">
+                Temukan barangmu, <br />
+                <span className="text-[#12A99A]">hubungkan kembali</span> <br />
+                ke pemilik sah.
+              </h1>
+
+              {/* Subtitle */}
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed font-normal max-w-lg">
+                Platform pelaporan terpusat dengan pencocokan cerdas dan verifikasi dua langkah untuk mengembalikan barang hilang secara terstruktur dan aman.
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap items-center gap-3 pt-1">
+                <Link
+                  href="/lapor/kehilangan"
+                  className="px-5 py-2.5 bg-[#0B1633] hover:bg-slate-800 text-white font-medium text-xs sm:text-sm rounded-xl shadow-xs transition-all duration-200 flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4 text-[#12A99A]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  Lapor Kehilangan
+                </Link>
+                <Link
+                  href="/lapor/penemuan"
+                  className="px-5 py-2.5 bg-[#12A99A] hover:bg-[#12A99A]/90 text-white font-medium text-xs sm:text-sm rounded-xl shadow-xs transition-all duration-200 flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                  </svg>
+                  Lapor Penemuan
+                </Link>
+                <Link
+                  href="/barang-temuan"
+                  className="px-4 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium text-xs sm:text-sm rounded-xl transition-all"
+                >
+                  Katalog Temuan &rarr;
+                </Link>
+              </div>
+
+              {/* Key Highlights */}
+              <div className="pt-5 border-t border-slate-200 grid grid-cols-3 gap-4">
+                <div>
+                  <span className="block text-xl font-semibold text-[#0B1633]">0.45s</span>
+                  <span className="text-xs text-slate-500">Pencocokan Cepat</span>
+                </div>
+                <div>
+                  <span className="block text-xl font-semibold text-[#12A99A]">100%</span>
+                  <span className="text-xs text-slate-500">Privasi Ciri Khusus</span>
+                </div>
+                <div>
+                  <span className="block text-xl font-semibold text-[#0B1633]">Admin Lab</span>
+                  <span className="text-xs text-slate-500">Penitipan Fisik</span>
+                </div>
+              </div>
             </div>
+
+            {/* Right Hero Card Illustration */}
+            <div className="lg:col-span-6 flex justify-center">
+              <div className="relative w-full max-w-md bg-white p-3 rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <Image
+                  src="/hero_illustration.png"
+                  alt="REFOUND Lost and Found System"
+                  width={500}
+                  height={350}
+                  className="rounded-xl w-full h-auto object-cover"
+                  priority
+                />
+
+                <div className="mt-3 p-3.5 bg-[#0B1633] text-white rounded-xl flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <span className="text-[10px] uppercase font-semibold text-[#12A99A] tracking-wider">Verifikasi Terlindungi</span>
+                    <p className="text-xs text-slate-200 font-medium">Ciri fisik rahasia diverifikasi oleh Admin Lab</p>
+                  </div>
+                  <span className="px-2.5 py-0.5 bg-[#12A99A] text-white text-[10px] font-semibold rounded-md">
+                    Aktif
+                  </span>
+                </div>
+              </div>
+            </div>
+
           </div>
         </section>
 
-        {/* Cara Kerja Section */}
-        <section className="bg-white py-20 px-6 sm:px-12 border-t border-zinc-50">
-          <div className="max-w-6xl mx-auto space-y-12">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1633] text-center tracking-tight">
-              Cara Kerja
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Step 1 */}
-              <div className="bg-white p-8 rounded-2xl border border-zinc-100 shadow-[0_4px_20px_-2px_rgba(11,22,51,0.02)] hover:shadow-[0_10px_30px_-5px_rgba(11,22,51,0.06)] hover:border-indigo-100 transition-all duration-300 flex flex-col items-center text-center space-y-4 group">
-                <div className="w-14 h-14 rounded-full bg-indigo-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                    <circle cx="12" cy="13" r="3" />
-                  </svg>
-                </div>
-                <h3 className="font-extrabold text-lg text-[#0B1633]">Lapor & Foto</h3>
-                <p className="text-zinc-500 text-sm leading-relaxed font-medium">
-                  Unggah foto barang yang hilang atau ditemukan. Sistem kami akan memproses detailnya.
-                </p>
-              </div>
-
-              {/* Step 2 */}
-              <div className="bg-white p-8 rounded-2xl border border-zinc-100 shadow-[0_4px_20px_-2px_rgba(11,22,51,0.02)] hover:shadow-[0_10px_30px_-5px_rgba(11,22,51,0.06)] hover:border-teal-100 transition-all duration-300 flex flex-col items-center text-center space-y-4 group">
-                <div className="w-14 h-14 rounded-full bg-teal-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <svg className="w-6 h-6 text-[#12A99A]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l.707-.707m2.828 9.9a5 5 0 113.62 0m-3.62 0A19.953 19.953 0 0012 20c-1.398 0-2.727-.282-3.94-.793z" />
-                  </svg>
-                </div>
-                <h3 className="font-extrabold text-lg text-[#0B1633]">AI Matching</h3>
-                <p className="text-zinc-500 text-sm leading-relaxed font-medium">
-                  Algoritma pintar kami membandingkan laporan untuk menemukan kecocokan yang paling relevan.
-                </p>
-              </div>
-
-              {/* Step 3 */}
-              <div className="bg-white p-8 rounded-2xl border border-zinc-100 shadow-[0_4px_20px_-2px_rgba(11,22,51,0.02)] hover:shadow-[0_10px_30px_-5px_rgba(11,22,51,0.06)] hover:border-rose-100 transition-all duration-300 flex flex-col items-center text-center space-y-4 group">
-                <div className="w-14 h-14 rounded-full bg-rose-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <svg className="w-6 h-6 text-[#FF765F]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                </div>
-                <h3 className="font-extrabold text-lg text-[#0B1633]">Verifikasi Admin</h3>
-                <p className="text-zinc-500 text-sm leading-relaxed font-medium">
-                  Admin lab memverifikasi kecocokan dan mengamankan pengembalian barang fisik.
-                </p>
-              </div>
+        {/* 3. Cara Kerja 3-Langkah */}
+        <section className="bg-white py-16 px-6 border-y border-slate-200">
+          <div className="max-w-6xl mx-auto space-y-10">
+            
+            <div className="text-center space-y-2 max-w-xl mx-auto">
+              <span className="text-xs font-semibold uppercase tracking-wider text-[#12A99A]">Alur Penggunaan</span>
+              <h2 className="text-2xl sm:text-3xl font-semibold text-[#0B1633] tracking-tight">
+                Bagaimana REFOUND Bekerja?
+              </h2>
+              <p className="text-slate-500 text-xs sm:text-sm font-normal">
+                Alur tertutup untuk memastikan keabsahan kepemilikan tanpa membocorkan ciri rahasia ke publik.
+              </p>
             </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              
+              {/* Card 1 */}
+              <div className="p-6 rounded-2xl bg-[#F5F7FA] border border-slate-200 flex flex-col justify-between space-y-4">
+                <div className="space-y-3">
+                  <div className="w-9 h-9 rounded-lg bg-[#12A99A]/10 text-[#12A99A] flex items-center justify-center font-semibold text-sm">
+                    1
+                  </div>
+                  <h3 className="text-base font-semibold text-[#0B1633]">Pelaporan & Zonasi</h3>
+                  <p className="text-slate-600 text-xs sm:text-sm leading-relaxed font-normal">
+                    Tuliskan deskripsi umum dan pilih zona lokasi tempat barang ditemukan atau hilang.
+                  </p>
+                </div>
+                <span className="text-xs font-medium text-[#12A99A]">Privasi Ciri Terjaga &rarr;</span>
+              </div>
+
+              {/* Card 2 */}
+              <div className="p-6 rounded-2xl bg-[#F5F7FA] border border-slate-200 flex flex-col justify-between space-y-4">
+                <div className="space-y-3">
+                  <div className="w-9 h-9 rounded-lg bg-indigo-50 text-[#6366F1] flex items-center justify-center font-semibold text-sm">
+                    2
+                  </div>
+                  <h3 className="text-base font-semibold text-[#0B1633]">Pencocokan Cerdas</h3>
+                  <p className="text-slate-600 text-xs sm:text-sm leading-relaxed font-normal">
+                    Sistem membandingkan kemiripan teks, visual foto, zona lokasi, dan rentang waktu.
+                  </p>
+                </div>
+                <span className="text-xs font-medium text-[#6366F1]">Skor Kecocokan Otomatis &rarr;</span>
+              </div>
+
+              {/* Card 3 */}
+              <div className="p-6 rounded-2xl bg-[#F5F7FA] border border-slate-200 flex flex-col justify-between space-y-4">
+                <div className="space-y-3">
+                  <div className="w-9 h-9 rounded-lg bg-emerald-50 text-[#10B981] flex items-center justify-center font-semibold text-sm">
+                    3
+                  </div>
+                  <h3 className="text-base font-semibold text-[#0B1633]">Verifikasi & Pengambilan</h3>
+                  <p className="text-slate-600 text-xs sm:text-sm leading-relaxed font-normal">
+                    Jawab pertanyaan rahasia. Setelah disetujui, ambil barang fisik di Admin Lab dengan kode unik.
+                  </p>
+                </div>
+                <span className="text-xs font-medium text-[#10B981]">Kode Sekali Pakai &rarr;</span>
+              </div>
+
+            </div>
+
           </div>
         </section>
 
-        {/* AI-Ranked Match & Keamanan Admin Lab Details */}
-        <section className="py-20 px-6 sm:px-12 bg-[#F9FAFC]">
-          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Card 1: AI-Ranked Match */}
-            <div className="bg-white p-8 rounded-2xl border border-zinc-100 shadow-[0_10px_35px_rgba(11,22,51,0.03)] hover:shadow-[0_15px_40px_rgba(11,22,51,0.06)] hover:border-indigo-100/50 transition-all duration-300 flex flex-col justify-between space-y-6">
-              <div className="space-y-4">
-                <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-indigo-600/20">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-extrabold text-[#0B1633]">AI-Ranked Match</h3>
-                <p className="text-zinc-500 text-sm sm:text-base leading-relaxed font-medium">
-                  Sistem memberikan peringkat pada potensi kecocokan berdasarkan warna, lokasi (Zonasi), dan deskripsi. Alasan kecocokan dijelaskan secara transparan untuk membantu Anda.
-                </p>
+        {/* 4. Fitur Keamanan */}
+        <section className="py-16 px-6 bg-[#F5F7FA]">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white p-6 sm:p-7 rounded-2xl border border-slate-200 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-teal-50 text-[#12A99A] flex items-center justify-center">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
               </div>
-              <div className="flex flex-wrap gap-2 pt-2">
-                <span className="px-3 py-1.5 text-xs font-bold bg-zinc-100 text-zinc-600 rounded-full border border-zinc-200">
-                  Warna Mirip
-                </span>
-                <span className="px-3 py-1.5 text-xs font-bold bg-zinc-100 text-zinc-600 rounded-full border border-zinc-200">
-                  Zona Sama (LAB A)
-                </span>
-              </div>
+              <h3 className="text-base sm:text-lg font-semibold text-[#0B1633]">Perlindungan Ciri Rahasia</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed font-normal">
+                Ciri fisik unik seperti nomor seri atau goresan tersembunyi disimpan di tabel rahasia terpisah dan hanya bisa diakses oleh Admin Lab saat proses verifikasi.
+              </p>
             </div>
 
-            {/* Card 2: Keamanan Admin Lab */}
-            <div className="bg-white p-8 rounded-2xl border border-zinc-100 shadow-[0_10px_35px_rgba(11,22,51,0.03)] hover:shadow-[0_15px_40px_rgba(11,22,51,0.06)] hover:border-teal-100/50 transition-all duration-300 flex flex-col justify-between space-y-6">
-              <div className="space-y-4">
-                <div className="w-12 h-12 bg-[#12A99A] rounded-xl flex items-center justify-center text-white shadow-md shadow-teal-600/20">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-extrabold text-[#0B1633]">Keamanan Admin Lab</h3>
-                <p className="text-zinc-500 text-sm sm:text-base leading-relaxed font-medium">
-                  Barang yang ditemukan disimpan secara fisik dan aman di ruangan laboratorium. Admin kami bertindak sebagai pihak ketiga yang netral untuk proses serah terima.
-                </p>
+            <div className="bg-white p-6 sm:p-7 rounded-2xl border border-slate-200 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-indigo-50 text-[#6366F1] flex items-center justify-center">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
               </div>
-              <div className="flex pt-2">
-                <span className="px-3.5 py-1.5 text-xs font-bold bg-teal-50 text-[#12A99A] rounded-full border border-[#12A99A]/30 flex items-center">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#12A99A] mr-2 animate-pulse" />
-                  Disimpan Admin
-                </span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Privacy Banner Section */}
-        <section className="bg-[#0B1633] text-white py-16 px-6 sm:px-12 text-center relative overflow-hidden">
-          {/* Decorative mesh */}
-          <div className="absolute inset-0 opacity-5 pointer-events-none bg-[radial-gradient(#12A99A_1px,transparent_1px)] [background-size:16px_16px]" />
-          
-          <div className="max-w-3xl mx-auto space-y-6 relative z-10 flex flex-col items-center">
-            <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mb-2">
-              <svg className="w-6 h-6 text-[#12A99A]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              Privasi Anda Terjaga
-            </h2>
-            <p className="text-zinc-300 text-sm sm:text-base leading-relaxed font-medium">
-              Informasi sensitif seperti NIM atau detail spesifik lainnya secara otomatis disembunyikan dalam kartu publik. Lokasi disederhanakan menjadi "Zona" untuk mencegah penyalahgunaan.
-            </p>
-          </div>
-        </section>
-
-        {/* FAQ Section */}
-        <section className="bg-white py-20 px-6 sm:px-12">
-          <div className="max-w-3xl mx-auto space-y-10">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0B1633] text-center tracking-tight">
-              Pertanyaan Umum
-            </h2>
-
-            <div className="space-y-6">
-              {/* Question 1 */}
-              <div className="bg-[#F9FAFC] p-6 rounded-2xl border border-zinc-100 flex flex-col space-y-2 hover:border-zinc-200 transition-colors">
-                <h3 className="font-extrabold text-sm sm:text-base text-[#0B1633]">
-                  Berapa lama proses verifikasi?
-                </h3>
-                <p className="text-zinc-500 text-xs sm:text-sm leading-relaxed font-medium">
-                  Proses pencocokan awal oleh AI terjadi instan. Verifikasi akhir oleh Admin Lab biasanya memakan waktu 1–2 hari kerja.
-                </p>
-              </div>
-
-              {/* Question 2 */}
-              <div className="bg-[#F9FAFC] p-6 rounded-2xl border border-zinc-100 flex flex-col space-y-2 hover:border-zinc-200 transition-colors">
-                <h3 className="font-extrabold text-sm sm:text-base text-[#0B1633]">
-                  Di mana saya bisa mengambil barang saya?
-                </h3>
-                <p className="text-zinc-500 text-xs sm:text-sm leading-relaxed font-medium">
-                  Pengambilan dilakukan di Ruang Tata Usaha / Lab Center gedung Informatika pada jam kerja operasional.
-                </p>
-              </div>
-
-              {/* Question 3 */}
-              <div className="bg-[#F9FAFC] p-6 rounded-2xl border border-zinc-100 flex flex-col space-y-2 hover:border-zinc-200 transition-colors">
-                <h3 className="font-extrabold text-sm sm:text-base text-[#0B1633]">
-                  Apakah saya perlu membuat akun?
-                </h3>
-                <p className="text-zinc-500 text-xs sm:text-sm leading-relaxed font-medium">
-                  Ya, pelaporan dan klaim membutuhkan login menggunakan kredensial universitas Anda untuk memastikan keamanan.
-                </p>
-              </div>
+              <h3 className="text-base sm:text-lg font-semibold text-[#0B1633]">Evaluasi Semantik & Fail-Safe</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed font-normal">
+                Jawaban klaim dievaluasi oleh sistem semantik untuk mencocokkan makna kata kunci pemohon dengan ciri rahasia barang secara objektif dan akurat.
+              </p>
             </div>
           </div>
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-[#0B1633] text-white border-t border-white/10 py-12 px-6 sm:px-12">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex flex-col items-center md:items-start space-y-2">
-            <Image src="/logo.png" alt="REFOUND Logo" width={110} height={32} className="object-contain h-8 w-auto brightness-0 invert" />
-            <span className="text-xs text-zinc-400 font-medium">
-              © 2026 REFOUND University Laboratory System. All rights reserved.
-            </span>
+      {/* 5. Clean Modern Footer */}
+      <footer className="bg-white text-slate-600 border-t border-slate-200 py-8 px-6">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col items-center md:items-start space-y-1">
+            <Link href="/" className="flex items-center">
+              <Image src="/logo.png" alt="REFOUND Logo" width={110} height={32} className="object-contain h-7 w-auto" />
+            </Link>
+            <p className="text-xs text-slate-500 font-normal">
+              © 2026 REFOUND. Sistem Lost & Found Digital Komunitas Kampus.
+            </p>
           </div>
-          <div className="flex flex-wrap justify-center gap-6 text-xs sm:text-sm font-semibold text-zinc-300">
-            <Link href="#" className="hover:text-white transition-colors">Tentang Kami</Link>
-            <Link href="#" className="hover:text-white transition-colors">Panduan Komunitas</Link>
-            <Link href="#" className="hover:text-white transition-colors">Kebijakan Privasi</Link>
-            <Link href="#" className="hover:text-white transition-colors">Kontak Admin Lab</Link>
+          <div className="flex flex-wrap justify-center gap-5 text-xs font-medium text-slate-600">
+            <Link href="/barang-temuan" className="hover:text-[#12A99A] transition-colors">Katalog Temuan</Link>
+            <Link href="/lapor/kehilangan" className="hover:text-[#12A99A] transition-colors">Lapor Kehilangan</Link>
+            <Link href="/lapor/penemuan" className="hover:text-[#12A99A] transition-colors">Lapor Penemuan</Link>
+            <Link href="/admin-login" className="hover:text-[#12A99A] transition-colors">Gerbang Admin</Link>
           </div>
         </div>
       </footer>
+
     </div>
   );
 }
-

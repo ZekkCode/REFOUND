@@ -66,7 +66,7 @@ export default function HalamanAdminPenyerahan() {
         <div>
           <Link
             href="/login"
-            className="text-zinc-500 hover:text-[#0B1633] font-extrabold text-sm transition-all"
+            className="text-zinc-500 hover:text-[#0B1633] font-semibold text-sm transition-all"
           >
             Masuk
           </Link>
@@ -79,10 +79,10 @@ export default function HalamanAdminPenyerahan() {
           
           {/* Header text */}
           <div className="space-y-2 border-b border-zinc-100 pb-6 text-center">
-            <h1 className="text-2xl sm:text-3xl font-black text-[#0B1633]">
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#0B1633]">
               Serah Terima Barang
             </h1>
-            <p className="text-zinc-500 text-xs sm:text-sm font-medium leading-relaxed">
+            <p className="text-zinc-500 text-xs sm:text-sm font-normal leading-relaxed">
               Pastikan identitas penerima sesuai sebelum menyerahkan barang.
             </p>
           </div>
@@ -111,10 +111,10 @@ export default function HalamanAdminPenyerahan() {
               {/* Code OTP and QR Code Box */}
               <div className="p-6 bg-[#F4F6F9] border border-zinc-200 rounded-2xl flex flex-col items-center justify-center space-y-4">
                 <div className="text-center space-y-1">
-                  <span className="block text-[10px] font-black uppercase tracking-wider text-zinc-400">
+                  <span className="block text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
                     KODE OTP SERAH TERIMA
                   </span>
-                  <span className="block text-4xl font-black text-[#006F69] tracking-wider font-mono">
+                  <span className="block text-4xl font-bold text-[#006F69] tracking-wider font-mono">
                     {otpCode}
                   </span>
                 </div>
@@ -128,7 +128,7 @@ export default function HalamanAdminPenyerahan() {
                     {/* Visual QR sign frame */}
                     <div className="w-16 h-20 bg-white border border-zinc-300 rounded shadow-md flex flex-col items-center justify-center p-1.5 z-10 shrink-0">
                       {/* Brand title */}
-                      <span className="text-[4px] font-black leading-none text-[#0B1633] mb-1">REFOUND OTP</span>
+                      <span className="text-[4px] font-bold leading-none text-[#0B1633] mb-1">REFOUND OTP</span>
                       
                       {/* Mock QR SVG */}
                       <svg className="w-8 h-8 text-[#0B1633]" viewBox="0 0 24 24" fill="currentColor">
@@ -154,7 +154,7 @@ export default function HalamanAdminPenyerahan() {
 
               {/* Verification Checklist */}
               <div className="space-y-4 pt-2">
-                <h3 className="text-lg font-black text-[#0B1633]">
+                <h3 className="text-lg font-bold text-[#0B1633]">
                   Verifikasi Identitas
                 </h3>
 
@@ -169,10 +169,10 @@ export default function HalamanAdminPenyerahan() {
                       className="w-5 h-5 rounded border-zinc-300 text-[#006F69] focus:ring-[#006F69] mt-0.5 shrink-0 cursor-pointer"
                     />
                     <label htmlFor="verif-ktm" className="flex flex-col cursor-pointer select-none">
-                      <span className="text-sm font-extrabold text-[#0B1633]">
+                      <span className="text-sm font-semibold text-[#0B1633]">
                         KTM / Kartu Identitas Fisik Cocok
                       </span>
-                      <span className="text-zinc-400 text-xs font-semibold mt-0.5 leading-relaxed">
+                      <span className="text-zinc-400 text-xs font-normal mt-0.5 leading-relaxed">
                         Nama dan foto pada kartu identitas sesuai dengan pengambil.
                       </span>
                     </label>
@@ -188,10 +188,10 @@ export default function HalamanAdminPenyerahan() {
                       className="w-5 h-5 rounded border-zinc-300 text-[#006F69] focus:ring-[#006F69] mt-0.5 shrink-0 cursor-pointer"
                     />
                     <label htmlFor="verif-desc" className="flex flex-col cursor-pointer select-none">
-                      <span className="text-sm font-extrabold text-[#0B1633]">
+                      <span className="text-sm font-semibold text-[#0B1633]">
                         Deskripsi Barang Sesuai
                       </span>
-                      <span className="text-zinc-400 text-xs font-semibold mt-0.5 leading-relaxed">
+                      <span className="text-zinc-400 text-xs font-normal mt-0.5 leading-relaxed">
                         Penerima dapat menyebutkan detail spesifik barang (warna, merk, isi dompet).
                       </span>
                     </label>
@@ -207,10 +207,10 @@ export default function HalamanAdminPenyerahan() {
                       className="w-5 h-5 rounded border-zinc-300 text-[#006F69] focus:ring-[#006F69] mt-0.5 shrink-0 cursor-pointer"
                     />
                     <label htmlFor="verif-sign" className="flex flex-col cursor-pointer select-none">
-                      <span className="text-sm font-extrabold text-[#0B1633]">
+                      <span className="text-sm font-semibold text-[#0B1633]">
                         Tanda Tangan Digital / Persetujuan Log
                       </span>
-                      <span className="text-zinc-400 text-xs font-semibold mt-0.5 leading-relaxed">
+                      <span className="text-zinc-400 text-xs font-normal mt-0.5 leading-relaxed">
                         Penerima telah mengonfirmasi penerimaan di sistem.
                       </span>
                     </label>
