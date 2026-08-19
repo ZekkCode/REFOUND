@@ -1,5 +1,9 @@
-# Dependencies
-/node_modules
+# ==============================================================================
+# REFOUND - .gitignore
+# ==============================================================================
+
+# 1. Dependensi & Package Manager
+node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -8,42 +12,58 @@
 !.yarn/releases
 !.yarn/versions
 
-# Testing & Coverage
-/coverage
+# 2. Next.js Build & Production Output
+.next/
+out/
+build/
+dist/
 
-# Next.js Build Output
-/.next/
-/out/
-
-# Production Build
-/build
-
-# Miscellaneous
-.DS_Store
-*.pem
-
-# Debug Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# Environment Variables (Sangat penting: Jangan commit rahasia)
+# 3. Environment Variables (Sangat penting: Jangan commit file credentials lokal)
 .env
+.env*.local
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-.env*.local
 
-# Sertakan contoh template environment
+# Tetap commit template .env.example
 !.env.example
 
-# Vercel Deployment Folder
+# 4. Logs & Debugging
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# 5. Testing & Coverage
+coverage/
+.nyc_output/
+
+# 6. Vercel & Cloud Deployments
 .vercel
 
-# TypeScript & IDE
+# 7. TypeScript Cache
 *.tsbuildinfo
 next-env.d.ts
+
+# 8. Editor & OS Specific Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# IDE & Editor Configs
 .idea/
 .vscode/
+*.swp
+*.swo
+*~
+.cursor/
+.windsurf/
+.antigravity/
