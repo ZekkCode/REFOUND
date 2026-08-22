@@ -5,47 +5,117 @@ import Link from 'next/link';
 import Image from 'next/image';
 import SidebarMahasiswa from '@/komponen/SidebarMahasiswa';
 import TopbarMahasiswa from '@/komponen/TopbarMahasiswa';
+import MatchCard from '@/komponen/MatchCard';
+
+interface ReportDetails {
+  id: string;
+  tipe: string;
+  kategori: string;
+  deskripsi_publik: string;
+  id_zona: string;
+  nama_zona?: string;
+  waktu_kejadian: string;
+  status: string;
+}
+
+interface MatchCandidate {
+  id: string | number;
+  lost_report_id: string;
+  found_report_id: string;
+  skor_teks: number;
+  skor_visual: number;
+  skor_lokasi: number;
+  skor_waktu: number;
+  skor_akhir: number;
+  status: string;
+  found_report?: ReportDetails;
+  lost_report?: ReportDetails;
+}
+
+const getCategoryFallbackImage = (kategori?: string) => {
+  if (!kategori) return '/laptop_apple_library.png';
+  const kat = kategori.toLowerCase();
+  if (kat.includes('laptop') || kat.includes('komputer') || kat.includes('macbook') || kat.includes('hp')) {
+    return '/laptop_apple_library.png';
+  }
+  if (kat.includes('kunci') || kat.includes('kendaraan') || kat.includes('motor')) {
+    return '/kunci_mobil.png';
+  }
+  return '/laptop_dark_cafe.png';
+};
+
+const getMatchingReasons = (match: MatchCandidate) => {
+  const reasons: string[] = [];
+  if (match.skor_teks > 0.7) reasons.push('Nama & Deskripsi Mirip');
+  if (match.skor_visual > 0.6) reasons.push('Atribut Fisik Cocok');
+  if (match.skor_lokasi > 0.7) reasons.push('Zona Penemuan Sesuai');
+  if (match.skor_waktu > 0.7) reasons.push('Korelasi Waktu Sesuai');
+  if (reasons.length === 0) reasons.push('Kategori Barang Sama');
+  return reasons;
+};
 
 export default function HalamanPencocokanAI() {
-  const [showMatch1, setShowMatch1] = useState(true);
+  const [kandidatList, setKandidatList] = useState<MatchCandidate[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [notif, setNotif] = useState<string | null>(null);
+  const [ignoredIds, setIgnoredIds] = useState<any[]>([]);
+  const [retryTrigger, setRetryTrigger] = useState(0);
 
   useEffect(() => {
     async function cekStatusKecocokan() {
       try {
+        setLoading(true);
+        setErrorMsg(null);
         const res = await fetch('/api/kecocokan');
         const json = await res.json();
         if (json.sukses && Array.isArray(json.data)) {
-          // Connected
+          setKandidatList(json.data);
+        } else {
+          setErrorMsg(json.error || 'Gagal memuat daftar kecocokan AI.');
         }
       } catch (err) {
         console.error('Koneksi endpoint kecocokan:', err);
+        setErrorMsg('Koneksi internet gagal memuat hasil kecocokan AI.');
+      } finally {
+        setLoading(false);
       }
     }
     cekStatusKecocokan();
-  }, []);
+  }, [retryTrigger]);
 
-  const handleIgnore = (id: number) => {
-    if (id === 1) setShowMatch1(false);
+  const handleIgnore = (id: any) => {
+    setIgnoredIds((prev) => [...prev, id]);
     setNotif('Barang telah ditandai sebagai bukan milik Anda.');
     setTimeout(() => {
       setNotif(null);
     }, 4000);
   };
 
+  const handleRetry = () => {
+    setRetryTrigger((prev) => prev + 1);
+  };
+
+  // Filter out ignored items
+  const activeCandidates = kandidatList.filter(item => !ignoredIds.includes(item.id));
+
+  // Determine lost report details from the first matching candidate
+  const firstMatch = kandidatList[0];
+  const lostReport = firstMatch?.lost_report;
+  const lostReportTitle = lostReport?.deskripsi_publik
+    ? lostReport.deskripsi_publik.split('\n')[0].replace('Nama Barang: ', '')
+    : lostReport?.kategori || 'MacBook Pro 14" (Space Grey)';
+  const lostReportTime = lostReport?.waktu_kejadian || '12 Okt 2024, 14:30 WIB';
+  const lostReportLocation = lostReport?.nama_zona || lostReport?.id_zona || 'Lab TIF (Lt. 2)';
+  const lostReportImage = getCategoryFallbackImage(lostReport?.kategori);
+
   return (
     <div className="min-h-screen flex bg-[#F5F7FA] text-[#0B1633] font-sans antialiased">
-      
-      {/* Sidebar */}
       <SidebarMahasiswa />
 
-      {/* Main Column */}
       <div className="flex-1 flex flex-col min-h-screen overflow-x-hidden pb-24 md:pb-10">
-        
-        {/* Top Navbar */}
         <TopbarMahasiswa judulHalaman="Hasil Pencocokan AI" />
 
-        {/* Content Wrapper */}
         <main className="flex-1 py-6 sm:py-8 px-4 sm:px-8 max-w-6xl w-full mx-auto space-y-5 sm:space-y-6">
           
           {/* Header Title Banner */}
@@ -74,10 +144,11 @@ export default function HalamanPencocokanAI() {
           <div className="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col md:flex-row gap-5 items-start md:items-center">
             <div className="w-full md:w-44 h-28 relative rounded-xl overflow-hidden border border-slate-200 shrink-0 bg-slate-100">
               <Image
-                src="/macbook_space_grey.png"
-                alt="MacBook Pro Space Grey"
+                src={lostReportImage}
+                alt={lostReportTitle}
                 fill
                 className="object-cover"
+                sizes="(max-width: 768px) 100vw, 176px"
                 priority
               />
             </div>
@@ -88,18 +159,18 @@ export default function HalamanPencocokanAI() {
                   Laporan Kehilangan Anda
                 </span>
                 <h2 className="text-base font-bold text-[#0B1633]">
-                  MacBook Pro 14" (Space Grey)
+                  {lostReportTitle}
                 </h2>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                 <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200/60">
                   <span className="block text-slate-400 font-normal text-[10px] uppercase">Waktu Hilang</span>
-                  <span className="text-[#0B1633] font-medium">12 Okt 2024, 14:30 WIB</span>
+                  <span className="text-[#0B1633] font-medium">{lostReportTime}</span>
                 </div>
                 <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200/60">
                   <span className="block text-slate-400 font-normal text-[10px] uppercase">Lokasi Terakhir</span>
-                  <span className="text-[#0B1633] font-medium">Lab TIF (Lt. 2)</span>
+                  <span className="text-[#0B1633] font-medium">{lostReportLocation}</span>
                 </div>
               </div>
             </div>
@@ -112,74 +183,72 @@ export default function HalamanPencocokanAI() {
             </h2>
 
             <div className="space-y-4">
-              {showMatch1 ? (
-                <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-sm transition-all duration-200 overflow-hidden">
-                  <div className="p-5 sm:p-6 flex flex-col md:flex-row gap-5 items-start">
-                    <div className="w-full md:w-48 h-32 relative rounded-xl overflow-hidden border border-slate-200 shrink-0 bg-slate-100">
-                      <Image
-                        src="/laptop_apple_library.png"
-                        alt="Laptop Apple Library"
-                        fill
-                        className="object-cover"
-                      />
-                      <span className="absolute bottom-2 left-2 bg-[#0B1633]/90 text-white px-2 py-0.5 rounded-full font-medium text-[9px] backdrop-blur-xs">
-                        Disimpan Admin Lab
-                      </span>
-                    </div>
-
-                    <div className="flex-1 space-y-3">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="space-y-0.5">
-                          <h3 className="text-base font-bold text-[#0B1633]">
-                            Laptop Silver/Grey (Apple)
-                          </h3>
-                          <p className="text-slate-500 text-xs font-normal">
-                            Ditemukan di Meja Baca Utara, Lab TIF. Diserahkan oleh petugas lab.
-                          </p>
-                        </div>
-                        <span className="inline-flex items-center px-2.5 py-0.5 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200/80 rounded-full shrink-0">
-                          86% Cocok AI
-                        </span>
-                      </div>
-
-                      <div className="flex flex-wrap gap-1.5 pt-0.5">
-                        <span className="inline-flex items-center px-2.5 py-1 text-[11px] font-medium text-slate-600 bg-slate-50 border border-slate-200/80 rounded-lg">
-                          Warna Mirip (Space Grey)
-                        </span>
-                        <span className="inline-flex items-center px-2.5 py-1 text-[11px] font-medium text-slate-600 bg-slate-50 border border-slate-200/80 rounded-lg">
-                          Zona Sesuai (Lab TIF)
-                        </span>
+              {loading ? (
+                // Skeletons during Loading state
+                <div className="space-y-4">
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-xs animate-pulse space-y-4">
+                    <div className="flex gap-4">
+                      <div className="w-48 h-32 bg-slate-100 rounded-xl shrink-0" />
+                      <div className="flex-1 space-y-3 pt-2">
+                        <div className="h-4 bg-slate-100 rounded w-1/4" />
+                        <div className="h-6 bg-slate-100 rounded w-3/4" />
+                        <div className="h-10 bg-slate-100 rounded w-full" />
                       </div>
                     </div>
                   </div>
-
-                  <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row gap-2.5 items-center justify-between">
-                    <Link
-                      href="/klaim/match-8821"
-                      className="flex-1 w-full text-center px-4 py-2 bg-[#0B1633] hover:bg-[#0B1633]/90 text-white font-medium text-xs rounded-xl shadow-xs transition-all"
-                    >
-                      Ini Barang Saya (Ajukan Klaim) &rarr;
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() => handleIgnore(1)}
-                      className="flex-1 w-full px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 font-medium text-xs rounded-xl transition-all cursor-pointer"
-                    >
-                      Bukan Barang Saya
-                    </button>
-                  </div>
+                </div>
+              ) : errorMsg ? (
+                // Error state
+                <div className="bg-white p-6 rounded-2xl border border-red-200 text-center space-y-3">
+                  <p className="text-sm text-red-500 font-semibold">{errorMsg}</p>
+                  <button
+                    onClick={handleRetry}
+                    className="px-4 py-2 bg-[#0B1633] hover:bg-[#12A99A] text-white text-xs font-semibold rounded-xl shadow-xs transition-colors cursor-pointer"
+                  >
+                    Coba Lagi
+                  </button>
+                </div>
+              ) : activeCandidates.length === 0 ? (
+                // Empty state
+                <div className="p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-400 text-xs font-normal">
+                  Semua kandidat kecocokan telah ditinjau atau tidak ada kandidat kecocokan baru saat ini.
                 </div>
               ) : (
-                <div className="p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-400 text-xs font-normal">
-                  Semua kandidat kecocokan telah ditinjau.
-                </div>
+                // Dynamic Matching Candidate List
+                activeCandidates.map((item) => {
+                  const report = item.found_report;
+                  const itemTitle = report?.deskripsi_publik
+                    ? report.deskripsi_publik.split('\n')[0].replace('Nama Barang: ', '')
+                    : report?.kategori || 'Barang Temuan';
+                  const itemDesc = report?.deskripsi_publik || 'Tidak ada deskripsi publik.';
+                  const itemCategory = report?.kategori || 'Elektronik';
+                  const itemLocation = report?.nama_zona || report?.id_zona || 'Lab TIF';
+                  const itemTime = report?.waktu_kejadian || '12 Okt 2024, 15:00 WIB';
+                  const itemImage = getCategoryFallbackImage(report?.kategori);
+                  const reasons = getMatchingReasons(item);
+
+                  return (
+                    <MatchCard
+                      key={item.id}
+                      id={item.id}
+                      title={itemTitle}
+                      category={itemCategory}
+                      description={itemDesc}
+                      score={item.skor_akhir}
+                      location={itemLocation}
+                      time={itemTime}
+                      reasons={reasons}
+                      image={itemImage}
+                      onIgnore={handleIgnore}
+                    />
+                  );
+                })
               )}
             </div>
           </section>
 
         </main>
       </div>
-
     </div>
   );
 }

@@ -10,6 +10,9 @@ const mockProfilDB = {
   email: 'budi.santoso@student.trunojoyo.ac.id',
   telepon: '0812-3456-7890',
   dua_faktor: false,
+  fakultas: 'Fakultas Teknik',
+  role: 'Mahasiswa',
+  lab_affiliation: 'Laboratorium TIF',
 };
 
 export async function GET() {
@@ -35,6 +38,9 @@ export async function GET() {
             email: authData.user.email,
             telepon: profilDb.nomor_telepon || '0812-3456-7890',
             avatar_url: profilDb.avatar_url,
+            fakultas: 'Fakultas Teknik',
+            role: 'Mahasiswa',
+            lab_affiliation: 'Laboratorium TIF',
           },
         });
       }
@@ -72,7 +78,12 @@ export async function PATCH(request: Request) {
           sukses: true,
           sumber_data: 'supabase_live',
           pesan: 'Profil berhasil diperbarui di database Supabase.',
-          data: updateRes,
+          data: {
+            ...updateRes,
+            fakultas: 'Fakultas Teknik',
+            role: 'Mahasiswa',
+            lab_affiliation: 'Laboratorium TIF',
+          },
         });
       }
     }

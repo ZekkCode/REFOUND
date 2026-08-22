@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { supabaseKlien } from '@/pustaka/supabase/klien';
 import { masukDenganGoogle } from '@/pustaka/supabase/auth';
 
 export default function UserLoginPage() {
@@ -35,7 +36,7 @@ export default function UserLoginPage() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
     setSuccessMsg(null);
@@ -50,23 +51,87 @@ export default function UserLoginPage() {
         return;
       }
       setLoading(true);
-      setTimeout(() => {
+      
+      const { data, error } = await supabaseKlien.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: nama,
+            nim: nim,
+            prodi: prodi,
+          }
+        }
+      });
+
+      if (error) {
+        setErrorMsg(error.message);
         setLoading(false);
-        setSuccessMsg('Pendaftaran akun berhasil! Silakan masuk menggunakan NIM Anda.');
-        setIsRegisterMode(false);
-        setNama('');
-        setKonfirmasiPassword('');
-      }, 1200);
+        return;
+      }
+
+      if (data?.user) {
+        const { error: profileError } = await supabaseKlien.from('profil').upsert({
+          id: data.user.id,
+          nama: nama,
+          nim: nim,
+          program_studi: prodi
+        });
+        if (profileError) {
+          console.warn('DB profile upsert failed:', profileError);
+        }
+      }
+
+      setLoading(false);
+      setSuccessMsg('Pendaftaran akun berhasil! Silakan masuk menggunakan NIM atau Email Kampus Anda.');
+      setIsRegisterMode(false);
+      setNama('');
+      setKonfirmasiPassword('');
     } else {
       if (!nim || !password) {
         setErrorMsg('Mohon isi NIM dan Kata Sandi Anda.');
         return;
       }
       setLoading(true);
-      setTimeout(() => {
+
+      let targetEmail = nim;
+
+      // NIM lookup if input is not an email
+      if (!nim.includes('@')) {
+        try {
+          const lookupRes = await fetch('/api/auth/lookup-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nim }),
+          });
+          const lookupJson = await lookupRes.json();
+          if (lookupJson.sukses && lookupJson.email) {
+            targetEmail = lookupJson.email;
+          } else {
+            setErrorMsg(lookupJson.error || 'NIM tidak terdaftar.');
+            setLoading(false);
+            return;
+          }
+        } catch {
+          setErrorMsg('Koneksi internet gagal untuk verifikasi NIM.');
+          setLoading(false);
+          return;
+        }
+      }
+
+      const { error } = await supabaseKlien.auth.signInWithPassword({
+        email: targetEmail,
+        password,
+      });
+
+      if (error) {
+        setErrorMsg(error.message);
         setLoading(false);
-        router.push('/dashboard');
-      }, 1200);
+        return;
+      }
+
+      setLoading(false);
+      router.push('/dashboard');
     }
   };
 
@@ -152,7 +217,7 @@ export default function UserLoginPage() {
               <div className="w-full border-t border-slate-200" />
             </div>
             <div className="relative flex justify-center text-[10px] uppercase font-semibold">
-              <span className="bg-white px-2 text-slate-400">Atau masuk dengan NIM</span>
+              <span className="bg-white px-2 text-slate-400">Atau masuk dengan NIM / Email</span>
             </div>
           </div>
 
@@ -196,10 +261,12 @@ export default function UserLoginPage() {
             )}
 
             <div>
-              <label className="block text-[10px] font-semibold uppercase text-slate-400 mb-1">NIM (Nomor Induk Mahasiswa)</label>
+              <label className="block text-[10px] font-semibold uppercase text-slate-400 mb-1">
+                {isRegisterMode ? 'NIM (Nomor Induk Mahasiswa)' : 'NIM atau Email Kampus'}
+              </label>
               <input
                 type="text"
-                placeholder="Contoh: 13519099"
+                placeholder={isRegisterMode ? "Contoh: 13519099" : "Contoh: 13519099 atau budi@student.trunojoyo.ac.id"}
                 value={nim}
                 onChange={(e) => setNim(e.target.value)}
                 className="w-full bg-white border border-slate-200 focus:ring-1 focus:ring-[#0D9488] focus:border-[#0D9488] outline-none rounded-xl p-3 text-xs font-semibold text-slate-900"

@@ -1,9 +1,45 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export default function AdminOverviewDashboardPage() {
+  const [dashboardData, setDashboardData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [retryTrigger, setRetryTrigger] = useState(0);
+
+  useEffect(() => {
+    async function loadDashboardData() {
+      try {
+        setLoading(true);
+        setErrorMsg(null);
+        const res = await fetch('/api/admin/dashboard');
+        const json = await res.json();
+        if (json.sukses && json.data) {
+          setDashboardData(json.data);
+        } else {
+          setErrorMsg(json.error || 'Gagal memuat data dashboard.');
+        }
+      } catch (err) {
+        console.error('Fetch admin dashboard error:', err);
+        setErrorMsg('Koneksi internet gagal memuat data dashboard.');
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadDashboardData();
+  }, [retryTrigger]);
+
+  const handleRetry = () => {
+    setRetryTrigger((prev) => prev + 1);
+  };
+
+  const stats = dashboardData?.stats || { total_inventory: 0, pending_claims: 0, successful_returns: 0 };
+  const verificationQueue = dashboardData?.verificationQueue || [];
+  const activityLog = dashboardData?.activityLog || [];
+
   return (
     <div className="min-h-screen flex bg-[#F9FAFC] text-[#0B1633] font-sans antialiased selection:bg-[#12A99A]/20">
       
@@ -29,7 +65,7 @@ export default function AdminOverviewDashboardPage() {
               <svg className="w-5 h-5 text-[#0B1633]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
               </svg>
-              <span>Overview</span>
+              <span>Ringkasan</span>
             </Link>
             
             <Link
@@ -42,7 +78,9 @@ export default function AdminOverviewDashboardPage() {
                 </svg>
                 <span>Laporan Masuk</span>
               </div>
-              <span className="bg-[#FFB020] text-white px-2 py-0.5 rounded-full text-[9px] font-semibold">3</span>
+              <span className="bg-[#FFB020] text-white px-2 py-0.5 rounded-full text-[9px] font-semibold">
+                {loading ? '...' : stats.total_inventory}
+              </span>
             </Link>
 
             <Link
@@ -65,7 +103,9 @@ export default function AdminOverviewDashboardPage() {
                 </svg>
                 <span>Klaim</span>
               </div>
-              <span className="bg-red-500 text-white px-2 py-0.5 rounded-full text-[9px] font-semibold">18</span>
+              <span className="bg-red-500 text-white px-2 py-0.5 rounded-full text-[9px] font-semibold">
+                {loading ? '...' : stats.pending_claims}
+              </span>
             </Link>
 
             <Link
@@ -79,7 +119,7 @@ export default function AdminOverviewDashboardPage() {
             </Link>
 
             <Link
-              href="#"
+              href="/admin/laporan"
               className="flex items-center space-x-3 px-4 py-3 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-50 font-semibold text-sm rounded-xl transition-all"
             >
               <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -113,18 +153,25 @@ export default function AdminOverviewDashboardPage() {
           {/* Header Title */}
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tight text-[#0B1633]">
-              Admin Overview
+              Ringkasan Admin
             </h1>
             <p className="text-zinc-500 text-sm leading-relaxed max-w-3xl font-normal">
-              Manage laboratory lost and found inventory and verifications.
+              Kelola inventaris barang hilang/temuan laboratorium dan verifikasi klaim mahasiswa UTM.
             </p>
           </div>
+
+          {errorMsg && (
+            <div className="p-4 bg-rose-50 border border-rose-200 text-[#FF765F] text-xs font-semibold rounded-2xl flex items-center justify-between">
+              <span>{errorMsg}</span>
+              <button onClick={handleRetry} className="underline font-bold text-[#0B1633] ml-2">Coba Lagi</button>
+            </div>
+          )}
 
           {/* 3 KPI Status Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             
             {/* Card 1: Total Items Logged */}
-            <div className="bg-white p-6 rounded-3xl border border-zinc-150 shadow-[0_10px_35px_rgba(11,22,51,0.02)] flex flex-col justify-between space-y-4">
+            <div className="bg-white p-6 rounded-3xl border border-zinc-150 shadow-[0_10px_35px_rgba(11,22,51,0.02)] flex flex-col justify-between space-y-4 min-h-[140px]">
               <div className="flex items-center justify-between">
                 <div className="w-10 h-10 bg-teal-50 rounded-xl flex items-center justify-center text-[#12A99A]">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -132,21 +179,25 @@ export default function AdminOverviewDashboardPage() {
                   </svg>
                 </div>
                 <span className="px-2.5 py-1 text-[9px] font-semibold text-zinc-500 bg-zinc-50 border border-zinc-200 rounded-full">
-                  In Storage
+                  Disimpan
                 </span>
               </div>
               <div className="space-y-1">
-                <h3 className="text-4xl font-bold text-[#0B1633] font-mono leading-none">
-                  142
-                </h3>
+                {loading ? (
+                  <div className="h-9 w-20 bg-slate-100 rounded-lg animate-pulse" />
+                ) : (
+                  <h3 className="text-4xl font-bold text-[#0B1633] font-mono leading-none">
+                    {stats.total_inventory}
+                  </h3>
+                )}
                 <p className="text-zinc-400 text-xs font-medium">
-                  Total Items Logged
+                  Total Barang Tercatat
                 </p>
               </div>
             </div>
 
             {/* Card 2: Pending Claims */}
-            <div className="bg-white p-6 rounded-3xl border border-zinc-150 shadow-[0_10px_35px_rgba(11,22,51,0.02)] flex flex-col justify-between space-y-4">
+            <div className="bg-white p-6 rounded-3xl border border-zinc-150 shadow-[0_10px_35px_rgba(11,22,51,0.02)] flex flex-col justify-between space-y-4 min-h-[140px]">
               <div className="flex items-center justify-between">
                 <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center text-[#FFB020]">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -154,21 +205,25 @@ export default function AdminOverviewDashboardPage() {
                   </svg>
                 </div>
                 <span className="px-2.5 py-1 text-[9px] font-semibold text-amber-600 bg-amber-50 border border-amber-200 rounded-full uppercase tracking-wider">
-                  Action Required
+                  Tindakan Diperlukan
                 </span>
               </div>
               <div className="space-y-1">
-                <h3 className="text-4xl font-bold text-[#0B1633] font-mono leading-none">
-                  18
-                </h3>
+                {loading ? (
+                  <div className="h-9 w-20 bg-slate-100 rounded-lg animate-pulse" />
+                ) : (
+                  <h3 className="text-4xl font-bold text-[#0B1633] font-mono leading-none">
+                    {stats.pending_claims}
+                  </h3>
+                )}
                 <p className="text-zinc-400 text-xs font-medium">
-                  Pending Claims
+                  Klaim Menunggu Verifikasi
                 </p>
               </div>
             </div>
 
             {/* Card 3: Successful Returns */}
-            <div className="bg-white p-6 rounded-3xl border border-zinc-150 shadow-[0_10px_35px_rgba(11,22,51,0.02)] flex flex-col justify-between space-y-4">
+            <div className="bg-white p-6 rounded-3xl border border-zinc-150 shadow-[0_10px_35px_rgba(11,22,51,0.02)] flex flex-col justify-between space-y-4 min-h-[140px]">
               <div className="flex items-center justify-between">
                 <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center text-[#12A99A]">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -176,15 +231,19 @@ export default function AdminOverviewDashboardPage() {
                   </svg>
                 </div>
                 <span className="px-2.5 py-1 text-[9px] font-semibold text-[#12A99A] bg-teal-50 border border-teal-200 rounded-full tracking-wider">
-                  This Week
+                  Minggu Ini
                 </span>
               </div>
               <div className="space-y-1">
-                <h3 className="text-4xl font-bold text-[#0B1633] font-mono leading-none">
-                  45
-                </h3>
+                {loading ? (
+                  <div className="h-9 w-20 bg-slate-100 rounded-lg animate-pulse" />
+                ) : (
+                  <h3 className="text-4xl font-bold text-[#0B1633] font-mono leading-none">
+                    {stats.successful_returns}
+                  </h3>
+                )}
                 <p className="text-zinc-400 text-xs font-medium">
-                  Successful Returns
+                  Barang Berhasil Dikembalikan
                 </p>
               </div>
             </div>
@@ -201,88 +260,62 @@ export default function AdminOverviewDashboardPage() {
                   <svg className="w-5 h-5 mr-2 text-[#0B1633]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
-                  Verification Queue
+                  Antrean Verifikasi
                 </h3>
                 <Link href="/admin/klaim" className="text-xs font-semibold text-[#006F69] hover:underline">
-                  View All
+                  Lihat Semua
                 </Link>
               </div>
 
               {/* List of queue items */}
-              <div className="space-y-6">
-                
-                {/* Item 1 */}
-                <div className="flex items-center justify-between gap-4 p-4 border border-zinc-100 hover:border-zinc-200 rounded-2xl transition-all">
-                  <div className="flex items-center space-x-4">
-                    {/* Icon frame */}
-                    <div className="w-12 h-12 bg-zinc-50 border border-zinc-100 rounded-xl flex items-center justify-center text-zinc-400 shrink-0">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    {/* Meta info */}
-                    <div className="space-y-1">
-                      <h4 className="font-semibold text-sm text-[#0B1633] leading-tight">
-                        MacBook Pro Charger
-                      </h4>
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-[10px] text-zinc-400 font-medium">
-                          Claim ID: #CL-089
-                        </span>
-                        <span className="px-2 py-0.5 text-[8px] font-semibold uppercase text-amber-600 bg-amber-50 rounded-full">
-                          Awaiting Verif
-                        </span>
-                      </div>
-                      <p className="text-zinc-400 text-[10px] font-medium">
-                        Claimed by: Budi S. (Computer Science)
-                      </p>
-                    </div>
+              <div className="space-y-4">
+                {loading ? (
+                  <div className="space-y-3 animate-pulse">
+                    <div className="h-16 bg-slate-100 rounded-2xl w-full" />
+                    <div className="h-16 bg-slate-100 rounded-2xl w-full" />
                   </div>
-                  {/* Action Review */}
-                  <Link
-                    href="/admin/klaim"
-                    className="px-4 py-2 bg-white border border-[#006F69] hover:bg-[#006F69]/5 text-[#006F69] font-semibold text-xs rounded-xl transition-all"
-                  >
-                    Review
-                  </Link>
-                </div>
-
-                {/* Item 2 */}
-                <div className="flex items-center justify-between gap-4 p-4 border border-zinc-100 hover:border-zinc-200 rounded-2xl transition-all">
-                  <div className="flex items-center space-x-4">
-                    {/* Icon frame */}
-                    <div className="w-12 h-12 bg-zinc-50 border border-zinc-100 rounded-xl flex items-center justify-center text-zinc-400 shrink-0">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                      </svg>
-                    </div>
-                    {/* Meta info */}
-                    <div className="space-y-1">
-                      <h4 className="font-semibold text-sm text-[#0B1633] leading-tight">
-                        Advanced Calculus Textbook
-                      </h4>
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-[10px] text-zinc-400 font-medium">
-                          Claim ID: #CL-092
-                        </span>
-                        <span className="px-2 py-0.5 text-[8px] font-semibold uppercase text-amber-600 bg-amber-50 rounded-full">
-                          Awaiting Verif
-                        </span>
-                      </div>
-                      <p className="text-zinc-400 text-[10px] font-medium">
-                        Claimed by: Ani K. (Mathematics)
-                      </p>
-                    </div>
+                ) : verificationQueue.length === 0 ? (
+                  <div className="text-center py-6 text-xs font-semibold text-slate-400">
+                    Tidak ada antrean verifikasi klaim aktif.
                   </div>
-                  {/* Action Review */}
-                  <Link
-                    href="/admin/klaim"
-                    className="px-4 py-2 bg-white border border-[#006F69] hover:bg-[#006F69]/5 text-[#006F69] font-semibold text-xs rounded-xl transition-all"
-                  >
-                    Review
-                  </Link>
-                </div>
-
+                ) : (
+                  verificationQueue.map((item: any) => (
+                    <div key={item.id} className="flex items-center justify-between gap-4 p-4 border border-zinc-100 hover:border-zinc-200 rounded-2xl transition-all">
+                      <div className="flex items-center space-x-4">
+                        {/* Icon frame */}
+                        <div className="w-12 h-12 bg-zinc-50 border border-zinc-100 rounded-xl flex items-center justify-center text-zinc-400 shrink-0">
+                          <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                        {/* Meta info */}
+                        <div className="space-y-1">
+                          <h4 className="font-semibold text-sm text-[#0B1633] leading-tight">
+                            {item.item_name}
+                          </h4>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-[10px] text-zinc-400 font-medium">
+                              ID Klaim: #{item.claim_id}
+                            </span>
+                            <span className="px-2 py-0.5 text-[8px] font-semibold uppercase text-amber-600 bg-amber-50 rounded-full">
+                              Menunggu Verifikasi
+                            </span>
+                          </div>
+                          <p className="text-zinc-400 text-[10px] font-medium">
+                            Klaim oleh: {item.claimed_by}
+                          </p>
+                        </div>
+                      </div>
+                      {/* Action Review */}
+                      <Link
+                        href={`/admin/klaim`}
+                        className="px-4 py-2 bg-white border border-[#006F69] hover:bg-[#006F69]/5 text-[#006F69] font-semibold text-xs rounded-xl transition-all shrink-0"
+                      >
+                        Tinjau
+                      </Link>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
 
@@ -292,7 +325,7 @@ export default function AdminOverviewDashboardPage() {
                 <svg className="w-5 h-5 mr-2 text-[#0B1633]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Activity Log
+                Aktivitas Terbaru
               </h3>
 
               {/* Vertical timeline details */}
@@ -300,57 +333,57 @@ export default function AdminOverviewDashboardPage() {
                 {/* Connecting vertical line */}
                 <div className="absolute top-2.5 bottom-2.5 left-2.5 w-0.5 bg-zinc-100" />
 
-                {/* Log 1: returned item */}
-                <div className="relative space-y-1">
-                  {/* Verified circle icon */}
-                  <div className="absolute -left-[24px] top-0.5 w-4 h-4 rounded-full bg-emerald-500 flex items-center justify-center text-white ring-4 ring-emerald-50 shrink-0">
-                    <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
+                {loading ? (
+                  <div className="space-y-4 animate-pulse">
+                    <div className="h-10 bg-slate-100 rounded-lg w-full" />
+                    <div className="h-10 bg-slate-100 rounded-lg w-full" />
                   </div>
-                  <h4 className="text-xs font-semibold text-[#0B1633]">
-                    Item Returned
-                  </h4>
-                  <p className="text-zinc-500 text-[10px] font-normal leading-relaxed">
-                    Water bottle returned to owner.
-                  </p>
-                  <p className="text-zinc-400 text-[9px] font-medium">10 mins ago by Admin Sys</p>
-                </div>
-
-                {/* Log 2: new item logged */}
-                <div className="relative space-y-1">
-                  {/* Folder/plus circle icon */}
-                  <div className="absolute -left-[24px] top-0.5 w-4 h-4 rounded-full bg-[#0B1633] flex items-center justify-center text-white ring-4 ring-zinc-100 shrink-0">
-                    <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                    </svg>
+                ) : activityLog.length === 0 ? (
+                  <div className="text-center py-6 text-xs text-slate-400">
+                    Belum ada log aktivitas.
                   </div>
-                  <h4 className="text-xs font-semibold text-[#0B1633]">
-                    New Item Logged
-                  </h4>
-                  <p className="text-zinc-500 text-[10px] font-normal leading-relaxed">
-                    Black umbrella found in Lab B added to inventory.
-                  </p>
-                  <p className="text-zinc-400 text-[9px] font-medium">45 mins ago by Staff Member</p>
-                </div>
+                ) : (
+                  activityLog.map((log: any) => {
+                    const isReturned = log.tipe === 'item_returned';
+                    const isNewItem = log.tipe === 'new_item';
 
-                {/* Log 3: system sync */}
-                <div className="relative space-y-1">
-                  {/* Sync blue icon */}
-                  <div className="absolute -left-[24px] top-0.5 w-4 h-4 rounded-full bg-[#6366F1] flex items-center justify-center text-white ring-4 ring-indigo-50 shrink-0">
-                    <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17" />
-                    </svg>
-                  </div>
-                  <h4 className="text-xs font-semibold text-[#0B1633]">
-                    System Sync
-                  </h4>
-                  <p className="text-zinc-500 text-[10px] font-semibold leading-relaxed">
-                    Automated inventory sync completed.
-                  </p>
-                  <p className="text-zinc-400 text-[9px] font-bold">2 hours ago</p>
-                </div>
-
+                    return (
+                      <div key={log.id} className="relative space-y-1">
+                        {/* Circle icon */}
+                        <div className={`absolute -left-[24px] top-0.5 w-4 h-4 rounded-full flex items-center justify-center text-white ring-4 shrink-0 ${
+                          isReturned 
+                            ? 'bg-emerald-500 ring-emerald-50' 
+                            : isNewItem 
+                            ? 'bg-[#0B1633] ring-zinc-150' 
+                            : 'bg-[#6366F1] ring-indigo-50'
+                        }`}>
+                          {isReturned ? (
+                            <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          ) : isNewItem ? (
+                            <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                            </svg>
+                          ) : (
+                            <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17" />
+                            </svg>
+                          )}
+                        </div>
+                        <h4 className="text-xs font-semibold text-[#0B1633]">
+                          {log.judul}
+                        </h4>
+                        <p className="text-zinc-500 text-[10px] font-normal leading-relaxed">
+                          {log.deskripsi}
+                        </p>
+                        <p className="text-zinc-400 text-[9px] font-medium">
+                          {log.waktu} {log.pelaku && `oleh ${log.pelaku}`}
+                        </p>
+                      </div>
+                    );
+                  })
+                )}
               </div>
             </div>
 
@@ -359,12 +392,12 @@ export default function AdminOverviewDashboardPage() {
         </div>
 
         {/* Footer */}
-        <footer className="bg-[#0B1633] text-white py-12 px-6 sm:px-12 border-t border-white/10 shrink-0">
+        <footer className="bg-[#0B1633] text-white py-12 px-6 sm:px-12 border-t border-white/10 shrink-0 mt-8">
           <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex flex-col items-center md:items-start space-y-2">
               <Image src="/logo.png" alt="REFOUND Logo" width={110} height={32} className="object-contain h-8 w-auto brightness-0 invert" />
               <span className="text-xs text-zinc-400 font-semibold">
-                © 2024 REFOUND University Laboratory System. All rights reserved.
+                © 2026 REFOUND University Laboratory System. All rights reserved.
               </span>
             </div>
             <div className="flex flex-wrap justify-center gap-6 text-xs sm:text-sm font-semibold text-zinc-300">
@@ -381,4 +414,3 @@ export default function AdminOverviewDashboardPage() {
     </div>
   );
 }
-

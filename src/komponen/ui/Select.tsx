@@ -1,0 +1,28 @@
+import React from 'react';
+
+interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  label?: string;
+  error?: string;
+  children: React.ReactNode;
+}
+
+export default function Select({ label, error, children, className = '', ...props }: SelectProps) {
+  return (
+    <div className="space-y-1">
+      {label && (
+        <label className="block text-[10px] font-semibold uppercase text-slate-400 tracking-wider">
+          {label}
+        </label>
+      )}
+      <select
+        className={`w-full bg-white border border-slate-200 focus:ring-1 focus:ring-[#0D9488] focus:border-[#0D9488] outline-none rounded-xl p-3 text-xs font-semibold text-slate-900 transition-all ${
+          error ? 'border-rose-300 focus:ring-rose-500 focus:border-rose-500' : ''
+        } ${className}`}
+        {...props}
+      >
+        {children}
+      </select>
+      {error && <p className="text-[10px] text-rose-500 font-semibold">{error}</p>}
+    </div>
+  );
+}
