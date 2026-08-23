@@ -158,13 +158,22 @@ export default function TopbarMahasiswa({ }: PropsTopbar) {
     <header className="w-full bg-white/90 backdrop-blur-md py-3 px-6 sm:px-10 flex items-center justify-between border-b border-slate-200/80 shrink-0 sticky top-0 z-30">
       {/* Mobile Logo */}
       <div className="md:hidden">
-        <Link href="/" className="flex items-center">
+        <Link href="/" className="flex items-center space-x-2">
           <Image
             src="/logo.png"
             alt="REFOUND Logo"
-            width={100}
-            height={32}
-            className="object-contain h-7 w-auto"
+            width={90}
+            height={28}
+            className="object-contain h-6 w-auto"
+            priority
+          />
+          <div className="h-4.5 w-px bg-slate-200" />
+          <Image
+            src="/TCC_LOGO.png"
+            alt="TCC Logo"
+            width={28}
+            height={28}
+            className="object-contain h-6 w-auto"
             priority
           />
         </Link>

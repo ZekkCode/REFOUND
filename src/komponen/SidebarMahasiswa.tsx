@@ -57,13 +57,21 @@ export default function SidebarMahasiswa() {
       {/* Desktop Clean Sidebar */}
       <aside className="w-64 bg-white text-[#0B1633] flex flex-col justify-between p-5 shrink-0 min-h-screen border-r border-slate-200/70 hidden md:flex">
         <div className="space-y-6">
-          {/* Brand Logo */}
           <div className="px-2 pt-2">
-            <Link href="/" className="flex items-center">
+            <Link href="/" className="flex items-center space-x-3 hover:opacity-90 transition-opacity">
               <Image
                 src="/logo.png"
                 alt="REFOUND Logo"
-                width={120}
+                width={130}
+                height={38}
+                className="object-contain h-9 w-auto"
+                priority
+              />
+              <div className="h-6 w-px bg-slate-200" />
+              <Image
+                src="/TCC_LOGO.png"
+                alt="TCC Logo"
+                width={36}
                 height={36}
                 className="object-contain h-8 w-auto"
                 priority
