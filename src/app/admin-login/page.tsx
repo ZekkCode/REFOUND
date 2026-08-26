@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { supabaseKlien } from '@/pustaka/supabase/klien';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -12,21 +13,70 @@ export default function AdminLoginPage() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const handleLoginAdmin = (e: React.FormEvent) => {
+  const handleLoginAdmin = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
     setLoading(true);
 
-    setTimeout(() => {
-      setLoading(false);
-      // Mock verifikasi admin login
-      if (kodePetugas && pinAkses) {
-        document.cookie = 'refound_admin_token=admin_lab_active; path=/; max-age=86400';
-        router.push('/admin');
-      } else {
-        setErrorMsg('Kode petugas atau PIN akses tidak valid.');
+    try {
+      // 1. Cari email berdasarkan NIP/Kode Petugas
+      const resLookup = await fetch('/api/auth/lookup-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nim: kodePetugas }),
+      });
+      const dataLookup = await resLookup.json();
+
+      if (!resLookup.ok || !dataLookup.sukses) {
+        setErrorMsg(dataLookup.error || 'NIP/Kode Petugas tidak terdaftar.');
+        setLoading(false);
+        return;
       }
-    }, 800);
+
+      const email = dataLookup.email;
+
+      // 2. Sign in dengan email & password menggunakan Supabase Auth
+      const { data: authData, error: authError } = await supabaseKlien.auth.signInWithPassword({
+        email,
+        password: pinAkses,
+      });
+
+      if (authError) {
+        setErrorMsg(authError.message === 'Invalid login credentials' ? 'PIN Akses/kata sandi salah.' : authError.message);
+        setLoading(false);
+        return;
+      }
+
+      if (!authData?.user) {
+        setErrorMsg('Gagal melakukan autentikasi.');
+        setLoading(false);
+        return;
+      }
+
+      // 3. Verifikasi apakah user terdaftar di tabel admin_lab
+      const { data: adminRecord, error: dbError } = await supabaseKlien
+        .from('admin_lab')
+        .select('*')
+        .eq('id', authData.user.id)
+        .single();
+
+      if (dbError || !adminRecord) {
+        // Sign out karena bukan admin
+        await supabaseKlien.auth.signOut();
+        setErrorMsg('Akun Anda tidak memiliki hak akses Petugas Admin Lab.');
+        setLoading(false);
+        return;
+      }
+
+      // 4. Sukses, set cookie & redirect
+      document.cookie = 'refound_admin_token=admin_lab_active; path=/; max-age=86400';
+      router.push('/admin');
+    } catch (err: unknown) {
+      console.error(err);
+      setErrorMsg('Terjadi kesalahan koneksi database.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
