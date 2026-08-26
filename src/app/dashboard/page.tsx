@@ -179,7 +179,7 @@ export default function DashboardMahasiswaPage() {
   const matchKandidat = laporanSaya.find(l => l.status === 'potensi_cocok') || laporanSaya[0];
 
   return (
-    <div className="min-h-screen flex bg-[#F8FAFC] text-[#0B1633] font-sans antialiased">
+    <div className="min-h-screen flex bg-[#F5F7FA] text-[#0B1633] font-sans antialiased">
       <SidebarMahasiswa />
 
       <div className="flex-1 flex flex-col min-h-screen overflow-x-hidden pb-28 md:pb-12">
@@ -221,8 +221,8 @@ export default function DashboardMahasiswaPage() {
                       Selamat Datang, {profil?.nama}
                     </h1>
                   </div>
-                  <p className="text-xs sm:text-sm text-slate-500 font-normal max-w-xl leading-relaxed pt-1">
-                    Halo dari {profil?.program_studi}. Pantau laporan barang hilang Anda, laporkan temuan baru, dan periksa notifikasi kecocokan cerdas AI laboratorium.
+                  <p className="text-xs text-slate-400 font-normal pt-0.5">
+                    {profil?.program_studi} • NIM {profil?.nim}
                   </p>
                 </>
               )}
@@ -473,13 +473,7 @@ export default function DashboardMahasiswaPage() {
                 )}
               </div>
 
-              {/* Privacy Notice Card */}
-              <div className="p-3.5 bg-slate-50/80 border border-slate-200/60 rounded-xl flex items-start gap-2.5 text-slate-500 text-xs font-normal leading-relaxed">
-                <svg className="w-4 h-4 text-slate-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.75" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-                </svg>
-                <span>Ciri rahasia barang temuan dilindungi sistem. Hanya Admin Lab yang memverifikasi keaslian bukti kepemilikan Anda.</span>
-              </div>
+
             </section>
 
             {/* Right: Active Reports Section */}

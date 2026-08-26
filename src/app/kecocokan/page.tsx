@@ -126,9 +126,6 @@ export default function HalamanPencocokanAI() {
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0B1633]">
               Hasil Analisis Kecocokan AI
             </h1>
-            <p className="text-slate-500 text-xs sm:text-sm font-normal max-w-3xl leading-relaxed">
-              Sistem AI Vector Matching menemukan kandidat barang temuan yang memiliki kesamaan atribut dengan laporan kehilangan Anda.
-            </p>
           </div>
 
           {notif && (

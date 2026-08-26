@@ -3,15 +3,19 @@
  * 
  * Penggunaan AI di REFOUND:
  * 1. AI Vector Similarity & Score Fusion (Pencocokan Kandidat)
- * 2. LLM Semantic Verification (Evaluasi Jawaban Klaim Rahasia)
- * 3. LLM Admin Verification Question Suggester (Usulan Pertanyaan Admin)
+ * 2. LLM Semantic Verification (Evaluasi Jawaban Klaim Rahasia) - Google Gemini API
+ * 3. LLM Admin Verification Question Suggester (Usulan Pertanyaan Admin) - Google Gemini API
  * 
  * Mekanisme Backup / Callback Fail-Safe:
- * - Apabila API Key (OpenAI/Gemini) tidak dikonfigurasi, kuota habis, atau error jaringan,
+ * - Apabila API Key (Gemini/OpenAI) tidak dikonfigurasi, kuota habis, atau error jaringan,
  *   sistem secara otomatis (callback) beralih ke Mesin Fallback Deterministik berbasis
  *   Aturan & Kemiripan Kata Kunci Lokal (Local Keyword & String Overlap).
  * - Keputusan akhir SELALU tetap di tangan Admin Lab (Admin Manual Override).
  */
+
+import { isGeminiTersedia } from './gemini';
+import { buatEmbeddingTeks, hitungCosineSimilarity } from './embedding';
+import { evaluasiSemantikKlaimAI, usulkanPertanyaanVerifikasiAI } from './verifikasi-semantik';
 
 export interface SkorPencocokan {
   skorTeks: number;
@@ -35,20 +39,20 @@ export interface StatusAdapterAI {
  * Memeriksa status kesiapan API Key dan menentukan mode engine yang aktif.
  */
 export function dapatkanStatusAdapterAI(): StatusAdapterAI {
-  const provider = process.env.AI_PROVIDER || 'mock';
+  const provider = process.env.AI_PROVIDER || 'gemini';
   const openAiKey = process.env.OPENAI_API_KEY;
-  const geminiKey = process.env.GEMINI_API_KEY;
+  const isGeminiReady = isGeminiTersedia();
 
   const isReady =
-    (provider === 'openai' && Boolean(openAiKey && !openAiKey.includes('your-'))) ||
-    (provider === 'gemini' && Boolean(geminiKey && !geminiKey.includes('your-')));
+    (provider === 'gemini' && isGeminiReady) ||
+    (provider === 'openai' && Boolean(openAiKey && !openAiKey.includes('your-') && openAiKey.length > 10));
 
   if (isReady) {
     return {
       provider,
       isApiKeyReady: true,
       activeMode: 'live_api',
-      deskripsiStatus: `AI Engine Aktif (Live API: ${provider.toUpperCase()})`,
+      deskripsiStatus: `AI Engine Aktif (Live API: ${provider.toUpperCase()} - Google AI Studio Free Tier)`,
     };
   }
 
@@ -113,67 +117,17 @@ export function hitungSkorPencocokan(
 
 /**
  * Evaluasi semantik jawaban klaim pengguna terhadap ciri rahasia barang temuan.
- * Mendukung pencocokan otomatis via Live API atau Callback Fallback Lokal jika API Key tidak tersedia.
+ * Mendukung pencocokan otomatis via Live Gemini API atau Callback Fallback Lokal jika API Key tidak tersedia.
  */
 export async function evaluasiJawabanKlaim(
   catatanRahasia: string,
   jawabanPengguna: string
 ): Promise<{ skorSemantik: number; alasanAnalisis: string; modeEngine: 'live_api' | 'fallback_local' }> {
-  if (!jawabanPengguna || jawabanPengguna.trim() === '') {
-    return {
-      skorSemantik: 0,
-      alasanAnalisis: 'Jawaban pengguna tidak boleh kosong.',
-      modeEngine: 'fallback_local',
-    };
-  }
-
-  const statusAdapter = dapatkanStatusAdapterAI();
-
-  // 1. Coba panggil Live API jika API key tersedia dan aktif
-  if (statusAdapter.activeMode === 'live_api') {
-    try {
-      // Contoh integrasi API Provider (OpenAI/Gemini)
-      // Jika berhasil, kembalikan skor live
-      // Jika throw error/timeout, catch block di bawah akan otomatis callback ke Local Fallback!
-    } catch {
-      console.warn('API Key error atau timeout. Otomatis callback beralih ke Local Fallback Engine.');
-    }
-  }
-
-  // 2. Callback Local Fallback Engine (Deterministik & Selalu Aman)
-  const jawabanClean = jawabanPengguna.toLowerCase();
-  const catatanClean = catatanRahasia.toLowerCase();
-
-  const kataRahasia = catatanClean.split(/\s+/).filter((w) => w.length > 3);
-  let matchCount = 0;
-
-  for (const kata of kataRahasia) {
-    if (jawabanClean.includes(kata)) {
-      matchCount++;
-    }
-  }
-
-  const rasioCocok = kataRahasia.length > 0 ? matchCount / kataRahasia.length : 0;
-  const cocokLangsung = jawabanClean.includes(catatanClean);
-
-  let skorSemantik = 0.4;
-  let alasanAnalisis =
-    'Jawaban mengandung beberapa kemiripan kata kunci. Admin Lab disarankan meninjau secara manual.';
-
-  if (cocokLangsung || rasioCocok >= 0.6) {
-    skorSemantik = 0.95;
-    alasanAnalisis =
-      'Jawaban pengguna sangat spesifik dan mencakup detail ciri rahasia barang temuan secara tepat.';
-  } else if (rasioCocok > 0.2) {
-    skorSemantik = 0.72;
-    alasanAnalisis =
-      'Jawaban pengguna menyebutkan beberapa kata kunci ciri rahasia yang relevan.';
-  }
-
+  const hasil = await evaluasiSemantikKlaimAI(catatanRahasia, jawabanPengguna);
   return {
-    skorSemantik: Number(skorSemantik.toFixed(2)),
-    alasanAnalisis,
-    modeEngine: statusAdapter.activeMode,
+    skorSemantik: hasil.skorSemantik,
+    alasanAnalisis: hasil.alasanAnalisis,
+    modeEngine: hasil.modeEngine === 'live_gemini' ? 'live_api' : 'fallback_local',
   };
 }
 
@@ -203,3 +157,6 @@ export function usulkanPertanyaanVerifikasiAdmin(kategori: string): string[] {
   const kategoriKey = Object.keys(usulan).find((k) => kategori.includes(k));
   return usulan[kategoriKey || 'Elektronik'];
 }
+
+// Re-export modul pendukung
+export { buatEmbeddingTeks, hitungCosineSimilarity, evaluasiSemantikKlaimAI, usulkanPertanyaanVerifikasiAI };

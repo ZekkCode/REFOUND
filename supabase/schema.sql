@@ -159,12 +159,42 @@ CREATE TABLE public.rahasia_temuan (
 );
 
 -- G. Tabel Vektor Embedding AI (pgvector untuk Vector Similarity Search)
+-- Catatan:
+-- - Google Gemini (text-embedding-004 / Free Tier AI Studio): vector(768)
+-- - OpenAI (text-embedding-3-small): vector(1536)
 CREATE TABLE public.vektor_embedding (
   id_laporan UUID PRIMARY KEY REFERENCES public.laporan(id) ON DELETE CASCADE,
-  vektor_teks vector(1536),
-  versi_model TEXT DEFAULT 'text-embedding-3-small' NOT NULL,
+  vektor_teks vector(768),
+  versi_model TEXT DEFAULT 'text-embedding-004' NOT NULL,
   dibuat_pada TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
+
+-- Helper Function Pencarian Kemiripan Vektor Cosine (pgvector)
+CREATE OR REPLACE FUNCTION public.cari_laporan_mirip_vektor(
+  vektor_kueri vector(768),
+  ambang_kemiripan float DEFAULT 0.5,
+  batas_jumlah int DEFAULT 10,
+  tipe_sasaran tipe_laporan DEFAULT 'penemuan'
+)
+RETURNS TABLE (
+  id_laporan UUID,
+  skor_kemiripan float
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  RETURN QUERY
+  SELECT
+    ve.id_laporan,
+    (1 - (ve.vektor_teks <=> vektor_kueri))::float AS skor_kemiripan
+  FROM public.vektor_embedding ve
+  JOIN public.laporan l ON l.id = ve.id_laporan
+  WHERE l.tipe = tipe_sasaran
+    AND (1 - (ve.vektor_teks <=> vektor_kueri)) >= ambang_kemiripan
+  ORDER BY ve.vektor_teks <=> vektor_kueri ASC
+  LIMIT batas_jumlah;
+END;
+$$;
 
 -- H. Tabel Kecocokan AI (Kandidat Match Antara Kehilangan & Penemuan)
 CREATE TABLE public.kecocokan (

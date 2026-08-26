@@ -117,15 +117,12 @@ export default function HalamanBarangTemuan() {
           
           {/* Header Title Banner */}
           <div className="bg-white p-5 sm:p-6 rounded-xl sm:rounded-2xl border border-slate-200/70 shadow-xs space-y-1">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-[#12A99A]">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-[#12A99A]">
               Inventaris Publik
             </span>
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0B1633]">
               Katalog Barang Temuan
             </h1>
-            <p className="text-slate-500 text-xs sm:text-sm font-normal max-w-3xl leading-relaxed">
-              Telusuri barang yang diamankan di laboratorium. Ciri rahasia diverifikasi oleh Admin Lab sebelum serah terima.
-            </p>
           </div>
 
           {/* Search Bar, Categories & Sorting Row */}

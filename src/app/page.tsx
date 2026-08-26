@@ -8,7 +8,7 @@ export default function Home() {
   const [menuTerbuka, setMenuTerbuka] = useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-[#0B1633] selection:bg-[#12A99A]/20 font-sans antialiased">
+    <div className="min-h-screen flex flex-col bg-[#F5F7FA] text-[#0B1633] selection:bg-[#12A99A]/20 font-sans antialiased">
       
       <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-xl border-b border-slate-200/80 transition-all">
         <div className="w-full px-4 sm:px-10 lg:px-16 h-20 flex items-center justify-between relative">
