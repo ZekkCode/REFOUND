@@ -60,6 +60,4 @@ body {
   border: 1px solid rgba(229, 231, 235, 0.9);
 }
 
-.button-glow:hover {
-  box-shadow: 0 8px 20px -4px rgba(18, 169, 154, 0.35);
-}
+

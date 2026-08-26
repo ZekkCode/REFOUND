@@ -12,15 +12,12 @@ export default function HalamanLaporPenemuan() {
 
         <main className="flex-1 max-w-3xl w-full mx-auto px-6 sm:px-10 py-8 space-y-6">
           <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs space-y-1">
-            <span className="text-xs font-semibold uppercase tracking-wider text-[#12A99A]">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-[#12A99A]">
               Temuan Barang
             </span>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#0B1633]">
+            <h1 className="text-2xl font-bold tracking-tight text-[#0B1633]">
               Lapor Barang Ditemukan
             </h1>
-            <p className="text-slate-500 text-xs sm:text-sm font-normal">
-              Terima kasih telah menemukan barang! Setelah mengisi form, silakan serahkan barang fisik ke Ruang Admin Lab.
-            </p>
           </div>
 
           <FormLaporBaru tipeAwal="penemuan" />
