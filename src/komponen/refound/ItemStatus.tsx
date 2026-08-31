@@ -10,4 +10,3 @@ interface ItemStatusProps {
 export default function ItemStatus({ tipe, statusLaporan }: ItemStatusProps) {
   return <LencanaStatus tipe={tipe} statusLaporan={statusLaporan} />;
 }
-export default function MatchCard({tipe, statusLaporan}) 
