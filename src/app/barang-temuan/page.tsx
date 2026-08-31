@@ -55,7 +55,7 @@ export default function HalamanBarangTemuan() {
 
         const res = await fetch(`/api/barang-temuan?${queryParams.toString()}`);
         const data = await res.json();
-        if (data.sukses && Array.isArray(data.data) && data.data.length > 0) {
+        if (data.sukses && Array.isArray(data.data)) {
           setDaftarSemuaTemuan(data.data);
         }
       } catch (e) {

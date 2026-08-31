@@ -323,15 +323,6 @@ export default function UserLoginPage() {
             </button>
           </div>
 
-          {/* Admin link */}
-          <div className="text-center pt-3 border-t border-slate-100">
-            <span className="text-[11px] font-medium text-slate-400">
-              Petugas Laboratorium?{' '}
-              <Link href="/admin-login" className="text-[#0D9488] hover:underline font-semibold">
-                Masuk Gerbang Admin
-              </Link>
-            </span>
-          </div>
 
         </div>
       </main>
