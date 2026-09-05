@@ -78,7 +78,7 @@ export default function HalamanPengajuanKlaim({ params }: { params: Promise<{ id
             href="/dashboard"
             className="text-xs font-semibold text-slate-600 hover:text-[#0B1633] transition-colors"
           >
-            &larr; Kembali ke Dashboard
+            Dashboard
           </Link>
           <Link
             href="/profil"
@@ -97,13 +97,13 @@ export default function HalamanPengajuanKlaim({ params }: { params: Promise<{ id
           {/* Header text */}
           <div className="space-y-1.5 border-b border-slate-100 pb-5">
             <span className="text-[10px] font-semibold text-[#12A99A] uppercase tracking-widest bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-100">
-              Verifikasi Kepemilikan 2-Langkah
+              Verifikasi Kepemilikan
             </span>
             <h1 className="text-2xl sm:text-3xl font-bold text-[#0B1633] tracking-tight">
-              Pengajuan Klaim Barang
+              Klaim Barang
             </h1>
             <p className="text-slate-500 text-xs sm:text-sm font-normal leading-relaxed">
-              Jawab pertanyaan rahasia yang disusun oleh Admin Lab untuk membuktikan kepemilikan sah barang Anda.
+              Jawab pertanyaan berikut untuk memverifikasi kepemilikan barang.
             </p>
           </div>
 
@@ -117,7 +117,7 @@ export default function HalamanPengajuanKlaim({ params }: { params: Promise<{ id
             <div className="space-y-0.5">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="px-2 py-0.5 text-[9px] font-semibold uppercase bg-emerald-50 text-[#10B981] border border-emerald-200 rounded-full">
-                  Disimpan Admin Lab
+                  Disimpan di Lab
                 </span>
                 <span className="text-slate-400 font-medium text-[10px]">
                   ID: {kandidat.id_barang}
@@ -127,7 +127,7 @@ export default function HalamanPengajuanKlaim({ params }: { params: Promise<{ id
                 {kandidat.title}
               </h3>
               <p className="text-slate-500 text-[11px] font-normal">
-                Ditemukan di {kandidat.zona_penemuan} &bull; {kandidat.waktu_penemuan}
+                {kandidat.zona_penemuan} &bull; {kandidat.waktu_penemuan}
               </p>
             </div>
           </div>
@@ -137,25 +137,25 @@ export default function HalamanPengajuanKlaim({ params }: { params: Promise<{ id
             <div className="space-y-4 pt-2">
               <PesanUmpanBalik
                 tipe={hasil.error ? 'error' : 'sukses'}
-                judul={hasil.error ? 'Pengajuan Gagal' : 'Klaim Berhasil Dikirim'}
+                judul={hasil.error ? 'Pengajuan Gagal' : 'Klaim Terkirim'}
                 pesan={hasil.error || hasil.pesan || ''}
               />
 
               {hasil.skor_semantik_ai !== undefined && (
                 <div className="p-5 bg-teal-50/70 border border-teal-200 rounded-xl space-y-3 text-xs">
                   <span className="font-semibold uppercase tracking-wider text-[#12A99A] block">
-                    Hasil Evaluasi Semantik AI Engine:
+                    Hasil Verifikasi:
                   </span>
                   <div className="space-y-1 font-mono text-[#0B1633]">
-                    <p><strong>Tingkat Kemiripan Jawaban:</strong> {Math.round(hasil.skor_semantik_ai * 100)}%</p>
-                    <p className="leading-relaxed"><strong>Analisis Ciri AI:</strong> {hasil.alasan_analisis_ai}</p>
+                    <p><strong>Kemiripan Jawaban:</strong> {Math.round(hasil.skor_semantik_ai * 100)}%</p>
+                    <p className="leading-relaxed"><strong>Analisis:</strong> {hasil.alasan_analisis_ai}</p>
                   </div>
                   <div className="pt-2 border-t border-teal-100 flex justify-end">
                     <Link
                       href="/dashboard"
-                      className="px-4 py-2 bg-[#12A99A] hover:bg-[#12A99A]/90 text-white font-semibold rounded-xl transition-all shadow-xs"
+                      className="px-4 py-2 bg-[#0B1633] hover:bg-[#12A99A] text-white font-semibold rounded-xl transition-all shadow-xs"
                     >
-                      Buka Dashboard Saya &rarr;
+                      Ke Dashboard
                     </Link>
                   </div>
                 </div>
@@ -169,10 +169,10 @@ export default function HalamanPengajuanKlaim({ params }: { params: Promise<{ id
               <div className="space-y-3">
                 <div className="space-y-1">
                   <label className="block text-xs font-semibold text-[#0B1633] uppercase tracking-wider">
-                    Pertanyaan Keamanan Rahasia *
+                    Pertanyaan Verifikasi *
                   </label>
                   <p className="text-slate-500 text-xs font-normal">
-                    Pertanyaan ini dirancang khusus dari ciri fisik unik yang ditemukan petugas:
+                    Pertanyaan berdasarkan ciri fisik barang:
                   </p>
                 </div>
 
@@ -193,7 +193,7 @@ export default function HalamanPengajuanKlaim({ params }: { params: Promise<{ id
                     rows={4}
                     value={jawaban}
                     onChange={(e) => setJawaban(e.target.value)}
-                    placeholder="Tuliskan jawaban detail dan spesifik Anda di sini..."
+                    placeholder="Tuliskan jawaban Anda di sini..."
                     className="w-full rounded-xl border border-slate-200 bg-white p-3.5 text-xs sm:text-sm font-medium text-slate-900 placeholder-slate-400 focus:border-[#12A99A] focus:ring-1 focus:ring-[#12A99A] outline-none transition-colors resize-none"
                   />
                 </div>
@@ -209,7 +209,7 @@ export default function HalamanPengajuanKlaim({ params }: { params: Promise<{ id
                   className="w-4 h-4 rounded border-slate-300 text-[#12A99A] focus:ring-[#12A99A] mt-0.5 shrink-0 cursor-pointer"
                 />
                 <label htmlFor="confirm-kebenaran" className="text-slate-500 text-xs font-normal leading-relaxed cursor-pointer select-none">
-                  Saya mengonfirmasi bahwa informasi yang saya berikan adalah benar. Saya memahami bahwa klaim palsu dapat dikenakan sanksi disipliner laboratorium.
+                  Saya menyatakan bahwa informasi yang diberikan adalah benar dan sesuai.
                 </label>
               </div>
 
@@ -224,9 +224,9 @@ export default function HalamanPengajuanKlaim({ params }: { params: Promise<{ id
                 <button
                   type="submit"
                   disabled={loading || !sudahKonfirmasi}
-                  className="px-6 py-2.5 bg-[#0B1633] hover:bg-[#0B1633]/90 disabled:opacity-50 text-white font-semibold text-xs rounded-xl shadow-xs transition-all flex items-center cursor-pointer"
+                  className="px-6 py-2.5 bg-[#0B1633] hover:bg-[#12A99A] disabled:opacity-50 text-white font-semibold text-xs rounded-xl shadow-xs transition-all flex items-center cursor-pointer"
                 >
-                  {loading ? 'Mengevaluasi Jawaban...' : 'Kirim Jawaban Klaim'}
+                  {loading ? 'Memverifikasi...' : 'Kirim Jawaban'}
                 </button>
               </div>
             </form>

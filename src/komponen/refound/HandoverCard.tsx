@@ -17,7 +17,7 @@ export default function HandoverCard({
     <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row gap-4 items-center justify-between w-full">
       <div className="space-y-1 text-center sm:text-left">
         <span className="text-[10px] font-semibold text-[#12A99A] uppercase tracking-wider block">
-          Penyerahan Aktif
+          Siap Diambil
         </span>
         <h4 className="text-sm font-bold text-[#0B1633] leading-tight">
           {itemName}
@@ -36,7 +36,7 @@ export default function HandoverCard({
           onClick={onVerify}
           className="px-4 py-2.5 bg-[#0B1633] hover:bg-[#12A99A] text-white font-semibold text-xs rounded-xl shadow-xs transition-colors cursor-pointer"
         >
-          Proses Serah Terima &rarr;
+          Serahkan Barang
         </button>
       </div>
     </div>

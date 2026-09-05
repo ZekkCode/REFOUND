@@ -21,7 +21,7 @@ export default function PageHeader({
       {backHref && (
         <div className="flex items-center space-x-1.5 text-xs font-semibold text-slate-400 mb-1.5">
           <Link href={backHref} className="hover:text-[#12A99A] transition-colors">
-            &larr; {backLabel}
+            {backLabel}
           </Link>
         </div>
       )}

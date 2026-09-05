@@ -21,12 +21,12 @@ export default function TabelAntreanAdmin({ daftarLaporan, onPilihLaporan }: Pro
         <table className="w-full text-left text-sm">
           <thead className="bg-zinc-50 dark:bg-zinc-800/60 text-xs font-semibold uppercase tracking-wider text-zinc-500 border-b border-zinc-200 dark:border-zinc-800">
             <tr>
-              <th className="p-4">ID Laporan</th>
-              <th className="p-4">Tipe</th>
-              <th className="p-4">Kategori & Deskripsi</th>
-              <th className="p-4">Zona</th>
+              <th className="p-4">ID</th>
+              <th className="p-4">Jenis</th>
+              <th className="p-4">Barang</th>
+              <th className="p-4">Lokasi</th>
               <th className="p-4">Status</th>
-              <th className="p-4 text-right">Aksi Admin</th>
+              <th className="p-4 text-right">Aksi</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -62,9 +62,9 @@ export default function TabelAntreanAdmin({ daftarLaporan, onPilihLaporan }: Pro
                   {onPilihLaporan && (
                     <button
                       onClick={() => onPilihLaporan(item)}
-                      className="px-3 py-1.5 bg-[#0B1633] hover:bg-[#152754] text-white text-xs font-semibold rounded-lg transition-all"
+                      className="px-3 py-1.5 bg-[#0B1633] hover:bg-[#12A99A] text-white text-xs font-semibold rounded-lg transition-all cursor-pointer"
                     >
-                      Kelola Custody &rarr;
+                      Kelola
                     </button>
                   )}
                 </td>

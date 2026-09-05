@@ -39,16 +39,16 @@ export default function ReportCard({ item }: ReportCardProps) {
         {item.status === 'potensi_cocok' && item.id_pencocokan_kandidat ? (
           <Link
             href={`/kecocokan/${item.id_pencocokan_kandidat}`}
-            className="text-xs font-bold text-purple-700 bg-purple-50 hover:bg-purple-100 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 border border-purple-200/60"
+            className="text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 border border-indigo-200/60"
           >
-            Lihat Match &rarr;
+            Lihat Kecocokan
           </Link>
         ) : (
           <Link
             href={`/barang-temuan`}
-            className="text-xs font-medium text-[#12A99A] hover:underline"
+            className="text-xs font-semibold text-[#12A99A] hover:underline"
           >
-            Detail &rarr;
+            Detail
           </Link>
         )}
       </div>

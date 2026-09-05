@@ -33,8 +33,8 @@ export default function ClaimCard({
             {itemName}
           </h4>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[10px] text-zinc-400 font-medium">
-              ID Klaim: #{id}
+            <span className="text-[10px] text-zinc-400 font-medium font-mono">
+              #{id}
             </span>
             <span className={`px-2 py-0.5 text-[8px] font-semibold uppercase rounded-full ${
               isAwaiting ? 'text-amber-600 bg-amber-50' : 'text-emerald-600 bg-emerald-50'
@@ -43,7 +43,7 @@ export default function ClaimCard({
             </span>
           </div>
           <p className="text-zinc-400 text-[10px] font-medium">
-            Klaim oleh: {claimedBy} &bull; {date}
+            {claimedBy} &bull; {date}
           </p>
         </div>
       </div>

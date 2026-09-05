@@ -150,8 +150,8 @@ export default function UserLoginPage() {
           </Link>
         </div>
         <div>
-          <Link href="/" className="text-slate-600 hover:text-slate-900 text-xs font-bold transition-colors">
-            &larr; Beranda
+          <Link href="/" className="text-slate-600 hover:text-slate-900 text-xs font-semibold transition-colors">
+            Beranda
           </Link>
         </div>
       </header>
@@ -166,12 +166,12 @@ export default function UserLoginPage() {
               <Image src="/logo.png" alt="REFOUND Logo" width={130} height={40} className="object-contain" />
             </div>
             <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-              {isRegisterMode ? 'Daftar Akun Mahasiswa' : 'Portal Masuk Mahasiswa'}
+              {isRegisterMode ? 'Daftar Akun' : 'Masuk'}
             </h1>
             <p className="text-slate-500 text-xs font-normal leading-relaxed">
               {isRegisterMode 
-                ? 'Lengkapi form untuk mendaftarkan akun komunitas laboratorium.' 
-                : 'Masuk dengan akun universitas atau Google OAuth untuk melapor dan klaim.'}
+                ? 'Lengkapi data untuk mendaftar akun.' 
+                : 'Masuk dengan NIM/Email atau akun Google Anda.'}
             </p>
           </div>
 
@@ -207,7 +207,7 @@ export default function UserLoginPage() {
                 <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z" />
                 <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" />
               </svg>
-              <span>{loadingGoogle ? 'Mengarahkan ke Google...' : 'Masuk dengan Akun Google'}</span>
+              <span>{loadingGoogle ? 'Menghubungkan...' : 'Lanjutkan dengan Google'}</span>
             </button>
           </div>
 
@@ -217,7 +217,7 @@ export default function UserLoginPage() {
               <div className="w-full border-t border-slate-200" />
             </div>
             <div className="relative flex justify-center text-[10px] uppercase font-semibold">
-              <span className="bg-white px-2 text-slate-400">Atau masuk dengan NIM / Email</span>
+              <span className="bg-white px-2 text-slate-400">Atau masuk dengan NIM</span>
             </div>
           </div>
 
@@ -228,7 +228,7 @@ export default function UserLoginPage() {
                   <label className="block text-[10px] font-semibold uppercase text-slate-400 mb-1">Nama Lengkap</label>
                   <input
                     type="text"
-                    placeholder="Contoh: Budi Santoso"
+                    placeholder="Nama Lengkap"
                     value={nama}
                     onChange={(e) => setNama(e.target.value)}
                     className="w-full bg-white border border-slate-200 focus:ring-1 focus:ring-[#0D9488] focus:border-[#0D9488] outline-none rounded-xl p-3 text-xs font-semibold text-slate-900"
@@ -251,7 +251,7 @@ export default function UserLoginPage() {
                   <label className="block text-[10px] font-semibold uppercase text-slate-400 mb-1">Email Mahasiswa</label>
                   <input
                     type="email"
-                    placeholder="budi@student.trunojoyo.ac.id"
+                    placeholder="email@student.trunojoyo.ac.id"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full bg-white border border-slate-200 focus:ring-1 focus:ring-[#0D9488] focus:border-[#0D9488] outline-none rounded-xl p-3 text-xs font-semibold text-slate-900"
@@ -262,11 +262,11 @@ export default function UserLoginPage() {
 
             <div>
               <label className="block text-[10px] font-semibold uppercase text-slate-400 mb-1">
-                {isRegisterMode ? 'NIM (Nomor Induk Mahasiswa)' : 'NIM atau Email Kampus'}
+                {isRegisterMode ? 'NIM' : 'NIM atau Email'}
               </label>
               <input
                 type="text"
-                placeholder={isRegisterMode ? "Contoh: 13519099" : "Contoh: 13519099 atau budi@student.trunojoyo.ac.id"}
+                placeholder={isRegisterMode ? "Masukkan NIM" : "NIM atau Email Kampus"}
                 value={nim}
                 onChange={(e) => setNim(e.target.value)}
                 className="w-full bg-white border border-slate-200 focus:ring-1 focus:ring-[#0D9488] focus:border-[#0D9488] outline-none rounded-xl p-3 text-xs font-semibold text-slate-900"
@@ -277,7 +277,7 @@ export default function UserLoginPage() {
               <label className="block text-[10px] font-semibold uppercase text-slate-400 mb-1">Kata Sandi</label>
               <input
                 type="password"
-                placeholder="Masukkan kata sandi..."
+                placeholder="Kata sandi"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full bg-white border border-slate-200 focus:ring-1 focus:ring-[#0D9488] focus:border-[#0D9488] outline-none rounded-xl p-3 text-xs font-semibold text-slate-900"
@@ -289,7 +289,7 @@ export default function UserLoginPage() {
                 <label className="block text-[10px] font-semibold uppercase text-slate-400 mb-1">Konfirmasi Kata Sandi</label>
                 <input
                   type="password"
-                  placeholder="Ulangi kata sandi..."
+                  placeholder="Ulangi kata sandi"
                   value={konfirmasiPassword}
                   onChange={(e) => setKonfirmasiPassword(e.target.value)}
                   className="w-full bg-white border border-slate-200 focus:ring-1 focus:ring-[#0D9488] focus:border-[#0D9488] outline-none rounded-xl p-3 text-xs font-semibold text-slate-900"
@@ -303,8 +303,8 @@ export default function UserLoginPage() {
               className="w-full py-3 bg-[#0F172A] hover:bg-slate-800 disabled:opacity-50 text-white font-semibold text-xs rounded-xl shadow-md transition-all mt-2 cursor-pointer"
             >
               {loading 
-                ? (isRegisterMode ? 'Memproses Pendaftaran...' : 'Memproses Masuk...') 
-                : (isRegisterMode ? 'Daftar Akun Mahasiswa' : 'Masuk dengan NIM')}
+                ? (isRegisterMode ? 'Mendaftar...' : 'Memproses...') 
+                : (isRegisterMode ? 'Daftar' : 'Masuk')}
             </button>
           </form>
 
@@ -319,7 +319,7 @@ export default function UserLoginPage() {
               }}
               className="text-xs font-semibold text-[#0D9488] hover:underline focus:outline-none cursor-pointer"
             >
-              {isRegisterMode ? 'Sudah punya akun? Masuk Sekarang' : 'Belum punya akun? Daftar Sekarang'}
+              {isRegisterMode ? 'Sudah punya akun? Masuk' : 'Belum punya akun? Daftar'}
             </button>
           </div>
 

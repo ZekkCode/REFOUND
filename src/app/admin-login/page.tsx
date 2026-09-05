@@ -90,8 +90,8 @@ export default function AdminLoginPage() {
         <Link href="/" className="flex items-center space-x-3">
           <Image src="/logo.png" alt="REFOUND Logo" width={120} height={36} className="object-contain h-8 w-auto brightness-0 invert" priority />
         </Link>
-        <Link href="/" className="text-slate-400 hover:text-white text-xs font-bold transition-colors">
-          &larr; Beranda Mahasiswa
+        <Link href="/" className="text-slate-400 hover:text-white text-xs font-semibold transition-colors">
+          Beranda
         </Link>
       </header>
 
@@ -102,13 +102,13 @@ export default function AdminLoginPage() {
           <div className="text-center space-y-2">
             <div className="inline-flex items-center space-x-2 px-3 py-1 bg-teal-500/10 border border-teal-500/20 rounded-full text-[10px] font-semibold uppercase tracking-widest text-teal-400">
               <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
-              <span>Gerbang Terbatas</span>
+              <span>Admin Lab</span>
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-white">
-              Portal Petugas Admin Lab
+              Masuk Admin
             </h1>
             <p className="text-slate-400 text-xs font-normal leading-relaxed">
-              Otoritas pengelolaan fisik loker penitipan & verifikasi klaim barang laboratorium.
+              Pengelolaan penitipan dan verifikasi klaim barang lab.
             </p>
           </div>
 
@@ -121,12 +121,12 @@ export default function AdminLoginPage() {
           <form onSubmit={handleLoginAdmin} className="space-y-4 text-xs font-semibold">
             <div>
               <label className="block text-[10px] uppercase text-slate-400 mb-1.5 tracking-wider">
-                NIP / Kode Petugas Laboratorium
+                NIP / Kode Petugas
               </label>
               <input
                 type="text"
                 required
-                placeholder="Contoh: ADM-TIF-01"
+                placeholder="NIP atau Kode Petugas"
                 value={kodePetugas}
                 onChange={(e) => setKodePetugas(e.target.value)}
                 className="w-full bg-slate-800/80 border border-slate-700 rounded-xl p-3 text-white placeholder-slate-500 focus:border-[#0D9488] focus:ring-1 focus:ring-[#0D9488] outline-none"
@@ -135,7 +135,7 @@ export default function AdminLoginPage() {
 
             <div>
               <label className="block text-[10px] uppercase text-slate-400 mb-1.5 tracking-wider">
-                PIN Akses Otoritas
+                PIN Akses / Kata Sandi
               </label>
               <input
                 type="password"
@@ -152,7 +152,7 @@ export default function AdminLoginPage() {
               disabled={loading}
               className="w-full py-3 bg-[#0D9488] hover:bg-[#0D9488]/90 disabled:opacity-50 text-white font-semibold text-xs rounded-xl shadow-lg transition-all mt-2 cursor-pointer"
             >
-              {loading ? 'Mengautentikasi Petugas...' : 'Buka Dashboard Admin Lab'}
+              {loading ? 'Memproses...' : 'Masuk Admin'}
             </button>
           </form>
 
@@ -167,7 +167,7 @@ export default function AdminLoginPage() {
 
       {/* Footer */}
       <footer className="py-6 text-center text-[11px] text-slate-500 border-t border-white/5">
-        © 2026 REFOUND - Sistem Akses Terbatas Laboratorium TIF & SI
+        © 2026 REFOUND - Sistem Manajemen Laboratorium
       </footer>
 
     </div>

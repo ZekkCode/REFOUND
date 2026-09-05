@@ -206,18 +206,18 @@ export default function ProfilMahasiswaPage() {
       <SidebarMahasiswa />
 
       <div className="flex-1 flex flex-col min-h-screen overflow-x-hidden pb-20 md:pb-8">
-        <TopbarMahasiswa judulHalaman="Profil & Keamanan Akun" />
+        <TopbarMahasiswa judulHalaman="Profil" />
 
         <main className="flex-1 py-8 px-6 sm:px-10 max-w-5xl w-full mx-auto space-y-6">
           <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs space-y-1">
             <span className="text-xs font-semibold uppercase tracking-wider text-[#12A99A]">
-              Pengaturan Akun
+              Pengaturan
             </span>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#0B1633]">
-              Profil & Keamanan Akun
+              Profil Akun
             </h1>
             <p className="text-slate-500 text-xs sm:text-sm font-normal">
-              Kelola data identitas mahasiswa, foto profil, dan kontak verifikasi laboratorium UTM.
+              Kelola data identitas dan kontak verifikasi Anda.
             </p>
           </div>
 
@@ -243,7 +243,7 @@ export default function ProfilMahasiswaPage() {
             <section className="lg:col-span-7 space-y-6">
               <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs space-y-6">
                 <h2 className="text-base font-bold text-[#0B1633] border-b border-slate-100 pb-3">
-                  Informasi Mahasiswa
+                  Data Diri
                 </h2>
 
                 {/* Avatar Photo Section with Upload Button */}
@@ -349,7 +349,7 @@ export default function ProfilMahasiswaPage() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
-                      <label className="block text-[10px] uppercase text-slate-400 mb-1">Peran Akses (Role)</label>
+                      <label className="block text-[10px] uppercase text-slate-400 mb-1">Peran</label>
                       <input
                         type="text"
                         disabled
@@ -358,7 +358,7 @@ export default function ProfilMahasiswaPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] uppercase text-slate-400 mb-1">Afiliasi Laboratorium</label>
+                      <label className="block text-[10px] uppercase text-slate-400 mb-1">Afiliasi Lab</label>
                       <input
                         type="text"
                         disabled
@@ -370,7 +370,7 @@ export default function ProfilMahasiswaPage() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
-                      <label className="block text-[10px] uppercase text-slate-400 mb-1">Email Kampus</label>
+                      <label className="block text-[10px] uppercase text-slate-400 mb-1">Email</label>
                       <input
                         type="email"
                         disabled
@@ -406,7 +406,7 @@ export default function ProfilMahasiswaPage() {
             <section className="lg:col-span-5 space-y-6">
               <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200/80 shadow-xs space-y-5">
                 <h2 className="text-base font-bold text-[#0B1633] border-b border-slate-100 pb-3">
-                  Statistik & Status
+                  Ringkasan
                 </h2>
 
                 <div className="grid grid-cols-3 gap-3 text-center">
@@ -427,8 +427,8 @@ export default function ProfilMahasiswaPage() {
                 <div className="pt-2 border-t border-slate-100 space-y-3 text-xs font-medium">
                   <div className="flex items-center justify-between">
                     <div>
-                      <span className="block text-[#0B1633] font-semibold">2-Factor Authentication</span>
-                      <span className="block text-slate-400 text-[10px]">Perlindungan sesi login mahasiswa</span>
+                      <span className="block text-[#0B1633] font-semibold">Autentikasi 2-Langkah</span>
+                      <span className="block text-slate-400 text-[10px]">Keamanan tambahan akun</span>
                     </div>
                     <button
                       type="button"

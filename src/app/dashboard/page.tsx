@@ -192,7 +192,7 @@ export default function DashboardMahasiswaPage() {
             <div className="space-y-1.5 flex-1">
               <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-teal-50 text-[#12A99A] text-[11px] font-semibold tracking-wide">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#12A99A]" />
-                Portal Mahasiswa
+                Mahasiswa
               </div>
               
               {loadingProfil ? (
@@ -277,14 +277,14 @@ export default function DashboardMahasiswaPage() {
             {/* Metric 2: Kecocokan AI */}
             <div className="bg-white p-4 rounded-2xl border border-slate-200/70 shadow-xs flex items-center justify-between min-h-[85px]">
               <div className="space-y-0.5">
-                <span className="text-xs font-normal text-slate-500 block">Kecocokan AI</span>
+                <span className="text-xs font-normal text-slate-500 block">Kecocokan</span>
                 {loadingStats ? (
                   <div className="h-7 w-16 bg-slate-100 rounded-md animate-pulse" />
                 ) : errorStats ? (
                   <span className="text-xs text-red-500">Error</span>
                 ) : (
                   <span className="text-2xl font-bold text-[#12A99A] block">
-                    {stats?.total_kandidat_cocok || 0} Match
+                    {stats?.total_kandidat_cocok || 0}
                   </span>
                 )}
               </div>
@@ -319,7 +319,7 @@ export default function DashboardMahasiswaPage() {
             {/* Metric 4: Barang Berhasil Kembali */}
             <div className="bg-white p-4 rounded-2xl border border-slate-200/70 shadow-xs flex items-center justify-between min-h-[85px]">
               <div className="space-y-0.5">
-                <span className="text-xs font-normal text-slate-500 block">Barang Kembali</span>
+                <span className="text-xs font-normal text-slate-500 block">Selesai</span>
                 {loadingStats ? (
                   <div className="h-7 w-12 bg-slate-100 rounded-md animate-pulse" />
                 ) : errorStats ? (
@@ -350,7 +350,7 @@ export default function DashboardMahasiswaPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <h2 className="text-sm font-bold uppercase tracking-wider text-slate-400">
-                      Kandidat Kecocokan AI
+                      Kecocokan Baru
                     </h2>
                     {!loadingStats && stats && stats.total_kandidat_cocok > 0 && (
                       <span className="px-2 py-0.5 text-[10px] font-semibold bg-[#12A99A] text-white rounded-full">
@@ -375,8 +375,8 @@ export default function DashboardMahasiswaPage() {
                   </div>
                 ) : !matchKandidat ? (
                   <div className="bg-white p-6 rounded-2xl border border-slate-200/70 shadow-xs text-center space-y-2">
-                    <p className="text-xs text-slate-400 font-semibold">Belum ada kandidat kecocokan saat ini.</p>
-                    <p className="text-[11px] text-slate-400 font-medium">Sistem AI akan otomatis memberi tahu jika ada barang temuan yang mirip.</p>
+                    <p className="text-xs text-slate-400 font-semibold">Belum ada kecocokan saat ini.</p>
+                    <p className="text-[11px] text-slate-400 font-medium">Sistem akan memberi tahu jika ada barang temuan yang cocok.</p>
                   </div>
                 ) : (
                   <div className="bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/70 shadow-xs space-y-4">
@@ -406,20 +406,20 @@ export default function DashboardMahasiswaPage() {
                           <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                         </svg>
-                        Zona: {matchKandidat.nama_zona || matchKandidat.id_zona || 'Lab Komputer'}
+                        Lokasi: {matchKandidat.nama_zona || matchKandidat.id_zona || 'Lab Komputer'}
                       </span>
                     </div>
 
                     <div className="flex items-center gap-2 px-3.5 py-2.5 bg-emerald-50/70 border border-emerald-200/60 rounded-xl text-xs font-medium text-emerald-800">
                       <span className="w-2 h-2 rounded-full bg-[#10B981] shrink-0 animate-pulse" />
-                      <span>Disimpan Aman di Ruang Admin Lab</span>
+                      <span>Disimpan di Ruang Admin Lab</span>
                     </div>
 
                     <Link
                       href="/kecocokan"
-                      className="flex items-center justify-center w-full px-4 py-2.5 bg-[#0B1633] hover:bg-[#12A99A] text-white font-medium text-xs sm:text-sm rounded-xl shadow-xs transition-all duration-150"
+                      className="flex items-center justify-center w-full px-4 py-2.5 bg-[#0B1633] hover:bg-[#12A99A] text-white font-semibold text-xs sm:text-sm rounded-xl shadow-xs transition-all duration-150"
                     >
-                      Tinjau & Klaim Barang &rarr;
+                      Tinjau Kecocokan
                     </Link>
                   </div>
                 )}
@@ -480,10 +480,10 @@ export default function DashboardMahasiswaPage() {
             <section className="lg:col-span-7 space-y-3.5">
               <div className="flex items-center justify-between">
                 <h2 className="text-sm font-bold uppercase tracking-wider text-slate-400">
-                  Laporan Aktif Saya
+                  Laporan Saya
                 </h2>
                 {!loadingLaporan && (
-                  <span className="text-xs font-normal text-slate-400">{laporanSaya.length} Laporan Terdaftar</span>
+                  <span className="text-xs font-normal text-slate-400">{laporanSaya.length} Laporan</span>
                 )}
               </div>
 
@@ -505,8 +505,8 @@ export default function DashboardMahasiswaPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 012.008 1.24l.885 1.77a2.25 2.25 0 002.007 1.24h1.98a2.25 2.25 0 002.007-1.24l.885-1.77a2.25 2.25 0 012.007-1.24h3.86m-18 0a2.25 2.25 0 00-2.25 2.25v.9c0 1.144.918 2.063 2.063 2.063h17.874c1.145 0 2.063-.919 2.063-2.063v-.9a2.25 2.25 0 00-2.25-2.25m-18 0a2.25 2.25 0 012.25-2.25h13.5a2.25 2.25 0 012.25 2.25m-18 0V7.5A2.25 2.25 0 015.25 5.25h13.5A2.25 2.25 0 0121 7.5v6" />
                   </svg>
                   <div className="space-y-1">
-                    <p className="text-xs text-slate-400 font-bold">Anda belum memiliki laporan aktif.</p>
-                    <p className="text-[11px] text-slate-400 font-medium">Buat laporan kehilangan atau temuan baru untuk memulai pencarian cerdas.</p>
+                    <p className="text-xs text-slate-400 font-bold">Belum ada laporan aktif.</p>
+                    <p className="text-[11px] text-slate-400 font-medium">Buat laporan kehilangan atau temuan untuk mulai pencarian.</p>
                   </div>
                 </div>
               ) : (
@@ -546,7 +546,7 @@ export default function DashboardMahasiswaPage() {
                               ? 'bg-indigo-50 text-indigo-700 border border-indigo-200/70' 
                               : 'bg-emerald-50 text-[#10B981] border border-emerald-200/70'
                           }`}>
-                            {isPotensiCocok ? 'Potensi Cocok AI' : 'Disimpan Admin'}
+                            {isPotensiCocok ? 'Potensi Cocok' : 'Disimpan di Lab'}
                           </span>
                         </div>
 
@@ -559,7 +559,7 @@ export default function DashboardMahasiswaPage() {
                             </div>
                             <div className="space-y-1.5">
                               <div className="h-1.5 w-full bg-[#12A99A] rounded-full" />
-                              <span className="text-[11px] font-medium text-[#12A99A] block">Diproses AI</span>
+                              <span className="text-[11px] font-medium text-[#12A99A] block">Diproses</span>
                             </div>
                             <div className="space-y-1.5">
                               <div className={`h-1.5 w-full rounded-full ${isPotensiCocok ? 'bg-[#6366F1]' : 'bg-slate-200'}`} />
@@ -567,7 +567,7 @@ export default function DashboardMahasiswaPage() {
                             </div>
                             <div className="space-y-1.5">
                               <div className="h-1.5 w-full bg-slate-200 rounded-full" />
-                              <span className="text-[11px] font-normal text-slate-400 block">Pengambilan</span>
+                              <span className="text-[11px] font-normal text-slate-400 block">Selesai</span>
                             </div>
                           </div>
                         </div>

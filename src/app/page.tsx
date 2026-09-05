@@ -123,19 +123,19 @@ export default function Home() {
                 {/* Badge Pill */}
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-slate-200/80 rounded-full text-xs font-semibold text-slate-600 shadow-sm animate-fade-in">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#12A99A] animate-pulse" />
-                  <span>Sistem Lost & Found Digital Komunitas Kampus</span>
+                  <span>Sistem Lost & Found Kampus</span>
                 </div>
 
                 {/* Heading with Brand Gradient */}
                 <h1 className="text-3xl sm:text-4xl lg:text-[46px] font-extrabold text-[#0B1633] leading-[1.15] tracking-tight">
                   Temukan barangmu, <br />
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#12A99A] to-[#0D9488]">hubungkan kembali</span> <br />
-                  ke pemilik sah.
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#12A99A] to-[#0D9488]">kembalikan</span> <br />
+                  ke pemiliknya.
                 </h1>
 
                 {/* Subtitle */}
                 <p className="text-slate-600 text-sm sm:text-base leading-relaxed font-normal max-w-lg">
-                  Platform pelaporan terpusat dengan pencocokan cerdas berbasis AI dan verifikasi dua langkah untuk mengembalikan barang hilang secara terstruktur, transparan, dan aman.
+                  Platform pelaporan barang hilang dan temuan di lingkungan kampus dengan pencocokan cerdas dan verifikasi kepemilikan yang aman.
                 </p>
 
                 {/* Action Buttons */}
@@ -156,29 +156,29 @@ export default function Home() {
                     <svg className="w-4 h-4 text-[#12A99A]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
-                    Lapor Penemuan
+                    Lapor Temuan
                   </Link>
                   <Link
                     href="/barang-temuan"
                     className="px-5 py-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold text-xs sm:text-sm rounded-xl shadow-2xs hover:shadow-xs transition-all duration-200"
                   >
-                    Katalog Temuan &rarr;
+                    Katalog Temuan
                   </Link>
                 </div>
 
                 {/* Key Highlights */}
                 <div className="pt-6 border-t border-slate-200/80 grid grid-cols-3 gap-6">
                   <div>
-                    <span className="block text-2xl font-bold text-[#0B1633] font-mono leading-none">0.45s</span>
-                    <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block mt-1">Pencocokan AI</span>
+                    <span className="block text-2xl font-bold text-[#0B1633] font-mono leading-none">&lt; 1s</span>
+                    <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block mt-1">Pencocokan Cepat</span>
                   </div>
                   <div>
                     <span className="block text-2xl font-bold text-[#12A99A] font-mono leading-none">100%</span>
-                    <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block mt-1">Privasi Ciri</span>
+                    <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block mt-1">Privasi Terjaga</span>
                   </div>
                   <div>
                     <span className="block text-2xl font-bold text-[#0B1633] font-mono leading-none">Admin Lab</span>
-                    <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block mt-1">Penitipan Fisik</span>
+                    <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block mt-1">Penitipan Aman</span>
                   </div>
                 </div>
               </div>
@@ -198,10 +198,10 @@ export default function Home() {
                   <div className="mt-4 p-4 bg-[#0B1633] text-white rounded-2xl flex items-center justify-between shadow-inner">
                     <div className="space-y-1">
                       <span className="text-[9px] uppercase font-bold text-[#12A99A] tracking-widest block">Verifikasi Terlindungi</span>
-                      <p className="text-xs text-slate-200 font-medium">Ciri fisik rahasia diverifikasi oleh Admin Lab sebelum serah terima.</p>
+                      <p className="text-xs text-slate-200 font-medium">Ciri khusus barang diverifikasi oleh petugas sebelum serah terima.</p>
                     </div>
                     <span className="px-3 py-1 bg-[#12A99A] text-white text-[10px] font-black rounded-lg uppercase tracking-wider shrink-0 self-center shadow-xs">
-                      Terjamin
+                      Aman
                     </span>
                   </div>
                 </div>
@@ -221,7 +221,7 @@ export default function Home() {
                 Bagaimana REFOUND Bekerja?
               </h2>
               <p className="text-slate-500 text-sm font-normal">
-                Alur tertutup untuk memastikan keabsahan kepemilikan tanpa membocorkan ciri rahasia ke publik.
+                Alur pelaporan yang mudah, terstruktur, dan aman bagi seluruh civitas kampus.
               </p>
             </div>
 
@@ -233,13 +233,13 @@ export default function Home() {
                   <div className="w-10 h-10 rounded-xl bg-teal-50 text-[#12A99A] border border-teal-100 flex items-center justify-center font-bold text-sm shadow-xs">
                     1
                   </div>
-                  <h3 className="text-base font-bold text-[#0B1633]">Pelaporan & Zonasi</h3>
+                  <h3 className="text-base font-bold text-[#0B1633]">Lapor & Pilih Lokasi</h3>
                   <p className="text-slate-600 text-xs sm:text-sm leading-relaxed font-normal">
-                    Tuliskan deskripsi umum barang temuan/hilang Anda, lalu pilih zona lokasi laboratorium kampus UTM tempat kejadian.
+                    Tuliskan deskripsi umum barang temuan atau kehilangan, lalu pilih zona lokasi kampus tempat kejadian.
                   </p>
                 </div>
-                <span className="text-xs font-bold text-[#12A99A] flex items-center gap-1">
-                  Privasi Ciri Terjaga &rarr;
+                <span className="text-xs font-semibold text-[#12A99A]">
+                  Ciri Rahasia Terjaga
                 </span>
               </div>
 
@@ -249,13 +249,13 @@ export default function Home() {
                   <div className="w-10 h-10 rounded-xl bg-indigo-50 text-[#6366F1] border border-indigo-100 flex items-center justify-center font-bold text-sm shadow-xs">
                     2
                   </div>
-                  <h3 className="text-base font-bold text-[#0B1633]">Pencocokan Cerdas AI</h3>
+                  <h3 className="text-base font-bold text-[#0B1633]">Pencocokan Cerdas</h3>
                   <p className="text-slate-600 text-xs sm:text-sm leading-relaxed font-normal">
-                    Sistem secara otomatis menghitung skor kemiripan teks deskripsi, visual foto, zona, serta interval rentang waktu.
+                    Sistem otomatis menghitung kecocokan deskripsi, foto, lokasi zona, dan rentang waktu kejadian.
                   </p>
                 </div>
-                <span className="text-xs font-bold text-[#6366F1] flex items-center gap-1">
-                  Skor Persentase Otomatis &rarr;
+                <span className="text-xs font-semibold text-[#6366F1]">
+                  Hasil Real-time
                 </span>
               </div>
 
@@ -267,11 +267,11 @@ export default function Home() {
                   </div>
                   <h3 className="text-base font-bold text-[#0B1633]">Verifikasi & Pengambilan</h3>
                   <p className="text-slate-600 text-xs sm:text-sm leading-relaxed font-normal">
-                    Pemilik menjawab ciri khusus rahasia. Setelah lolos verifikasi, ambil barang fisik dengan kode OTP serah terima.
+                    Jawab pertanyaan verifikasi untuk membuktikan kepemilikan, lalu ambil barang dengan kode serah terima.
                   </p>
                 </div>
-                <span className="text-xs font-bold text-[#10B981] flex items-center gap-1">
-                  Kode Sekali Pakai &rarr;
+                <span className="text-xs font-semibold text-[#10B981]">
+                  Kode OTP Pengambilan
                 </span>
               </div>
 
@@ -293,7 +293,7 @@ export default function Home() {
               </div>
               <h3 className="text-lg font-bold text-[#0B1633]">Perlindungan Ciri Rahasia</h3>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed font-normal">
-                Ciri fisik unik seperti nomor seri atau goresan tersembunyi disimpan di tabel rahasia terpisah dan hanya bisa diakses oleh Admin Lab saat proses verifikasi klaim.
+                Ciri unik seperti nomor seri atau goresan tersembunyi disimpan aman dan hanya digunakan saat proses verifikasi klaim.
               </p>
             </div>
 
@@ -304,9 +304,9 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-bold text-[#0B1633]">Evaluasi Semantik & Fail-Safe</h3>
+              <h3 className="text-lg font-bold text-[#0B1633]">Verifikasi Cepat & Akurat</h3>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed font-normal">
-                Jawaban klaim dievaluasi oleh sistem semantik untuk mencocokkan makna kata kunci pemohon dengan ciri rahasia barang secara objektif, aman, dan akurat.
+                Jawaban klaim dievaluasi untuk memastikan kesesuaian ciri barang secara objektif, aman, dan tepat sasaran.
               </p>
             </div>
             

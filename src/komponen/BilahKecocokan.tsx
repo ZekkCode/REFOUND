@@ -22,10 +22,10 @@ export default function BilahKecocokan({ skor }: PropsBilah) {
       <div className="flex items-center justify-between">
         <div>
           <span className={`text-sm font-semibold ${warnaTeks}`}>
-            {persen}/100 - {skor.labelPotensi}
+            {persen}% — {skor.labelPotensi}
           </span>
-          <p className="text-xs text-slate-500 font-normal mt-0.5">
-            Dihitung dari kombinasi Teks (45%), Visual (30%), Lokasi (15%), dan Waktu (10%)
+          <p className="text-xs text-slate-400 font-normal mt-0.5">
+            Kombinasi teks, visual, lokasi, dan waktu
           </p>
         </div>
         <span className="text-xl font-bold text-[#0B1633]">
@@ -42,27 +42,27 @@ export default function BilahKecocokan({ skor }: PropsBilah) {
       </div>
 
       {/* Breakdown Component Chips */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-[11px] font-medium">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] font-medium">
         <div className="bg-slate-50 p-2 rounded-xl border border-slate-200/80">
-          <span className="text-slate-400 block text-[10px] uppercase font-medium">Teks (45%)</span>
+          <span className="text-slate-400 block text-[10px] uppercase font-medium">Teks</span>
           <strong className="text-slate-800 font-semibold">
             {Math.round(skor.skorTeks * 100)}%
           </strong>
         </div>
         <div className="bg-slate-50 p-2 rounded-xl border border-slate-200/80">
-          <span className="text-slate-400 block text-[10px] uppercase font-medium">Visual (30%)</span>
+          <span className="text-slate-400 block text-[10px] uppercase font-medium">Visual</span>
           <strong className="text-slate-800 font-semibold">
             {Math.round(skor.skorVisual * 100)}%
           </strong>
         </div>
         <div className="bg-slate-50 p-2 rounded-xl border border-slate-200/80">
-          <span className="text-slate-400 block text-[10px] uppercase font-medium">Lokasi (15%)</span>
+          <span className="text-slate-400 block text-[10px] uppercase font-medium">Lokasi</span>
           <strong className="text-slate-800 font-semibold">
             {Math.round(skor.skorLokasi * 100)}%
           </strong>
         </div>
         <div className="bg-slate-50 p-2 rounded-xl border border-slate-200/80">
-          <span className="text-slate-400 block text-[10px] uppercase font-medium">Waktu (10%)</span>
+          <span className="text-slate-400 block text-[10px] uppercase font-medium">Waktu</span>
           <strong className="text-slate-800 font-semibold">
             {Math.round(skor.skorWaktu * 100)}%
           </strong>

@@ -121,10 +121,12 @@ export default function HalamanPencocokanAI() {
           {/* Header Title Banner */}
           <div className="bg-white p-5 sm:p-7 rounded-2xl border border-slate-200/80 shadow-xs space-y-1">
             <div className="flex items-center space-x-1.5 text-xs font-medium text-slate-400">
-              <Link href="/dashboard" className="hover:text-[#12A99A] transition-colors">&larr; Kembali ke Dashboard</Link>
+              <Link href="/dashboard" className="hover:text-[#12A99A] transition-colors">
+                Dashboard
+              </Link>
             </div>
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0B1633]">
-              Hasil Analisis Kecocokan AI
+              Kecocokan Barang
             </h1>
           </div>
 
@@ -153,7 +155,7 @@ export default function HalamanPencocokanAI() {
             <div className="flex-1 space-y-2.5">
               <div className="space-y-0.5">
                 <span className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase">
-                  Laporan Kehilangan Anda
+                  Barang Anda
                 </span>
                 <h2 className="text-base font-bold text-[#0B1633]">
                   {lostReportTitle}
@@ -166,7 +168,7 @@ export default function HalamanPencocokanAI() {
                   <span className="text-[#0B1633] font-medium">{lostReportTime}</span>
                 </div>
                 <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200/60">
-                  <span className="block text-slate-400 font-normal text-[10px] uppercase">Lokasi Terakhir</span>
+                  <span className="block text-slate-400 font-normal text-[10px] uppercase">Lokasi</span>
                   <span className="text-[#0B1633] font-medium">{lostReportLocation}</span>
                 </div>
               </div>
@@ -176,7 +178,7 @@ export default function HalamanPencocokanAI() {
           {/* AI Candidates List */}
           <section className="space-y-3">
             <h2 className="text-sm font-bold uppercase tracking-wider text-slate-400 border-b border-slate-200/80 pb-2">
-              Kandidat Kecocokan Tertinggi
+              Hasil Pencocokan
             </h2>
 
             <div className="space-y-4">
@@ -208,7 +210,7 @@ export default function HalamanPencocokanAI() {
               ) : activeCandidates.length === 0 ? (
                 // Empty state
                 <div className="p-8 text-center bg-white rounded-2xl border border-slate-200 text-slate-400 text-xs font-normal">
-                  Semua kandidat kecocokan telah ditinjau atau tidak ada kandidat kecocokan baru saat ini.
+                  Belum ada kecocokan baru saat ini.
                 </div>
               ) : (
                 // Dynamic Matching Candidate List

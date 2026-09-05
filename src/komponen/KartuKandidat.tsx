@@ -28,8 +28,8 @@ export default function KartuKandidat({ match }: PropsKartuKandidat) {
             {foundItem?.deskripsi_publik || 'Deskripsi barang temuan'}
           </h3>
         </div>
-        <span className="text-xs font-mono bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 px-3 py-1 rounded-full font-medium">
-          Disimpan Admin Lab
+        <span className="text-xs font-mono bg-emerald-50 text-emerald-800 px-3 py-1 rounded-full font-medium border border-emerald-200">
+          Disimpan di Lab
         </span>
       </div>
 
@@ -42,32 +42,32 @@ export default function KartuKandidat({ match }: PropsKartuKandidat) {
           {skorObj.alasanRingkas.map((alasan, idx) => (
             <span
               key={idx}
-              className="text-xs bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-2.5 py-1 rounded-md border border-zinc-200 dark:border-zinc-700"
+              className="text-xs bg-slate-50 text-slate-700 px-2.5 py-1 rounded-md border border-slate-200"
             >
-              &check; {alasan}
+              {alasan}
             </span>
           ))}
         </div>
       )}
 
       {/* Metadata & Action */}
-      <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-zinc-500">
+      <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-500">
         <div>
           <p>
-            <strong className="text-zinc-700 dark:text-zinc-300">Lokasi:</strong>{' '}
+            <strong className="text-slate-700">Lokasi:</strong>{' '}
             {foundItem?.nama_zona || foundItem?.id_zona || 'Lab TIF'}
           </p>
           <p>
-            <strong className="text-zinc-700 dark:text-zinc-300">Waktu Ditemukan:</strong>{' '}
+            <strong className="text-slate-700">Waktu:</strong>{' '}
             {foundItem?.waktu_kejadian || '9 Agu 2026, 09:30 WIB'}
           </p>
         </div>
 
         <Link
           href={`/klaim/${match.id}`}
-          className="w-full sm:w-auto text-center px-5 py-2.5 bg-[#0B1633] hover:bg-[#152754] text-white dark:bg-[#12A99A] dark:hover:bg-[#0f9184] rounded-xl font-semibold transition-all shadow-sm"
+          className="w-full sm:w-auto text-center px-5 py-2.5 bg-[#0B1633] hover:bg-[#12A99A] text-white rounded-xl font-semibold transition-all shadow-xs"
         >
-          Ajukan Klaim Sekarang &rarr;
+          Klaim Barang
         </Link>
       </div>
     </div>

@@ -270,14 +270,14 @@ export default function TopbarMahasiswa({ }: PropsTopbar) {
                   onClick={() => setBukaNotif(false)}
                   className="text-[11px] font-semibold text-[#0B1633] hover:text-[#12A99A] transition-colors"
                 >
-                  Buka Semua di Dashboard &rarr;
+                  Lihat Semua
                 </Link>
               </div>
             </div>
           )}
         </div>
 
-        {/* 2. Interactive Profile Popover Button (Nama, NIM, Prodi, Cek Akun, Logout) */}
+        {/* 2. Interactive Profile Popover Button */}
         <div className="relative" ref={profilRef}>
           <button
             type="button"
@@ -286,7 +286,7 @@ export default function TopbarMahasiswa({ }: PropsTopbar) {
               setBukaNotif(false);
             }}
             className="flex items-center gap-2.5 p-1 sm:pl-2 sm:pr-3 bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-full transition-all duration-150 group cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#12A99A]/40"
-            title="Menu Akun Saya"
+            title="Menu Akun"
           >
             {profil.avatar_url ? (
               <div className="w-7 h-7 rounded-full overflow-hidden shrink-0 group-hover:ring-2 group-hover:ring-[#12A99A]/50 transition-all">
@@ -322,7 +322,7 @@ export default function TopbarMahasiswa({ }: PropsTopbar) {
           {bukaProfilPop && (
             <div className="absolute right-0 mt-2 w-72 bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-150">
               
-              {/* Header Info User: Nama, NIM, Prodi */}
+              {/* Header Info User */}
               <div className="p-4 bg-slate-50/70 border-b border-slate-100 space-y-3">
                 <div className="flex items-center gap-3">
                   {profil.avatar_url ? (
@@ -360,7 +360,7 @@ export default function TopbarMahasiswa({ }: PropsTopbar) {
                 </div>
               </div>
 
-              {/* Action Links: Cek Akun & Logout */}
+              {/* Action Links: Profil & Logout */}
               <div className="p-2 space-y-1">
                 <Link
                   href="/profil"
@@ -373,8 +373,8 @@ export default function TopbarMahasiswa({ }: PropsTopbar) {
                     </svg>
                   </div>
                   <div>
-                    <span className="block font-semibold text-[#0B1633]">Cek Akun & Profil</span>
-                    <span className="block text-[10px] text-slate-400 font-normal">Edit foto, nomor WA, dan keamanan</span>
+                    <span className="block font-semibold text-[#0B1633]">Profil Saya</span>
+                    <span className="block text-[10px] text-slate-400 font-normal">Pengaturan akun dan kontak</span>
                   </div>
                 </Link>
 
@@ -388,7 +388,7 @@ export default function TopbarMahasiswa({ }: PropsTopbar) {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                   </div>
-                  <span>Dashboard Saya</span>
+                  <span>Dashboard</span>
                 </Link>
               </div>
 
@@ -402,7 +402,7 @@ export default function TopbarMahasiswa({ }: PropsTopbar) {
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
                   </svg>
-                  <span>Keluar Akun (Log Out)</span>
+                  <span>Keluar</span>
                 </button>
               </div>
 

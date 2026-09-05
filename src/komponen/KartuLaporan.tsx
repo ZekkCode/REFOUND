@@ -39,16 +39,16 @@ export default function KartuLaporan({ item }: PropsKartuLaporan) {
         {item.status === 'potensi_cocok' && item.id_pencocokan_kandidat ? (
           <Link
             href={`/kecocokan/${item.id_pencocokan_kandidat}`}
-            className="text-xs font-bold text-purple-700 dark:text-purple-300 bg-purple-100 hover:bg-purple-200 dark:bg-purple-950 dark:hover:bg-purple-900 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1"
+            className="text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 border border-indigo-200/60"
           >
-            Lihat Match &rarr;
+            Lihat Kecocokan
           </Link>
         ) : (
           <Link
             href={`/barang-temuan`}
-            className="text-xs font-medium text-[#12A99A] hover:underline"
+            className="text-xs font-semibold text-[#12A99A] hover:underline"
           >
-            Detail &rarr;
+            Detail
           </Link>
         )}
       </div>

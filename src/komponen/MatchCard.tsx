@@ -44,7 +44,7 @@ export default function MatchCard({
             sizes="(max-width: 768px) 100vw, 192px"
           />
           <span className="absolute bottom-2 left-2 bg-[#0B1633]/90 text-white px-2 py-0.5 rounded-full font-medium text-[9px] backdrop-blur-xs">
-            Disimpan Admin Lab
+            Disimpan di Lab
           </span>
         </div>
 
@@ -66,7 +66,7 @@ export default function MatchCard({
             {/* AI Match Score Badge */}
             <span className="inline-flex items-center px-2.5 py-1 text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200/80 rounded-full shrink-0 self-start">
               <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 mr-1.5 animate-pulse" />
-              {percentage}% Cocok AI
+              {percentage}% Cocok
             </span>
           </div>
 
@@ -89,13 +89,13 @@ export default function MatchCard({
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                 </svg>
-                Zona: {location}
+                Lokasi: {location}
               </span>
             </div>
           )}
           
           <div className="text-[10px] text-slate-400 font-medium">
-            Waktu Temu: {time}
+            Waktu: {time}
           </div>
         </div>
       </div>
@@ -104,16 +104,16 @@ export default function MatchCard({
       <div className="px-5 py-3 bg-slate-50 border-t border-slate-100 flex flex-col sm:flex-row gap-2.5 items-center justify-between">
         <Link
           href={`/klaim/${id}`}
-          className="flex-1 w-full text-center px-4 py-2 bg-[#0B1633] hover:bg-[#12A99A] text-white font-medium text-xs rounded-xl shadow-xs transition-all duration-150"
+          className="flex-1 w-full text-center px-4 py-2 bg-[#0B1633] hover:bg-[#12A99A] text-white font-semibold text-xs rounded-xl shadow-xs transition-all duration-150"
         >
-          Ini Barang Saya (Ajukan Klaim) &rarr;
+          Ajukan Klaim
         </Link>
         <button
           type="button"
           onClick={() => onIgnore(id)}
           className="flex-1 w-full px-4 py-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 font-medium text-xs rounded-xl transition-all cursor-pointer"
         >
-          Bukan Barang Saya
+          Bukan Milik Saya
         </button>
       </div>
     </div>

@@ -118,10 +118,10 @@ export default function HalamanBarangTemuan() {
           {/* Header Title Banner */}
           <div className="bg-white p-5 sm:p-6 rounded-xl sm:rounded-2xl border border-slate-200/70 shadow-xs space-y-1">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-[#12A99A]">
-              Inventaris Publik
+              Katalog
             </span>
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0B1633]">
-              Katalog Barang Temuan
+              Barang Temuan
             </h1>
           </div>
 
@@ -134,7 +134,7 @@ export default function HalamanBarangTemuan() {
                 </svg>
                 <input
                   type="text"
-                  placeholder="Cari nama barang, warna, atau lokasi..."
+                  placeholder="Cari barang atau lokasi..."
                   value={kataKunci}
                   onChange={(e) => setKataKunci(e.target.value)}
                   className="w-full pl-2.5 pr-4 py-1.5 text-xs sm:text-sm font-normal text-slate-900 placeholder-slate-400 outline-none"
@@ -148,10 +148,10 @@ export default function HalamanBarangTemuan() {
                   onChange={(e) => setUrutkan(e.target.value as any)}
                   className="w-full sm:w-auto px-3 py-2 bg-slate-50 border border-slate-200 text-[#0B1633] text-xs font-medium rounded-xl outline-none focus:border-[#12A99A] cursor-pointer"
                 >
-                  <option value="terbaru">Urutkan: Terbaru</option>
-                  <option value="terlama">Urutkan: Terlama</option>
-                  <option value="nama">Urutkan: Nama (A-Z)</option>
-                  <option value="zona">Urutkan: Zona Lab</option>
+                  <option value="terbaru">Terbaru</option>
+                  <option value="terlama">Terlama</option>
+                  <option value="nama">Nama (A-Z)</option>
+                  <option value="zona">Lokasi</option>
                 </select>
               </div>
             </div>
@@ -192,7 +192,7 @@ export default function HalamanBarangTemuan() {
             </div>
           ) : temuanTersaring.length === 0 ? (
             <div className="p-10 text-center bg-white border border-dashed border-slate-200 rounded-2xl text-slate-400 text-xs font-normal">
-              Tidak ada barang temuan yang sesuai dengan kata kunci pencarian.
+              Tidak ada barang temuan yang cocok.
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 sm:gap-6">
@@ -204,7 +204,7 @@ export default function HalamanBarangTemuan() {
                   <div className="relative">
                     <span className="absolute top-2.5 left-2.5 bg-[#0B1633]/90 text-white px-2.5 py-0.5 rounded-full font-medium text-[10px] flex items-center shadow-xs z-10 backdrop-blur-xs">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#12A99A] mr-1.5 animate-pulse" />
-                      Disimpan Admin Lab
+                      Disimpan di Lab
                     </span>
 
                     <div className="w-full h-44 relative bg-slate-100 flex items-center justify-center">
@@ -221,7 +221,7 @@ export default function HalamanBarangTemuan() {
                           <svg className="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                           </svg>
-                          <span className="text-[10px] text-slate-400 mt-1 font-normal">Foto Belum Tersedia</span>
+                          <span className="text-[10px] text-slate-400 mt-1 font-normal">Tanpa foto</span>
                         </div>
                       )}
                     </div>
@@ -259,9 +259,9 @@ export default function HalamanBarangTemuan() {
                     <div className="pt-2 border-t border-slate-100">
                       <Link
                         href={`/barang-temuan/${item.id}`}
-                        className="flex items-center justify-center w-full px-3.5 py-2 bg-[#0B1633] hover:bg-[#0B1633]/90 text-white font-medium text-xs rounded-xl transition-all duration-150 shadow-xs"
+                        className="flex items-center justify-center w-full px-3.5 py-2 bg-[#0B1633] hover:bg-[#12A99A] text-white font-semibold text-xs rounded-xl transition-all duration-150 shadow-xs"
                       >
-                        Detail & Klaim Barang &rarr;
+                        Detail & Klaim
                       </Link>
                     </div>
                   </div>

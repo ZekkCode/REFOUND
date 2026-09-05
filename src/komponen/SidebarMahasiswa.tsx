@@ -134,12 +134,12 @@ export default function SidebarMahasiswa() {
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
             </svg>
-            <span>Keluar Akun</span>
+            <span>Keluar</span>
           </Link>
         </div>
       </aside>
 
-      {/* Mobile Bottom Navigation Bar: 5 Items with Center Lapor (Toa/Megaphone Icon) */}
+      {/* Mobile Bottom Navigation Bar: 5 Items with Center Lapor */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-slate-200/80 flex items-center justify-around py-1.5 px-2 z-50 shadow-lg">
         
         {/* Item 1: Dashboard */}
@@ -168,7 +168,7 @@ export default function SidebarMahasiswa() {
           <span className="text-[10px] tracking-tight mt-0.5">{menuUtama[1].nama}</span>
         </Link>
 
-        {/* Item 3 (CENTER): Fitur Lapor dengan Ikon Toa / Megaphone */}
+        {/* Item 3 (CENTER): Fitur Lapor */}
         <div className="flex flex-col items-center -mt-4 px-1 shrink-0">
           <button
             type="button"
@@ -176,7 +176,6 @@ export default function SidebarMahasiswa() {
             className="w-12 h-12 rounded-full bg-[#0B1633] hover:bg-[#12A99A] text-white flex items-center justify-center shadow-md shadow-[#0B1633]/20 ring-4 ring-white transition-all duration-200 active:scale-95 cursor-pointer"
             title="Buat Laporan"
           >
-            {/* Ikon Toa / Megaphone */}
             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.757 3.63 8.25 4.51 8.25H6.75z" />
             </svg>
@@ -197,7 +196,7 @@ export default function SidebarMahasiswa() {
           <span className="text-[10px] tracking-tight mt-0.5">{menuUtama[2].nama}</span>
         </Link>
 
-        {/* Item 5: Profil Saya */}
+        {/* Item 5: Profil */}
         <Link
           href={menuUtama[3].href}
           className={`flex flex-col items-center py-1 px-2 rounded-xl transition-all flex-1 ${
@@ -212,7 +211,7 @@ export default function SidebarMahasiswa() {
 
       </div>
 
-      {/* Modal / Action Sheet Pilihan Lapor untuk Mobile */}
+      {/* Modal Pilihan Lapor untuk Mobile */}
       {bukaMenuLapor && (
         <div className="md:hidden fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center p-4 animate-in fade-in duration-150">
           <div className="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-100 animate-in slide-in-from-bottom duration-200">
@@ -223,7 +222,7 @@ export default function SidebarMahasiswa() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.757 3.63 8.25 4.51 8.25H6.75z" />
                   </svg>
                 </div>
-                <h3 className="text-sm font-bold text-[#0B1633]">Buat Laporan Baru</h3>
+                <h3 className="text-sm font-bold text-[#0B1633]">Buat Laporan</h3>
               </div>
               <button
                 type="button"
@@ -235,7 +234,7 @@ export default function SidebarMahasiswa() {
             </div>
 
             <p className="text-xs text-slate-500 font-normal leading-relaxed">
-              Pilih jenis laporan yang ingin Anda ajukan ke sistem laboratorium:
+              Pilih jenis laporan:
             </p>
 
             <div className="space-y-2.5 pt-1">
@@ -251,10 +250,10 @@ export default function SidebarMahasiswa() {
                 </div>
                 <div className="space-y-0.5">
                   <h4 className="text-xs font-bold text-[#0B1633] group-hover:text-[#12A99A] transition-colors">
-                    Lapor Kehilangan Barang
+                    Barang Hilang
                   </h4>
                   <p className="text-[11px] text-slate-400 font-normal">
-                    Barang Anda hilang dan ingin dicocokkan otomatis oleh AI.
+                    Lapor barang yang hilang untuk dicocokkan otomatis.
                   </p>
                 </div>
               </Link>
@@ -271,10 +270,10 @@ export default function SidebarMahasiswa() {
                 </div>
                 <div className="space-y-0.5">
                   <h4 className="text-xs font-bold text-[#0B1633] group-hover:text-[#12A99A] transition-colors">
-                    Lapor Barang Ditemukan
+                    Barang Ditemukan
                   </h4>
                   <p className="text-[11px] text-slate-400 font-normal">
-                    Anda menemukan barang dan akan menyerahkannya ke Admin Lab.
+                    Lapor barang temuan untuk dititipkan ke lab.
                   </p>
                 </div>
               </Link>

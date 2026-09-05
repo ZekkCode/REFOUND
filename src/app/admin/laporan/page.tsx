@@ -57,17 +57,17 @@ export default function HalamanAdminLaporanCustody() {
           {/* Header */}
           <div>
             <span className="text-[10px] font-semibold uppercase tracking-wider text-[#FF765F]">
-              Penitipan Barang Fisik
+              Penyimpanan Barang
             </span>
             <h1 className="text-2xl font-bold tracking-tight text-[#0B1633]">
-              Input Ciri Rahasia & Physical Custody
+              Catat Ciri Khusus & Lokasi Simpan
             </h1>
           </div>
 
           {pesan && (
             <PesanUmpanBalik
               tipe={pesan.tipe}
-              judul={pesan.tipe === 'sukses' ? 'Penitipan Berhasil' : 'Penitipan Gagal'}
+              judul={pesan.tipe === 'sukses' ? 'Berhasil Disimpan' : 'Gagal Menyimpan'}
               pesan={pesan.isi}
             />
           )}
@@ -75,7 +75,7 @@ export default function HalamanAdminLaporanCustody() {
           <form onSubmit={handleSubmitPenitipan} className="bg-white p-6 rounded-2xl border border-slate-200/70 shadow-sm space-y-5">
             <div>
               <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
-                ID Laporan Barang Temuan
+                ID Laporan Temuan
               </label>
               <input
                 type="text"
@@ -88,21 +88,21 @@ export default function HalamanAdminLaporanCustody() {
 
             <div>
               <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
-                Ciri Rahasia Barang (Hanya Admin)
+                Ciri Khusus / Rahasia (Hanya Admin)
               </label>
               <textarea
                 required
                 rows={3}
                 value={secretNotes}
                 onChange={(e) => setSecretNotes(e.target.value)}
-                placeholder="Contoh: Ada stiker logo TIF 2024 di pojok kanan bawah & goresan halus dekat lubang port."
+                placeholder="Contoh: Stiker logo di pojok kanan, goresan dekat tombol power."
                 className={inputClass}
               />
             </div>
 
             <div>
               <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
-                Kode Simpan Rak Fisik (Custody Code)
+                Kode Lokasi Rak Fisik
               </label>
               <input
                 type="text"
@@ -116,13 +116,13 @@ export default function HalamanAdminLaporanCustody() {
 
             <div>
               <label className="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1.5">
-                Pertanyaan Verifikasi Klaim Mahasiswa
+                Pertanyaan Verifikasi untuk Pelapor
               </label>
               <input
                 type="text"
                 value={verificationQuestion}
                 onChange={(e) => setVerificationQuestion(e.target.value)}
-                placeholder="Contoh: Sebutkan stiker atau goresan unik yang terdapat pada fisik barang."
+                placeholder="Contoh: Sebutkan stiker atau ciri unik pada barang."
                 className={inputClass}
               />
             </div>
@@ -132,7 +132,7 @@ export default function HalamanAdminLaporanCustody() {
               disabled={loading}
               className="w-full py-3 bg-[#0B1633] hover:bg-[#12A99A] text-white rounded-xl font-semibold text-xs transition-all disabled:opacity-50 shadow-sm cursor-pointer"
             >
-              {loading ? 'Menyimpan...' : 'Validasi & Aktifkan Laporan Temuan'}
+              {loading ? 'Menyimpan...' : 'Simpan & Aktifkan Laporan'}
             </button>
           </form>
         </main>

@@ -10,10 +10,10 @@ export const DAFTAR_ZONA_LAB: ZonaGedung[] = [
 ];
 
 export const KATEGORI_BARANG = [
-  'Elektronik (Laptop, Flashdisk, Charger, TWS, HP)',
-  'Aksesoris (Kacamata, Jam Tangan, Perhiasan, Topi)',
-  'Dokumen (KTM, KTP, STNK, Buku Catatan, Map)',
-  'Wadah (Tumbler, Tas, Dompet, Jaket, Pouch)',
+  'Elektronik',
+  'Aksesoris',
+  'Dokumen',
+  'Wadah & Tas',
   'Lainnya',
 ];
 
@@ -33,23 +33,23 @@ export const LABEL_STATUS_LAPORAN: Record<StatusLaporan, { label: string; kelasW
     kelasWarna: 'bg-gray-100 text-[#4B5563] border border-[#9CA3AF]/40' 
   },
   menunggu_validasi: { 
-    label: 'Menunggu Validasi Admin', 
+    label: 'Menunggu Validasi', 
     kelasWarna: 'bg-amber-50 text-[#B45309] border border-[#F59E0B]/40' 
   },
   aktif: { 
-    label: 'Aktif Diproses AI', 
+    label: 'Aktif', 
     kelasWarna: 'bg-blue-50 text-[#1D4ED8] border border-[#3B82F6]/40' 
   },
   potensi_cocok: { 
-    label: 'Potensi Cocok AI', 
+    label: 'Potensi Cocok', 
     kelasWarna: 'bg-indigo-50 text-[#4338CA] border border-[#6366F1]/40' 
   },
   diklaim: { 
-    label: 'Proses Klaim', 
+    label: 'Sedang Diklaim', 
     kelasWarna: 'bg-indigo-50 text-[#4338CA] border border-[#6366F1]/40' 
   },
   dikembalikan: { 
-    label: 'Dikembalikan ke Pemilik', 
+    label: 'Dikembalikan', 
     kelasWarna: 'bg-emerald-50 text-[#047857] border border-[#10B981]/40' 
   },
   ditolak: { 
@@ -64,31 +64,31 @@ export const LABEL_STATUS_LAPORAN: Record<StatusLaporan, { label: string; kelasW
 
 export const LABEL_STATUS_KLAIM: Record<StatusKlaim, { label: string; kelasWarna: string }> = {
   diajukan: { 
-    label: 'Klaim Diajukan', 
+    label: 'Diajukan', 
     kelasWarna: 'bg-gray-100 text-[#4B5563] border border-[#9CA3AF]/40' 
   },
   menunggu_jawaban: { 
-    label: 'Menunggu Jawaban Verifikasi', 
+    label: 'Menunggu Jawaban', 
     kelasWarna: 'bg-amber-50 text-[#B45309] border border-[#F59E0B]/40' 
   },
   ditinjau_admin: { 
-    label: 'Klaim Ditinjau Admin', 
+    label: 'Ditinjau', 
     kelasWarna: 'bg-indigo-50 text-[#4338CA] border border-[#6366F1]/40' 
   },
   disetujui: { 
-    label: 'Klaim Disetujui (Siap Ambil)', 
+    label: 'Disetujui', 
     kelasWarna: 'bg-emerald-50 text-[#047857] border border-[#10B981]/40' 
   },
   diambil: { 
-    label: 'Barang Sudah Diambil', 
+    label: 'Sudah Diambil', 
     kelasWarna: 'bg-emerald-50 text-[#047857] border border-[#10B981]/40' 
   },
   ditolak: { 
-    label: 'Klaim Ditolak', 
+    label: 'Ditolak', 
     kelasWarna: 'bg-rose-50 text-[#B91C1C] border border-[#EF4444]/40' 
   },
   dibatalkan: { 
-    label: 'Klaim Dibatalkan', 
+    label: 'Dibatalkan', 
     kelasWarna: 'bg-gray-100 text-[#4B5563] border border-[#9CA3AF]/40' 
   },
 };
