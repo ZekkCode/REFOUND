@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
         queryParams: {
           access_type: 'offline',
           prompt: 'consent',
+          hd: 'trunojoyo.ac.id',
         },
       },
     });

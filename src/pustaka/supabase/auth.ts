@@ -8,8 +8,17 @@ export function dapatkanCallbackUrl(): string {
 }
 
 /**
+ * Memvalidasi apakah email berasal dari sivitas akademika Universitas Trunojoyo Madura (@trunojoyo.ac.id atau @student.trunojoyo.ac.id)
+ */
+export function apakahEmailKampus(email?: string | null): boolean {
+  if (!email) return false;
+  const cleanEmail = email.trim().toLowerCase();
+  return cleanEmail.endsWith('@trunojoyo.ac.id') || cleanEmail.endsWith('.trunojoyo.ac.id');
+}
+
+/**
  * Inisiasi alur autentikasi OAuth Google melalui Supabase Auth
- * Mengarahkan pengguna ke layar consent Google OAuth
+ * Mengarahkan pengguna ke layar consent Google OAuth dengan filter domain kampus
  */
 export async function masukDenganGoogle(redirectTo?: string) {
   const callbackUrl = dapatkanCallbackUrl();
@@ -24,6 +33,7 @@ export async function masukDenganGoogle(redirectTo?: string) {
       queryParams: {
         access_type: 'offline',
         prompt: 'consent',
+        hd: 'trunojoyo.ac.id', // Hint ke Google untuk membatasi pemilih akun ke domain UTM
       },
     },
   });

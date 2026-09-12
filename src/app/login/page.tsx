@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { supabaseKlien } from '@/pustaka/supabase/klien';
-import { masukDenganGoogle } from '@/pustaka/supabase/auth';
+import { masukDenganGoogle, apakahEmailKampus } from '@/pustaka/supabase/auth';
 
 export default function UserLoginPage() {
   const router = useRouter();
@@ -23,6 +23,17 @@ export default function UserLoginPage() {
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+
+  // Tangkap error query param jika dialihkan kembali dari OAuth callback yang ditolak
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const urlError = params.get('error');
+      if (urlError) {
+        setErrorMsg(decodeURIComponent(urlError));
+      }
+    }
+  }, []);
 
   const handleLoginGoogle = async () => {
     setErrorMsg(null);
@@ -46,8 +57,16 @@ export default function UserLoginPage() {
         setErrorMsg('Mohon lengkapi seluruh kolom pendaftaran.');
         return;
       }
+      if (!apakahEmailKampus(email)) {
+        setErrorMsg('Pendaftaran hanya diperbolehkan menggunakan email resmi kampus Universitas Trunojoyo Madura (@student.trunojoyo.ac.id atau @trunojoyo.ac.id).');
+        return;
+      }
       if (password !== konfirmasiPassword) {
         setErrorMsg('Kata sandi dan konfirmasi kata sandi tidak cocok.');
+        return;
+      }
+      if (password.length < 6) {
+        setErrorMsg('Kata sandi minimal 6 karakter.');
         return;
       }
       setLoading(true);
@@ -248,14 +267,20 @@ export default function UserLoginPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-semibold uppercase text-slate-400 mb-1">Email Mahasiswa</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-[10px] font-semibold uppercase text-slate-400">Email Akun Kampus</label>
+                    <span className="text-[10px] text-[#0D9488] font-semibold">Domain @trunojoyo.ac.id</span>
+                  </div>
                   <input
                     type="email"
-                    placeholder="email@student.trunojoyo.ac.id"
+                    placeholder="nama@student.trunojoyo.ac.id"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full bg-white border border-slate-200 focus:ring-1 focus:ring-[#0D9488] focus:border-[#0D9488] outline-none rounded-xl p-3 text-xs font-semibold text-slate-900"
                   />
+                  <p className="mt-1 text-[10px] text-slate-400 font-normal">
+                    Wajib menggunakan email resmi kampus (@student.trunojoyo.ac.id / @trunojoyo.ac.id)
+                  </p>
                 </div>
               </>
             )}

@@ -24,12 +24,14 @@ export async function GET() {
       .select(`
         id,
         status,
-        bukti_kepemilikan,
+        jawaban,
         dibuat_pada,
-        laporan:id_laporan (
-          id,
-          kategori,
-          deskripsi_publik
+        kecocokan:id_kecocokan (
+          laporan_penemuan:id_laporan_penemuan (
+            id,
+            kategori,
+            deskripsi_publik
+          )
         ),
         pemohon:id_pemohon (
           id,
@@ -55,11 +57,13 @@ export async function GET() {
       .select(`
         id,
         status,
-        nomor_otp,
-        laporan:id_laporan (
-          id,
-          kategori,
-          deskripsi_publik
+        kode_pengambilan,
+        kecocokan:id_kecocokan (
+          laporan_penemuan:id_laporan_penemuan (
+            id,
+            kategori,
+            deskripsi_publik
+          )
         ),
         pemohon:id_pemohon (
           id,
@@ -76,13 +80,16 @@ export async function GET() {
       successful_returns: successfulReturns || 0,
     };
 
-    const formattedQueue = dbClaims ? dbClaims.map((item: any) => ({
-      id: item.id,
-      item_name: item.laporan?.deskripsi_publik?.split('\n')[0].replace('Nama Barang: ', '') || item.laporan?.kategori || 'Barang Hilang',
-      claim_id: item.id.slice(0, 6).toUpperCase(),
-      status: item.status,
-      claimed_by: `${item.pemohon?.nama || 'Mahasiswa'} (${item.pemohon?.program_studi || 'UTM'})`,
-    })) : [];
+    const formattedQueue = dbClaims ? dbClaims.map((item: any) => {
+      const lap = item.kecocokan?.laporan_penemuan;
+      return {
+        id: item.id,
+        item_name: lap?.deskripsi_publik?.split('\n')[0].replace('Nama Barang: ', '') || lap?.kategori || 'Barang Hilang',
+        claim_id: item.id.slice(0, 6).toUpperCase(),
+        status: item.status,
+        claimed_by: `${item.pemohon?.nama || 'Mahasiswa'} (${item.pemohon?.program_studi || 'UTM'})`,
+      };
+    }) : [];
 
     const formattedReports = dbReports ? dbReports.map((item: any) => ({
       id: item.id,
@@ -91,12 +98,15 @@ export async function GET() {
       waktu: item.waktu_kejadian,
     })) : [];
 
-    const formattedHandovers = dbHandovers ? dbHandovers.map((item: any) => ({
-      id: item.id,
-      item_name: item.laporan?.deskripsi_publik?.split('\n')[0].replace('Nama Barang: ', '') || item.laporan?.kategori || 'Barang Hilang',
-      claimed_by: item.pemohon?.nama || 'Mahasiswa',
-      otp: item.nomor_otp || 'XXXX',
-    })) : [];
+    const formattedHandovers = dbHandovers ? dbHandovers.map((item: any) => {
+      const lap = item.kecocokan?.laporan_penemuan;
+      return {
+        id: item.id,
+        item_name: lap?.deskripsi_publik?.split('\n')[0].replace('Nama Barang: ', '') || lap?.kategori || 'Barang Hilang',
+        claimed_by: item.pemohon?.nama || 'Mahasiswa',
+        otp: item.kode_pengambilan || 'XXXX',
+      };
+    }) : [];
 
     const activityLog = [
       {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseKlien } from '@/pustaka/supabase/klien';
+import { apakahEmailKampus, sinkronisasiProfilPengguna } from '@/pustaka/supabase/auth';
 
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
@@ -27,17 +28,30 @@ export async function GET(request: NextRequest) {
 
       if (sessionData?.user) {
         const u = sessionData.user;
-        const meta = u.user_metadata || {};
-        await supabaseKlien.from('profiles').upsert(
-          {
-            id: u.id,
-            name: meta.full_name || meta.name || u.email?.split('@')[0] || 'Mahasiswa Pengguna',
-            nim: meta.nim || `NIM-${u.id.slice(0, 8)}`,
-            study_program: 'Teknik Informatika',
-            role: 'user',
-          },
-          { onConflict: 'id' }
-        );
+        const userEmail = u.email || '';
+        const role = u.user_metadata?.role || u.app_metadata?.role;
+        const isAdmin = role === 'admin_lab' || userEmail === 'admin@refound.id' || userEmail.includes('admin');
+
+        // Validasi domain email kampus trunojoyo.ac.id
+        if (!isAdmin && !apakahEmailKampus(userEmail)) {
+          console.warn(`[OAuth Security] Ditolak: ${userEmail} bukan email kampus UTM.`);
+          await supabaseKlien.auth.signOut();
+          const redirectUrl = new URL('/login', requestUrl.origin);
+          redirectUrl.searchParams.set(
+            'error',
+            'Akses ditolak: Hanya akun email kampus resmi Trunojoyo (@trunojoyo.ac.id atau @student.trunojoyo.ac.id) yang diizinkan.'
+          );
+          return NextResponse.redirect(redirectUrl);
+        }
+
+        await sinkronisasiProfilPengguna({
+          id: u.id,
+          email: u.email,
+          nama: u.user_metadata?.full_name || u.user_metadata?.name,
+          nim: u.user_metadata?.nim,
+          program_studi: u.user_metadata?.prodi || 'Teknik Informatika',
+          role: role,
+        });
       }
 
       const destinationUrl = new URL(next.startsWith('/') ? next : `/${next}`, requestUrl.origin);
